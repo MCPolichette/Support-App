@@ -1,0 +1,80 @@
+body {
+	background-image: url(../style/avantlink-ribbon.svg);
+	height: 100vh;
+	background-position: right;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+	font-family: Roboto;
+}
+h5 {
+	font-weight: bolder;
+}
+h6 {
+	font-weight: bold;
+}
+#affTable {
+	border-color: blue;
+	border-width: 3px;
+}
+#productsRow {
+	margin-top: 100px;
+}
+#noteInputSection {
+	background-color: rgb(238, 209, 45);
+}
+#report_pdf {
+	background-color: white;
+	@page {
+		size: auto;
+		margin: 25mm 25mm 25mm 25mm;
+	}
+	@media print {
+		#search,
+		.printPage {
+			display: none !important;
+		}
+	}
+}
+.noteBox {
+	position: relative;
+}
+.keyBox1 {
+	padding-right: 25px;
+	padding-left: 25px;
+}
+.keyBoxIn {
+	padding: 8px;
+}
+.noteBox .close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 5px;
+}
+.psuedoinvisible {
+	height: 350px;
+	color: white;
+}
+
+@media print {
+	.keyBox {
+		margin: 200px; /* Adjust the margin value as needed */
+	}
+}
+.yoyTable td:nth-child(1),
+.yoyTable th:nth-child(1),
+.yoyTable td:nth-child(4),
+.yoyTable th:nth-child(4),
+.yoyTable td:nth-child(7),
+.yoyTable th:nth-child(7),
+.yoyTable td:nth-child(10),
+.yoyTable th:nth-child(10),
+.yoyTable td:nth-child(13),
+.yoyTable th:nth-child(13),
+.yoyTable td:nth-child(16),
+.yoyTable th:nth-child(16),
+.yoyTable td:nth-child(19),
+.yoyTable th:nth-child(19) {
+	border-right: 2px solid black;
+}
