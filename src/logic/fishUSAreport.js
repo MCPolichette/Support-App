@@ -114,7 +114,6 @@ export async function runFishUSAReport({
 	const filename = `FishUSA_customReport_${startDate}_to_${endDate}.csv`;
 	exportToCSV(mapped, filename, headers);
 
-	console.log("Final FishUSA Report:", mapped);
 	if (onComplete) onComplete(mapped);
 }
 

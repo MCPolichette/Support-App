@@ -3,7 +3,7 @@ import { file_reader } from "../logic/file_reader.js";
 import { feedfile } from "../logic/feedFile.js";
 import InfoDisplay from "../components/InfoDisplay.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
-import ShopifyModal from "../components/modals/ShopifyModal.js"; // Import modal
+//import ShopifyModal from "../components/modals/ShopifyModal.js"; // Import modal
 
 const Automapper = () => {
 	const [selectedFile, setSelectedFile] = useState(null);

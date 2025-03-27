@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
 	return (
-		<div className="container mt-5">
-			<h1 className="mb-4">Support Tools Dashboard</h1>
+		<div className="container container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center">
+			<h1 className="mb-4">Chetti.Tools Dashboard</h1>
 			<div className="card mb-3 shadow">
 				<div className="card-body">
 					<h5 className="card-title">Datafeed Automapper</h5>
