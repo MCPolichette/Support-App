@@ -1,0 +1,197 @@
+[
+	{
+		"fieldName": "strProductSKU",
+		"matches": ["sku", "productid", "itemnumber"],
+		"required": true,
+		"valueType": "text",
+		"valueTitle": "SKU"
+	},
+	{
+		"fieldName": "dblProductPrice",
+		"matches": [
+			"price",
+			"retailprice",
+			"retail",
+			"regularprice",
+			"retialprice",
+			"retial"
+		],
+		"required": true,
+		"valueType": "number",
+		"valueTitle": "Price"
+	},
+	{
+		"fieldName": "strProductName",
+		"matches": ["name", "title"],
+		"required": true,
+		"valueType": "text",
+		"valueTitle": "Product Name"
+	},
+	{
+		"fieldName": "stLongDescription",
+		"matches": [
+			"longdescription",
+			"description",
+			"description",
+			"desc",
+			"productdesc"
+		],
+		"required": true,
+		"valueType": "text",
+		"valueTitle": "Description"
+	},
+	{
+		"fieldName": "strLargeImage",
+		"matches": [
+			"imageurl",
+			"image",
+			"imageurllarge",
+			"imagelink",
+			"imagefeatured",
+			"picture",
+			"img"
+		],
+		"required": true,
+		"valueType": "url",
+		"valueTitle": "Image URL"
+	},
+	{
+		"fieldName": "strBuyURL",
+		"matches": ["url", "link", "buyurl", "permalink"],
+		"required": true,
+		"valueType": "url",
+		"valueTitle": "Buy URL"
+	},
+	{
+		"fieldName": "strDepartment",
+		"matches": ["department", "dept", "division"],
+		"required": true,
+		"valueType": "text",
+		"valueTitle": "Department"
+	},
+	{
+		"fieldName": "strCategory",
+		"matches": ["category", "cat", "group"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Category"
+	},
+	{
+		"fieldName": "strSubcategory",
+		"matches": ["subcategory", "subcat", "type"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Subcategory"
+	},
+	{
+		"fieldName": "strProductColor",
+		"matches": ["color", "clr", "shade"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Color"
+	},
+	{
+		"fieldName": "strProductSize",
+		"matches": ["size", "dimension", "length"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Size"
+	},
+	{
+		"fieldName": "strProductMaterial",
+		"matches": ["material", "fabric", "composition"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Material"
+	},
+	{
+		"fieldName": "strBrandName",
+		"matches": ["brand", "brandname", "maker", "manufacturer"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Brand"
+	},
+	{
+		"fieldName": "strManufacturerPartNumber",
+		"matches": ["manufacturerpartnumber", "manufacturerid", "mpn"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "MPN"
+	},
+
+	{
+		"fieldName": "dblProductSalePrice",
+		"matches": ["saleprice", "discountedprice"],
+		"required": false,
+		"valueType": "number",
+		"valueTitle": "Sale Price"
+	},
+	{
+		"field_name": "strAttribute1",
+		"required": false,
+		"valueTitle": "Product Parent Grouping Id",
+		" type": "<type>string</type>",
+		"matches": [
+			"parentid",
+			"parentgroup",
+			"parentgroupid",
+			"groupid",
+			"group"
+		],
+		"variant": "strProductSKU"
+	},
+
+	{
+		"field_name": "txtShortDescription",
+		"required": false,
+		"matches": ["shortdescription"],
+		"variant": false
+	},
+	{
+		"field_name": "strMediumImageURL",
+		"required": false,
+		"matches": [
+			"mediumimageurl",
+			"mediumimage",
+			"mediumimagelink",
+			"imageurlmedium"
+		],
+		"variant": false
+	},
+	{
+		"field_name": "strBrandURL",
+		"required": false,
+		"matches": ["brandurl", "brandpagelink", "brandpage"],
+		"variant": false
+	},
+	{
+		"field_name": "strBrandLogoImage",
+		"required": false,
+		"matches": [
+			"brandlogoimage",
+			"brandimage",
+			"brandimageurl",
+			"logourl",
+			"logolink",
+			"logoimage",
+			"logourl"
+		],
+		"variant": false
+	},
+	{
+		"field_name": "strThumbnailURL",
+		"required": false,
+		"matches": [
+			"thumbnailurl",
+			"thumbnail",
+			"thumbnaillink",
+			"thumbnailimage",
+			"imageurlsmall",
+			"imagesmall",
+			"thumblink",
+			"thumbimage",
+			"thumburl"
+		],
+		"variant": false
+	}
+]

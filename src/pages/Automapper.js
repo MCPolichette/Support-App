@@ -3,14 +3,17 @@ import { file_reader } from "../logic/file_reader.js";
 import { feedfile } from "../logic/feedFile.js";
 import InfoDisplay from "../components/InfoDisplay.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
-//import ShopifyModal from "../components/modals/ShopifyModal.js"; // Import modal
+import autoMapHeaders from "../logic/mappingEngine";
+import ShopifyModal from "../components/modals/ShopifyModal.js"; // Import modal
 
 const Automapper = () => {
+	const [allHeaders, setAllHeaders] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [mappingComplete, setMappingComplete] = useState(false);
+	const [mappingResults, setMappingResults] = useState(null);
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [showRefresh, setShowRefresh] = useState(false);
 	const [showModal, setShowModal] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const [mappingComplete, setMappingComplete] = useState(false);
 
 	// Handles file selection
 	const handleFileChange = (event) => {
@@ -19,33 +22,19 @@ const Automapper = () => {
 		setLoading(true); // Show loading animation
 		if (file) {
 			console.log(file);
-			file_reader(event.target).then(() => {
-				console.log("test");
-				setLoading(false); // Hide loading animation
-				setMappingComplete(true); // Show mapped data
+			file_reader(event.target).then((parsed) => {
+				const { headers, sampleRows } = parsed;
+				const mapping = autoMapHeaders(headers, sampleRows);
+				console.log(mapping); // For now, just confirm in console
+				// Store in state
+				setMappingResults(mapping);
+				setAllHeaders(headers);
+				setLoading(false);
+				setMappingComplete(true);
+				console.log("HEADERS:", headers);
+				console.log("SAMPLE ROWS:", sampleRows);
 			});
-
-			// .then(() => {
-			// 	check_for_blank_columns(
-			// 		feedFile.merchant_layout,
-			// 		feedFile.data_rows
-			// 	);
-			// 	determine_fields(feedFile.merchant_layout);
-			// 	// if (
-			// 	// 	feedFile.merchant_layout[31] ===
-			// 	// 	// shopify_API_feed_examples[0]?.column_layout[31]
-			// 	// ) {
-			// 	// 	// showShopifyModal();
-			// 	// }
-			// 	setShowRefresh(true);
-			// });
 		}
-		// if (
-		// 	feedfile.merchant_layout[31] ===
-		// 	shopify_API_feed_examples[0]?.column_layout[31]
-		// ) {
-		// 	setShowModal(true); // Open modal if Shopify feed detected
-		// }
 	};
 
 	// Reloads the page
@@ -114,74 +103,12 @@ const Automapper = () => {
 				{selectedFile && (
 					<div className="row mt-4 w-100">
 						<div className="col-12">
-							<MapDisplay />
-							{/* 
-						<div className="d-grid col-6 mx-auto gap-2">
-							<button
-								id="variant-toggle"
-								type="button"
-								hidden
-								className="btn btn-success btn-lg"
-								onClick="variant_toggle()"
-							>
-								Variant mapping is available - Click Here{" "}
-							</button>
-							<button
-								id="editing-toggle"
-								type="button"
-								className="btn btn-outline-secondary btn-sm"
-								onClick="is_editing_toggle()"
-							>
-								Click to adjust Mapping
-							</button>
-							<button
-								type="button"
-								className="btn btn-lg btn-primary"
-								data-bs-toggle="modal"
-								data-bs-target="#pipe_modal"
-							>
-								Give Me the Pipe Delimited Map!
-							</button>
-						</div> */}
-
-							<div className="row justify-content-md-center text-break">
-								<div className="col-4">
-									<h5>
-										<strong>Notes:</strong>
-									</h5>
-									<ul
-										className="list-group list-group-flush"
-										id="mapping_notes"
-									></ul>
-								</div>
-								<div
-									id="display_att_map"
-									className="col-4"
-									hidden
-								>
-									<h5>
-										<strong>str Attributes:</strong>
-									</h5>
-									<ul
-										className="list-group list-group-flush"
-										id="att-map"
-									></ul>
-								</div>
-								<div
-									id="display_errors"
-									className="col-4"
-									hidden
-								>
-									<h5>
-										<strong>Errors:</strong>
-									</h5>
-
-									<ul
-										className="list-group list-group-flush"
-										id="mapping_errors"
-									></ul>
-								</div>
-							</div>
+							<MapDisplay
+								mapping={mappingResults?.mapped}
+								warnings={mappingResults?.requiredWarnings}
+								unmatched={mappingResults?.unmatched}
+								allHeaders={mappingResults?.allHeaders}
+							/>
 						</div>
 					</div>
 				)}
