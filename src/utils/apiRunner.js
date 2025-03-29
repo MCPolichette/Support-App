@@ -1,11 +1,10 @@
 // utils/apiRunner.js
 
-export async function runAPI(params, API_KEY, merchant, reportStep2) {
+export async function runAPI(params, API_KEY, merchant) {
 	const {
 		report_id,
 		startDate,
 		endDate,
-		type,
 		networkCode,
 		merchant_id,
 		merchant_parent_id,
@@ -13,7 +12,11 @@ export async function runAPI(params, API_KEY, merchant, reportStep2) {
 		website_id,
 		affiliate_group_id,
 	} = applyDefaults({ ...params, merchant_id: merchant?.id });
-	console.log("API SENT", params);
+	console.log(
+		"API SENT",
+		report_id,
+		"Line 16 in // utils/apiRunner.js for Troubleshoting."
+	);
 
 	const networkParam = getNetworkParam(networkCode);
 

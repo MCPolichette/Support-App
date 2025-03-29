@@ -19,7 +19,10 @@ export function file_reader(input) {
 				determine_fields(feedfile.maps.merchant_layout);
 				console.log(feedfile);
 				file_data(input);
-				resolve();
+				resolve({
+					headers: feedfile.maps.merchant_layout,
+					sampleRows: [feedfile.maps.first_row], // Expand if needed
+				});
 			};
 
 			reader.onerror = function () {

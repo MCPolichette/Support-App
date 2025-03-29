@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { runFishUSAReport } from "../logic/fishUSAreport";
+import LoadingSpinner from "../components/LoadingSpinner";
+import DateRangePicker from "../components/DateRangePicker";
 
 const FishUSA = () => {
 	const getDefaultStartDate = () => {
@@ -68,35 +70,15 @@ const FishUSA = () => {
 
 			{!showModal && (
 				<div className="w-full max-w-md">
-					<div className="mb-4">
-						<label className="block mb-1 font-medium">
-							Start Date
-						</label>
-						<input
-							type="date"
-							value={startDate}
-							onChange={(e) => setStartDate(e.target.value)}
-							className="border p-2 w-full"
-						/>
-					</div>
-					<div className="mb-4">
-						<label className="block mb-1 font-medium">
-							End Date
-						</label>
-						<input
-							type="date"
-							value={endDate}
-							onChange={(e) => setEndDate(e.target.value)}
-							className="border p-2 w-full"
-						/>
-					</div>
+					<DateRangePicker
+						startDate={startDate}
+						endDate={endDate}
+						onStartChange={setStartDate}
+						onEndChange={setEndDate}
+					/>
 
 					{loading ? (
-						<div className="text-center py-4">
-							<span className="text-blue-600 font-semibold animate-pulse">
-								Loading report...
-							</span>
-						</div>
+						<LoadingSpinner message="Running FishUSA report..." />
 					) : (
 						<button
 							onClick={handleRunReport}

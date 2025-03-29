@@ -1,0 +1,65 @@
+[
+	{
+		"fieldName": "strProductUPC",
+		"matches": ["upc", "barcode"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "UPC"
+	},
+	{
+		"fieldName": "strProductEAN",
+		"matches": ["ean", "eancode"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "EAN"
+	},
+	{
+		"fieldName": "strProductISBN",
+		"matches": ["isbn"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "ISBN"
+	},
+	{
+		"fieldName": "strProductGender",
+		"matches": ["gender", "sex", "targetgender"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Gender"
+	},
+	{
+		"fieldName": "strProductAgeGroup",
+		"matches": ["agegroup", "audience", "targetage"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Age Group"
+	},
+	{
+		"fieldName": "strProductCondition",
+		"matches": ["condition", "state"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Condition"
+	},
+	{
+		"fieldName": "strAvailability",
+		"matches": ["availability", "stock", "instock"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Availability"
+	},
+	{
+		"fieldName": "intInventoryCount",
+		"matches": ["quantity", "inventory", "stockcount"],
+		"required": false,
+		"valueType": "number",
+		"valueTitle": "Inventory Count"
+	},
+	{
+		"fieldName": "strShipping",
+		"matches": ["shipping", "delivery"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Shipping Info"
+	}
+]
