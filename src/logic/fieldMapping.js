@@ -1,22 +1,24 @@
-// fieldMapping.js - Handles field mapping
+// fieldMapping.js - Now using fieldAliases.json
 import { feedfile } from "./feedFile";
-import fields from "./all_fields.json";
+import fieldAliases from "./fieldAliases.json";
 
-export function determine_fields(arr) {
-	feedfile.fileInfo.Number_of_Columns.value = arr.length;
-	console.log("columns set.. why is it not displaying?");
+export function determine_fields(headerArray) {
+	feedfile.fileInfo.Number_of_Columns.value = headerArray.length;
 	const fieldMap = {};
-	fields.all_fields.forEach((field) => {
+
+	fieldAliases.forEach((field) => {
 		field.matches.forEach((match) => {
-			fieldMap[match] = field; // Map match to field object
+			fieldMap[match.toLowerCase()] = field;
 		});
 	});
 
-	arr.forEach((array_element, index) => {
-		const matchedField = fieldMap[array_element.toLowerCase()];
+	headerArray.forEach((header, index) => {
+		const normalizedHeader = header.toLowerCase();
+		const matchedField = fieldMap[normalizedHeader];
+
 		if (matchedField) {
-			feedfile.maps.import_map[index] = matchedField.field_name;
-			feedfile.maps.map_for_variants[index] = matchedField.field_name;
+			feedfile.maps.import_map[index] = matchedField.fieldName;
+			feedfile.maps.map_for_variants[index] = matchedField.fieldName;
 			feedfile.maps.variant_map[index] = matchedField.variant || "";
 		} else {
 			feedfile.maps.import_map[index] = ""; // No match found
@@ -24,39 +26,40 @@ export function determine_fields(arr) {
 	});
 }
 
-export function check_for_blank_columns(arr, allRows) {
-	const sampleSize = Math.min(100, allRows.length); // Limit to 100 rows
-	let blank_columns = new Array(arr.length).fill(false);
-	let test_columns = new Array(arr.length).fill(0);
+export function check_for_blank_columns(headerArray, allRows) {
+	const sampleSize = Math.min(100, allRows.length);
+	let blankColumns = new Array(headerArray.length).fill(false);
+	let valueCounts = new Array(headerArray.length).fill(0);
 
-	// 🔥 Process a sample instead of all rows
+	const delimiter = determineDelimiter(allRows[0]);
+
 	for (let i = 1; i < sampleSize; i++) {
-		let values = allRows[i]?.split(determineDelimiter(allRows[0])) || [];
-		if (values.length === arr.length) {
+		let values = allRows[i]?.split(delimiter) || [];
+		if (values.length === headerArray.length) {
 			values.forEach((val, idx) => {
-				if (!val) test_columns[idx]++;
+				if (!val.trim()) valueCounts[idx]++;
 			});
 		}
 	}
 
-	// 🔥 Determine completely empty columns
-	test_columns.forEach((count, index) => {
+	valueCounts.forEach((count, index) => {
 		if (count === sampleSize - 1) {
-			blank_columns[index] = true;
+			blankColumns[index] = true;
 		}
 		if (count > 0 && count < sampleSize - 1) {
-			feedfile.contains_empty_values.push({
+			feedfile.maps.contains_empty_values.push({
 				i: index,
 				percent: ((count / sampleSize) * 100).toFixed(2),
 			});
 		}
 	});
 
-	feedfile.blank_columns = blank_columns
+	feedfile.blank_columns = blankColumns
 		.map((isEmpty, index) => (isEmpty ? index : null))
-		.filter((val) => val !== null); // Remove null values
+		.filter((val) => val !== null);
 }
-function determineDelimiter(header) {
+
+export function determineDelimiter(header) {
 	if (!header || typeof header !== "string") {
 		feedfile.fileInfo.Delimiter.value = "Unknown";
 		return "";

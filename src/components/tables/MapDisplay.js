@@ -43,8 +43,11 @@ const MapDisplay = ({
 						{allHeaders.length > 0 ? (
 							allHeaders.map((header, index) => {
 								const match = mappedByHeader[header];
+								const rowClass = match?.required
+									? "table-warning"
+									: "";
 								return (
-									<tr key={index}>
+									<tr key={index} className={rowClass}>
 										<td>{index + 1}</td>
 										<td>{header}</td>
 										<td>{match?.fieldName || "—"}</td>

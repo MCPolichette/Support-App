@@ -53,12 +53,33 @@ export function getTopValues(rows, fieldName, limit = 10) {
 		.sort((a, b) => b.count - a.count)
 		.slice(0, limit);
 }
-export function calculateFillRatio(rows = [], header = "") {
+export function calculateFillRatio(rows = [], header = "", valueType = "") {
 	if (!rows.length) return 0;
-	const filledCount = rows.filter((row) => {
-		const val = row[header];
-		return val !== null && val !== undefined && String(val).trim() !== "";
-	}).length;
+
+	let filledCount = 0;
+
+	rows.forEach((row) => {
+		let val = row[header];
+		if (val !== null && val !== undefined) {
+			val = String(val).trim();
+
+			if (val) {
+				if (valueType === "number" && isNaN(parseFloat(val))) return;
+				if (valueType === "url" && !isValidURL(val)) return;
+
+				filledCount++;
+			}
+		}
+	});
 
 	return filledCount / rows.length;
+}
+
+function isValidURL(val) {
+	try {
+		const url = new URL(val);
+		return url.protocol === "http:" || url.protocol === "https:";
+	} catch {
+		return false;
+	}
 }
