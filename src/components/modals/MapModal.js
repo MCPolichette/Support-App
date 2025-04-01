@@ -14,25 +14,27 @@ const MapModal = ({ show, onClose, mapping = [] }) => {
 	};
 
 	return (
-		<Modal show={show} onHide={onClose} centered>
+		<Modal show={show} onHide={onClose} centered size="lg">
 			<Modal.Header closeButton>
 				<Modal.Title>Mapped Fields</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<pre className="bg-light p-2 border rounded text-wrap">
-					{mappedStr || "No fields mapped yet."}
-				</pre>
+				<div className="mb-3">
+					<pre className="bg-light p-2 border rounded text-wrap">
+						{mappedStr || "No fields mapped yet."}
+					</pre>
+					<Button
+						variant="outline-primary"
+						onClick={handleCopy}
+						disabled={!mappedStr}
+					>
+						{copied ? "Copied!" : "Copy to Clipboard"}
+					</Button>
+				</div>
 			</Modal.Body>
 			<Modal.Footer>
 				<Button variant="secondary" onClick={onClose}>
 					Close
-				</Button>
-				<Button
-					variant="primary"
-					onClick={handleCopy}
-					disabled={!mappedStr}
-				>
-					{copied ? "Copied!" : "Copy to Clipboard"}
 				</Button>
 			</Modal.Footer>
 		</Modal>

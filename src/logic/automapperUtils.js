@@ -30,7 +30,26 @@ export function checkForBlankColumns(
 		};
 	});
 }
+export function validatePrice(rows = [], header = "") {
+	let numericCount = 0;
+	let totalChecked = 0;
 
+	const priceRegex = /^\$?\d{1,6}(\.\d{1,2})?$/;
+
+	for (let i = 0; i < Math.min(500, rows.length); i++) {
+		const val = rows[i][header];
+		if (val === undefined || val === null || val === "") continue;
+
+		totalChecked++;
+		const strVal = String(val).replace(/,/g, "").trim();
+
+		if (!isNaN(strVal) && priceRegex.test(strVal)) {
+			numericCount++;
+		}
+	}
+
+	return totalChecked > 0 && numericCount / totalChecked >= 0.6;
+}
 /**
  * Gets the most common values for a given field
  * Useful for category / subcategory suggestions
@@ -75,7 +94,7 @@ export function calculateFillRatio(rows = [], header = "", valueType = "") {
 	return filledCount / rows.length;
 }
 
-function isValidURL(val) {
+export function isValidURL(val) {
 	try {
 		const url = new URL(val);
 		return url.protocol === "http:" || url.protocol === "https:";

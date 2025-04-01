@@ -3,9 +3,10 @@ import { file_reader } from "../logic/file_reader.js";
 import { feedfile } from "../logic/feedFile.js";
 import InfoDisplay from "../components/InfoDisplay.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
-import { autoMapHeaders } from "../logic/mappingEngine";
+import autoMapHeaders from "../logic/mappingEngine";
 import ShopifyModal from "../components/modals/ShopifyModal.js"; // placeholder if needed
 import MapModal from "../components/modals/MapModal";
+import fieldAliases from "../logic/fieldAliases.json";
 
 const Automapper = () => {
 	const [allHeaders, setAllHeaders] = useState([]);
@@ -17,6 +18,30 @@ const Automapper = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [showRefresh, setShowRefresh] = useState(false);
 
+	const handleOverride = (header, newFieldName) => {
+		const field = fieldAliases.find((f) => f.fieldName === newFieldName);
+		if (!field) {
+			return;
+		}
+
+		const newMapping = mappingResults.mapping.map((m) =>
+			m.header === header
+				? {
+						...m,
+						fieldName: field.fieldName,
+						valueTitle: field.valueTitle,
+						manual: true,
+						score: 99,
+				  }
+				: m
+		);
+
+		setMappingResults({
+			...mappingResults,
+			mapping: newMapping, // correctly spelled
+		});
+	};
+
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
 		setSelectedFile(file);
@@ -25,23 +50,22 @@ const Automapper = () => {
 		if (file) {
 			file_reader(event.target).then((parsed) => {
 				const { headers, sampleRows } = parsed;
-				const { mapping, warnings } = autoMapHeaders(
+				const { mapped, warnings } = autoMapHeaders(
 					headers,
 					sampleRows
 				);
-
+				console.log(mapped);
 				setMappingResults({
-					mapping,
-					warnings,
+					mapping: mapped,
+					warnings: warnings,
 					allHeaders: headers,
 				});
 
 				setAllHeaders(headers);
 				setLoading(false);
-				setMappingComplete(true);
-				console.log("Mapped:", mapping);
 				console.log("Warnings:", warnings);
 				console.log("Headers:", headers);
+				console.log("mapped", mapped);
 			});
 		}
 	};
@@ -105,9 +129,10 @@ const Automapper = () => {
 					<div className="row mt-4 w-100">
 						<div className="col-12">
 							<MapDisplay
-								mapping={mappingResults.mapping}
+								mapping={mappingResults?.mapping}
 								warnings={mappingResults.warnings}
 								allHeaders={mappingResults.allHeaders}
+								onOverride={handleOverride}
 							/>
 						</div>
 					</div>

@@ -1,4 +1,8 @@
-import { calculateFillRatio } from "./automapperUtils";
+import {
+	calculateFillRatio,
+	validatePrice,
+	isValidURL,
+} from "./automapperUtils";
 import fieldAliases from "./fieldAliases.json";
 
 // Normalizes a header string for matching
@@ -10,52 +14,81 @@ function normalizeHeader(header = "") {
 		.replace(/(variant|catalog|item|product)/g, "")
 		.trim();
 }
+function getPreviewValue(rows, header) {
+	for (let i = 0; i < rows.length; i++) {
+		const val = rows[i][header];
+		if (val && String(val).trim() !== "") {
+			return String(val).trim();
+		}
+	}
+	return "";
+}
 
-export function autoMapHeaders(headerArray, sampleRows) {
-	const mapped = [];
+export default function autoMapHeaders(uploadedHeaders = [], sampleRows = []) {
+	const normalizedHeaders = uploadedHeaders.map(normalizeHeader);
 	const usedFieldNames = new Set();
 
-	// Pre-normalize aliases for all fields
-	const normalizedFields = fieldAliases.map((field) => ({
-		...field,
-		normalizedMatches: field.matches.map(normalizeHeader),
-	}));
+	const mapped = [];
+	const unmatched = [];
+	const requiredWarnings = [];
 
-	headerArray.forEach((header) => {
-		const normalized = normalizeHeader(header);
+	for (let i = 0; i < normalizedHeaders.length; i++) {
+		const header = uploadedHeaders[i];
+		const normalized = normalizedHeaders[i];
 		let bestMatch = null;
 
-		normalizedFields.forEach((field) => {
-			const index = field.normalizedMatches.indexOf(normalized);
-			if (index !== -1) {
-				const baseScore = 10 - index;
-				const fillRatio = calculateFillRatio(
-					sampleRows,
-					header,
-					field.valueType || ""
-				);
-				const score = Math.round(baseScore * fillRatio * 10); // e.g. 90 = high confidence
+		fieldAliases.forEach((field) => {
+			(field.matches || []).forEach((alias, index) => {
+				if (normalizeHeader(alias) === normalized) {
+					const aliasScore = Math.max(10 - index, 1);
+					const fillRatio = calculateFillRatio(sampleRows, header);
+					const finalScore = Math.round(aliasScore * fillRatio);
 
-				if (!bestMatch || score > bestMatch.score) {
-					bestMatch = {
-						fieldName: field.fieldName,
-						valueTitle: field.valueTitle,
-						score,
-						required: field.required || false,
-						header,
-					};
+					if (
+						!usedFieldNames.has(field.fieldName) &&
+						(!bestMatch || finalScore > bestMatch.score)
+					) {
+						bestMatch = {
+							fieldName: field.fieldName,
+							valueTitle: field.valueTitle,
+							header,
+							score: finalScore,
+							required: field.required,
+							valueType: field.valueType,
+							preview: getPreviewValue(sampleRows, header),
+							fillRatio,
+							isPrice: validatePrice(sampleRows, header),
+							isURL: isValidURL(sampleRows, header),
+							manual: false,
+						};
+						console.log(bestMatch);
+					}
 				}
-			}
+			});
 		});
 
 		if (bestMatch) {
-			mapped.push(bestMatch);
 			usedFieldNames.add(bestMatch.fieldName);
+			mapped.push(bestMatch);
+			console.log(mapped);
+		} else {
+			mapped.push({
+				header,
+				fieldName: "",
+				valueTitle: "",
+				score: 0,
+				required: false,
+				manual: false,
+				preview: getPreviewValue(sampleRows, header),
+				fillRatio: calculateFillRatio(sampleRows, header),
+				isPrice: validatePrice(sampleRows, header),
+				isURL: isValidURL(sampleRows, header),
+			});
+			console.log("FIELDName forced blank");
 		}
-	});
+	}
 
-	// Build required field warnings
-	const requiredWarnings = [];
+	// Check for missing required fields
 	fieldAliases.forEach((field) => {
 		if (field.required && !usedFieldNames.has(field.fieldName)) {
 			requiredWarnings.push({
@@ -65,79 +98,57 @@ export function autoMapHeaders(headerArray, sampleRows) {
 			});
 		}
 	});
+	const hasDepartment = mapped.some((m) => m.fieldName === "strDepartment");
+	const category = mapped.find(
+		(m) => m.fieldName === "strCategory" && m.fillRatio > 0.3
+	);
+	const subcategory = mapped.find(
+		(m) => m.fieldName === "strSubcategory" && m.fillRatio > 0.3
+	);
+	const googleCategory = mapped.find(
+		(m) => m.header.toLowerCase().includes("google") && m.fillRatio > 0.3
+	);
 
-	// Department fallback logic
-	if (!usedFieldNames.has("strDepartment")) {
-		const googleCat = mapped.find((m) => m.fieldName === "strAttribute10");
-		const category = mapped.find((m) => m.fieldName === "strCategory");
-		const subcategory = mapped.find(
-			(m) => m.fieldName === "strSubcategory"
-		);
+	if (!hasDepartment) {
+		if (category) {
+			category.fieldName = "strDepartment";
+			category.valueTitle = "Department (from Category)";
+			category.manual = true;
+			category.required = category.promotedFrom = "strCategory";
 
-		const googleFilled =
-			googleCat && calculateFillRatio(sampleRows, googleCat.header) > 0;
-		const categoryFilled =
-			category && calculateFillRatio(sampleRows, category.header) > 0;
-		const subcatFilled =
-			subcategory &&
-			calculateFillRatio(sampleRows, subcategory.header) > 0;
-
-		// Promote Google Category
-		if (googleFilled && !categoryFilled && !subcatFilled) {
-			requiredWarnings.push({
-				fieldName: "strDepartment",
-				valueTitle: "Department",
-				message:
-					"Google Product Category was promoted to Department, as no Category or Subcategory values were detected.",
-			});
-			if (googleCat) {
-				googleCat.fieldName = "strDepartment";
-				googleCat.valueTitle = "Department";
-				usedFieldNames.add("strDepartment");
-			}
-		}
-
-		// Promote Category → Department, and Subcategory → Category
-		else if (categoryFilled) {
-			requiredWarnings.push({
-				fieldName: "strDepartment",
-				valueTitle: "Department",
-				message:
-					"Category was promoted to Department, as no field explicitly mapped to Department.",
-			});
-			if (category) {
-				category.fieldName = "strDepartment";
-				category.valueTitle = "Department";
-				usedFieldNames.add("strDepartment");
-			}
-			if (subcatFilled && subcategory) {
-				subcategory.fieldName = "strCategory";
-				subcategory.valueTitle = "Category";
-				usedFieldNames.add("strCategory");
-			}
-		}
-
-		// Subcategory only
-		else if (subcatFilled) {
-			requiredWarnings.push({
-				fieldName: "strDepartment",
-				valueTitle: "Department",
-				message:
-					"Subcategory was promoted to Department, as no better option was found.",
-			});
 			if (subcategory) {
-				subcategory.fieldName = "strDepartment";
-				subcategory.valueTitle = "Department";
-				usedFieldNames.add("strDepartment");
+				subcategory.fieldName = "strCategory";
+				subcategory.valueTitle = "Category (from Subcategory)";
+				subcategory.manual = true;
+				subcategory.promotedFrom = "strSubcategory";
 			}
-		} else {
+
 			requiredWarnings.push({
 				fieldName: "strDepartment",
 				valueTitle: "Department",
-				message: "Required field not matched",
+				message:
+					"No Department found, but Category was mapped as Department; Subcategory as Category.",
+			});
+		} else if (googleCategory) {
+			googleCategory.fieldName = "strDepartment";
+			googleCategory.valueTitle =
+				"Department (from Google Product Category)";
+			googleCategory.manual = true;
+			googleCategory.promotedFrom = "Google Product Category";
+
+			requiredWarnings.push({
+				fieldName: "strDepartment",
+				valueTitle: "Department",
+				message:
+					"No Department found, but Google Product Category was used instead.",
 			});
 		}
 	}
 
-	return { mapping: mapped, warnings: requiredWarnings };
+	return {
+		mapped,
+		unmatched,
+		requiredWarnings,
+		allHeaders: uploadedHeaders,
+	};
 }

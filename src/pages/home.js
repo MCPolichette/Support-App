@@ -26,17 +26,17 @@ const Home = () => {
 						FISH USA Report
 					</Link>
 				</div>
-			</div>
-			Placeholder for future tools
-			<div className="card text-muted border-0">
-				<div className="card-body">
-					<h5 className="card-title">More tools coming soon...</h5>
-					<p className="card-text">
-						This dashboard will eventually include tools for
-						validation, troubleshooting, and feed health
-						diagnostics.
-					</p>
-				</div>
+				{/* <div className="card-body">
+					<h5 className="card-title">Website/page Link Detector</h5>
+					<p className="card-text">Work in progress.</p>
+					<Link
+						to="/website_scanner"
+						className="btn btn-primary"
+						disabled
+					>
+						Link detector
+					</Link>
+				</div> */}
 			</div>
 		</div>
 	);
