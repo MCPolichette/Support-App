@@ -1,97 +1,137 @@
 import React from "react";
+import fieldAliases from "../../logic/fieldAliases.json";
+
+const getVariant = (row) => {
+	if (row.manual) return "info";
+	if (row.fieldName) return "primary";
+	return "secondary";
+};
+
+const truncatePreview = (text, maxLength = 50) => {
+	if (!text) return "";
+	if (text.length <= maxLength) return text;
+	return text.slice(0, maxLength) + "…";
+};
+
+const truncateImageURL = (url, tailLength = 12) => {
+	if (!url) return "";
+	const base = url.slice(0, 30);
+	const tail = url.slice(-tailLength);
+	return `${base}…${tail}`;
+};
 
 const MapDisplay = ({
 	mapping = [],
 	warnings = [],
-	unmatched = [],
 	allHeaders = [],
+	onOverride,
 }) => {
-	// Create a unified map of column data
-	const mappedByHeader = mapping.reduce((acc, item) => {
-		acc[item.header] = item;
-		return acc;
-	}, {});
-
 	return (
-		<div id="tableDisplay">
+		<div className="table-responsive">
+			<table className="table table-bordered table-hover align-middle">
+				<thead className="table-light">
+					<tr>
+						<th>Original Header</th>
+						<th>Mapped Field</th>
+						<th>Preview</th>
+						<th>Score</th>
+					</tr>
+				</thead>
+				<tbody>
+					{mapping.map((row, index) => {
+						const requiredField = fieldAliases.find(
+							(f) => f.fieldName === row.fieldName
+						)?.required;
+						const isImageURL =
+							row.isURL &&
+							row.fieldName?.toLowerCase().includes("image");
+						const fullPreview = row.preview || "";
+
+						return (
+							<tr key={index}>
+								<td>{row.header}</td>
+								<td>
+									<div className="dropdown">
+										<button
+											className={`btn btn-sm btn-${getVariant(
+												row
+											)} dropdown-toggle`}
+											type="button"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											{row.fieldName
+												? `${row.fieldName} — ${row.valueTitle}`
+												: "Unassigned"}
+										</button>
+										<ul className="dropdown-menu">
+											{fieldAliases.map((field, i) => (
+												<li key={i}>
+													<button
+														type="button"
+														className="dropdown-item"
+														onClick={() =>
+															onOverride(
+																row.header,
+																field.fieldName
+															)
+														}
+													>
+														{field.fieldName} —{" "}
+														{field.valueTitle}
+													</button>
+												</li>
+											))}
+										</ul>
+										{requiredField && (
+											<span className="badge bg-success ms-2">
+												Required
+											</span>
+										)}
+										{row.manual && (
+											<span className="badge bg-info ms-2">
+												Manual
+											</span>
+										)}
+									</div>
+								</td>
+								<td
+									className="text-truncate"
+									style={{ maxWidth: "240px" }}
+									title={fullPreview}
+								>
+									{row.fillRatio === 0 ? (
+										<span className="text-muted fst-italic">
+											NO data in column
+										</span>
+									) : isImageURL ? (
+										truncateImageURL(fullPreview)
+									) : (
+										truncatePreview(fullPreview)
+									)}
+								</td>
+								<td>{row.score}</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+
 			{warnings.length > 0 && (
-				<div className="alert alert-warning">
-					<h6>Missing Required Fields</h6>
+				<div className="alert alert-warning mt-3">
+					<h5>Warnings</h5>
 					<ul className="mb-0">
-						{warnings.map((warn, index) => (
-							<li key={index}>
-								<b>{warn.valueTitle}</b> ({warn.fieldName}) –{" "}
-								{warn.message}
+						{warnings.map((warning, idx) => (
+							<li key={idx}>
+								<strong>
+									{warning.valueTitle || warning.fieldName}:
+								</strong>{" "}
+								{warning.message}
 							</li>
 						))}
 					</ul>
 				</div>
 			)}
-			<div className="table-responsive shadow p-3 mb-4 bg-body rounded">
-				<h5 className="mb-3">Field Mapping Preview</h5>
-				<table className="table table-sm table-bordered border-primary">
-					<thead className="table-light">
-						<tr>
-							<th>Col #</th>
-							<th>Source Header</th>
-							<th>Matched Field</th>
-							<th>Confidence</th>
-							<th>Required</th>
-						</tr>
-					</thead>
-					<tbody>
-						{allHeaders.length > 0 ? (
-							allHeaders.map((header, index) => {
-								const match = mappedByHeader[header];
-								return (
-									<tr key={index}>
-										<td>{index + 1}</td>
-										<td>{header}</td>
-										<td>{match?.fieldName || "—"}</td>
-										<td>
-											{match ? (
-												<span>
-													{match.valueTitle}{" "}
-													<span className="text-muted">
-														({match.score})
-													</span>
-												</span>
-											) : (
-												<span className="text-muted">
-													No match
-												</span>
-											)}
-										</td>
-										<td>
-											{match?.required ? "Yes" : "No"}
-										</td>
-									</tr>
-								);
-							})
-						) : (
-							<tr>
-								<td colSpan="5" className="text-center">
-									No headers found.
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
-			</div>
-
-			{/* {unmatched.length > 0 && (
-				<div className="alert alert-secondary">
-					<h6>Unmatched Headers</h6>
-					<ul className="mb-0">
-						{unmatched.map((un, idx) => (
-							<li key={idx}>
-								<b>{un.header}</b> –{" "}
-								{un.reason || "No alias match"}
-							</li>
-						))}
-					</ul>
-				</div>
-			)} */}
 		</div>
 	);
 };

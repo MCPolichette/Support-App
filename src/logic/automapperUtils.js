@@ -30,7 +30,26 @@ export function checkForBlankColumns(
 		};
 	});
 }
+export function validatePrice(rows = [], header = "") {
+	let numericCount = 0;
+	let totalChecked = 0;
 
+	const priceRegex = /^\$?\d{1,6}(\.\d{1,2})?$/;
+
+	for (let i = 0; i < Math.min(500, rows.length); i++) {
+		const val = rows[i][header];
+		if (val === undefined || val === null || val === "") continue;
+
+		totalChecked++;
+		const strVal = String(val).replace(/,/g, "").trim();
+
+		if (!isNaN(strVal) && priceRegex.test(strVal)) {
+			numericCount++;
+		}
+	}
+
+	return totalChecked > 0 && numericCount / totalChecked >= 0.6;
+}
 /**
  * Gets the most common values for a given field
  * Useful for category / subcategory suggestions
@@ -53,12 +72,33 @@ export function getTopValues(rows, fieldName, limit = 10) {
 		.sort((a, b) => b.count - a.count)
 		.slice(0, limit);
 }
-export function calculateFillRatio(rows = [], header = "") {
+export function calculateFillRatio(rows = [], header = "", valueType = "") {
 	if (!rows.length) return 0;
-	const filledCount = rows.filter((row) => {
-		const val = row[header];
-		return val !== null && val !== undefined && String(val).trim() !== "";
-	}).length;
+
+	let filledCount = 0;
+
+	rows.forEach((row) => {
+		let val = row[header];
+		if (val !== null && val !== undefined) {
+			val = String(val).trim();
+
+			if (val) {
+				if (valueType === "number" && isNaN(parseFloat(val))) return;
+				if (valueType === "url" && !isValidURL(val)) return;
+
+				filledCount++;
+			}
+		}
+	});
 
 	return filledCount / rows.length;
+}
+
+export function isValidURL(val) {
+	try {
+		const url = new URL(val);
+		return url.protocol === "http:" || url.protocol === "https:";
+	} catch {
+		return false;
+	}
 }
