@@ -6,6 +6,7 @@ import Automapper from "./pages/Automapper.js";
 import RecursiveCrawler from "./pages/RecursiveCrawler";
 import Home from "./pages/home.js";
 import FishUSA from "./pages/FishUSA.js";
+import UpdateKey from "./pages/UpdateKey.js";
 import Navbar from "./components/NavBar.js";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
 				<Route path="/automapper" element={<Automapper />} />
 				<Route path="/fish_usa" element={<FishUSA />} />
 				<Route path="/website_scanner" element={<RecursiveCrawler />} />
+				<Route path="/update_key" element={<UpdateKey />} />
 			</Routes>
 		</Router>
 	);
