@@ -1,5 +1,6 @@
 import { runAPI } from "../utils/apiRunner";
 import { exportToCSV } from "../utils/exportCSV";
+import existingData from "../components/data/FishUSAdata.json";
 
 function getDateRange(startDate, endDate) {
 	const range = [];
@@ -79,6 +80,7 @@ export async function runFishUSAReport({
 		"Affiliate Sale Commission",
 		"Network Sale Commission",
 		"Sale Commission",
+		"Affiliate New Customers",
 		"Adjusted Affiliate Earnings",
 		"Adjusted Cost",
 		"Adjusted Network Earnings",
@@ -103,6 +105,7 @@ export async function runFishUSAReport({
 		"Affiliate Sale Commission": row["15Commission"],
 		"Network Sale Commission": row.Network_Commission,
 		"Sale Commission": row["15Total_Commissions"],
+		"Affiliate New Customers": row["15New_Customer"],
 		"Adjusted Affiliate Earnings": row["15Adjusted_Commissions"],
 		"Adjusted Cost": row["15Total_Adjusted"],
 		"Adjusted Network Earnings": row["15Adjusted_Network_Earnings"],
@@ -111,10 +114,25 @@ export async function runFishUSAReport({
 		"Reversal Rate": row["15Reversal_Rate"],
 	}));
 
-	const filename = `FishUSA_customReport_${startDate}_to_${endDate}.csv`;
-	exportToCSV(mapped, filename, headers);
-
+	sortAndExportCombinedData(mapped, startDate, endDate, headers);
 	if (onComplete) onComplete(mapped);
+}
+
+function sortAndExportCombinedData(newData, startDate, endDate, headers) {
+	const combined = [...existingData, ...newData];
+
+	combined.sort((a, b) => {
+		const nameA = a["Affiliate Website"]?.toLowerCase() || "";
+		const nameB = b["Affiliate Website"]?.toLowerCase() || "";
+		if (nameA < nameB) return -1;
+		if (nameA > nameB) return 1;
+		const dateA = new Date(a["Day"]);
+		const dateB = new Date(b["Day"]);
+		return dateA - dateB;
+	});
+
+	const filename = `FishUSA_FULLREPORT_to_${endDate}.csv`;
+	exportToCSV(combined, filename, headers);
 }
 
 function parseXMLtoArray(xml) {
@@ -153,24 +171,25 @@ function mergeReportData(mod20Rows, mod15Rows, date) {
 					row20.Network_Commissions
 				),
 				Conversion_Rate: row20.Conversion_Rate,
-				Average_Order_Amount: matching15?.Average_Sale_Amount || "",
-				"15Commission": matching15?.Commissions || "",
-				Network_Commission: matching15?.Network_Commissions || "",
+				Average_Order_Amount: matching15?.Average_Sale_Amount || "0",
+				"15Commission": matching15?.Commissions || "0",
+				Network_Commission: matching15?.Network_Commissions || "0",
 				"15Total_Commissions": add(
 					matching15?.Commissions,
 					matching15?.Network_Commissions
 				),
+				"15New_Customer": matching15?.New_Customers || "0",
 				"15Adjusted_Commissions":
-					matching15?.Adjusted_Commissions || "",
+					matching15?.Adjusted_Commissions || "0",
 				"15Total_Adjusted": add(
 					matching15?.Adjusted_Commissions,
 					matching15?.Adjusted_Network_Earnings
 				),
 				"15Adjusted_Network_Earnings":
-					matching15?.Adjusted_Network_Earnings || "",
-				"15Adjusted_Sales": matching15?.Adjusted_Sales || "",
+					matching15?.Adjusted_Network_Earnings || "0",
+				"15Adjusted_Sales": matching15?.Adjusted_Sales || "0",
 				Number_of_Adjustments: row20.Number_of_Adjustments,
-				"15Reversal_Rate": matching15?.Reversal_Rate || "",
+				"15Reversal_Rate": matching15?.Reversal_Rate || "0",
 			};
 
 			return hasPerformance(mergedRow) ? mergedRow : null;

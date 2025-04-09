@@ -5,9 +5,12 @@ import DateRangePicker from "../components/DateRangePicker";
 
 const FishUSA = () => {
 	const getDefaultStartDate = () => {
-		const date = new Date();
-		date.setDate(date.getDate() - 7);
-		return date.toISOString().split("T")[0];
+		//
+		// const date = new Date();
+		// date.setDate(date.getDate() - 7);
+		// console.log(date.toISOString().split("T")[0]);
+		// return date.toISOString().split("T")[0];
+		return "2025-01-01";
 	};
 
 	const getDefaultEndDate = () => {
@@ -45,6 +48,20 @@ const FishUSA = () => {
 	return (
 		<div className="container container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center">
 			<h1 className="text-2xl font-bold mb-4">FishUSA Custom Report</h1>
+			<div className="alert alert-danger mt-4" role="alert">
+				<h5 className="alert-heading">⚠️ Important Report Notice</h5>
+				<p className="mb-2">
+					This report has been updated with backlogged data going back
+					to <strong>2023</strong>.
+				</p>
+				<p className="mb-0">
+					<strong>
+						Please leave the START date set to January 1st, 2025
+					</strong>{" "}
+					to ensure an accurate report. You may select any END DATE up
+					to <strong>yesterday</strong>.
+				</p>
+			</div>
 
 			{showModal && (
 				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
