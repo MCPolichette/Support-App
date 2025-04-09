@@ -1,6 +1,9 @@
 import { runAPI } from "../utils/apiRunner";
 import { exportToCSV } from "../utils/exportCSV";
 
+// TODO Add New customer to the Affiliate section of the report
+// TODO upload a report with 2023/2024 data, and set the report to run 2025 to yesterday.  merge the file. filter by Website ID, and print
+
 function getDateRange(startDate, endDate) {
 	const range = [];
 	let current = new Date(startDate);

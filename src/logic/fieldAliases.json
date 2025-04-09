@@ -84,27 +84,6 @@
 		"valueTitle": "Subcategory"
 	},
 	{
-		"fieldName": "strProductColor",
-		"matches": ["color", "clr", "shade"],
-		"required": false,
-		"valueType": "text",
-		"valueTitle": "Color"
-	},
-	{
-		"fieldName": "strProductSize",
-		"matches": ["size", "dimension", "length"],
-		"required": false,
-		"valueType": "text",
-		"valueTitle": "Size"
-	},
-	{
-		"fieldName": "strProductMaterial",
-		"matches": ["material", "fabric", "composition"],
-		"required": false,
-		"valueType": "text",
-		"valueTitle": "Material"
-	},
-	{
 		"fieldName": "strBrandName",
 		"matches": ["brand", "brandname", "maker", "manufacturer"],
 		"required": false,

@@ -1,22 +1,28 @@
-// linkcrawler.js - logic extracted from legacy app.js file
+// linkcrawler.js - scans <a> links recursively for URL parameter matches (e.g., "avad=")
+import { CRAWLER_API_URL, CRAWLER_TOKEN } from "./config";
+console.log("🔧 CRAWLER_API_URL:", CRAWLER_API_URL);
 
-let foundParams = [];
+let foundLinks = [];
 let scannedPages = new Set();
 let startTime;
 let crawlTimer;
-let progressUpdater;
+const MAX_PAGES = 500;
 
 export async function startCrawl(
 	baseUrl,
-	searchTerm,
+	searchTerms,
 	setStatus,
 	setResults,
 	setErrors,
 	setProgress
 ) {
-	foundParams = [];
+	console.log("🚀 startCrawl() triggered");
+	foundLinks = [];
 	scannedPages = new Set();
 	startTime = Date.now();
+
+	console.log("🔍 Base URL:", baseUrl);
+	console.log("🔍 Search Terms:", searchTerms);
 
 	setStatus("Crawling...");
 	setResults([]);
@@ -38,7 +44,7 @@ export async function startCrawl(
 	await crawl(
 		baseUrl,
 		baseUrl,
-		searchTerm,
+		searchTerms,
 		setStatus,
 		setResults,
 		setErrors,
@@ -52,55 +58,105 @@ export async function startCrawl(
 async function crawl(
 	url,
 	baseUrl,
-	searchTerm,
+	searchTerms,
 	setStatus,
 	setResults,
 	setErrors,
 	setProgress
 ) {
-	if (scannedPages.has(url)) return;
-	scannedPages.add(url);
-
-	setProgress((prev) => ({
-		...prev,
-		scanned: scannedPages.size,
-		remaining: Math.max(prev.total - scannedPages.size, 0),
-		percent: (scannedPages.size / (prev.total || 1)) * 100,
-	}));
-
 	try {
-		const response = await fetch(url);
-		if (!response.ok) throw new Error(`Fetch failed: ${url}`);
+		const normalizedUrl = new URL(url).toString();
+		if (scannedPages.has(normalizedUrl)) {
+			console.log("♻️ Already scanned:", normalizedUrl);
+			return;
+		}
+		scannedPages.add(normalizedUrl);
 
-		const text = await response.text();
-		const found = text
-			.split("\n")
-			.filter((line) => line.includes(searchTerm));
+		if (scannedPages.size > MAX_PAGES) {
+			console.warn("🚫 Max page limit reached.");
+			return;
+		}
 
-		found.forEach((line) =>
-			foundParams.push({ url, snippet: line.trim() })
-		);
-		setResults([...foundParams]);
+		console.log("🌐 Scanning:", normalizedUrl);
+		setProgress((prev) => ({
+			...prev,
+			scanned: scannedPages.size,
+			remaining: Math.max(prev.total - scannedPages.size, 0),
+			percent: (scannedPages.size / (prev.total || 1)) * 100,
+		}));
 
-		// Pull all internal links
-		const doc = new DOMParser().parseFromString(text, "text/html");
-		const links = Array.from(doc.querySelectorAll("a"))
-			.map((a) => a.href)
-			.filter(
-				(href) => href.startsWith(baseUrl) && !scannedPages.has(href)
-			);
+		const fetchUrl = `${CRAWLER_API_URL}/fetch?url=${encodeURIComponent(
+			normalizedUrl
+		)}`;
+		console.log("📡 Fetching:", fetchUrl);
+		const fetchRes = await fetch(fetchUrl, {
+			headers: { "x-api-token": CRAWLER_TOKEN },
+		});
+
+		if (!fetchRes.ok) throw new Error(`Fetch failed: ${normalizedUrl}`);
+
+		const text = await fetchRes.text();
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(text, "text/html");
+		if (!doc || !doc.querySelectorAll) {
+			console.warn("⚠️ DOM parsing failed for:", normalizedUrl);
+			return;
+		}
+
+		const anchors = Array.from(doc.querySelectorAll("a"));
+		let linksToFollow = [];
+
+		anchors.forEach((a) => {
+			try {
+				const href = a.getAttribute("href");
+				if (!href || href.startsWith("#") || href.startsWith("mailto:"))
+					return;
+				const absoluteUrl = new URL(href, normalizedUrl).href.split(
+					"#"
+				)[0];
+				if (scannedPages.has(absoluteUrl)) return;
+
+				const matched = searchTerms.some((term) =>
+					absoluteUrl.includes(term)
+				);
+				if (matched) {
+					const urlObj = new URL(absoluteUrl);
+					const params = new URLSearchParams(urlObj.search);
+					foundLinks.push({
+						page: normalizedUrl,
+						href: absoluteUrl,
+						anchorText: a.textContent.trim() || "No anchor text",
+						title: a.getAttribute("title") || "No title",
+						rel: a.getAttribute("rel") || "",
+						url: urlObj.origin + urlObj.pathname,
+						merchant_id: params.get("merchant_id") || null,
+						website_id: params.get("website_id") || null,
+						avad: params.get("avad") || null,
+						ctc: params.get("ctc") || null,
+					});
+					setResults([...foundLinks]);
+					console.log(`✅ Found match: ${absoluteUrl}`);
+				}
+
+				if (absoluteUrl.startsWith(baseUrl)) {
+					linksToFollow.push(absoluteUrl);
+				}
+			} catch (e) {
+				console.warn("⛔ Skipping bad href:", e.message);
+			}
+		});
 
 		setProgress((prev) => ({
 			...prev,
-			total: scannedPages.size + links.length,
-			remaining: links.length,
+			total: scannedPages.size + linksToFollow.length,
+			remaining: linksToFollow.length,
 		}));
 
-		for (const link of links) {
+		for (const link of linksToFollow) {
 			await crawl(
 				link,
 				baseUrl,
-				searchTerm,
+				searchTerms,
 				setStatus,
 				setResults,
 				setErrors,
@@ -108,7 +164,7 @@ async function crawl(
 			);
 		}
 	} catch (err) {
-		console.error("Error fetching:", url, err);
+		console.error("❌ Error fetching:", url, err);
 		setErrors((prev) => ({
 			...prev,
 			errors: (prev.errors || 0) + 1,
@@ -118,11 +174,31 @@ async function crawl(
 }
 
 export function downloadCSV() {
-	if (!foundParams.length) return;
-	const headers = ["URL", "Snippet"];
-	const rows = foundParams.map((row) => [
-		row.url,
-		row.snippet.replace(/\"/g, '"'),
+	if (!foundLinks.length) return;
+	const headers = [
+		"Page",
+		"Href",
+		"Anchor Text",
+		"Title",
+		"Rel",
+		"URL",
+		"Merchant ID",
+		"Website ID",
+		"AVAD",
+		"CTC",
+	];
+
+	const rows = foundLinks.map((link) => [
+		link.page,
+		link.href,
+		link.anchorText,
+		link.title,
+		link.rel,
+		link.url,
+		link.merchant_id,
+		link.website_id,
+		link.avad,
+		link.ctc,
 	]);
 
 	let csvContent =
@@ -130,9 +206,7 @@ export function downloadCSV() {
 		headers.join(",") +
 		"\n" +
 		rows
-			.map((r) =>
-				r.map((field) => `"${field.replace(/"/g, '""')}"`).join(",")
-			)
+			.map((r) => r.map((field) => `"${field ?? ""}"`).join(","))
 			.join("\n");
 
 	const encodedUri = encodeURI(csvContent);
