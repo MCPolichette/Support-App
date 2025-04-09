@@ -46,6 +46,14 @@ const Navbar = () => (
 									</Link>
 								</li>
 							))}
+							<li>
+								<Link
+									className="dropdown-item"
+									to="/update_key"
+								>
+									Update Key
+								</Link>
+							</li>
 						</ul>
 					</li>
 				</ul>
