@@ -1,5 +1,4 @@
-import { feedfile } from "./feedFile.js";
-import { determine_fields, check_for_blank_columns } from "./fieldMapping.js";
+import { feedfile } from "../referenceFiles/feedFile.js";
 
 // MAIN FILE READER
 export function file_reader(input) {
@@ -16,13 +15,9 @@ export function file_reader(input) {
 
 				const rawHeaderLine = allLines[0];
 				const delimiter = determineDelimiter(rawHeaderLine);
-
 				const headerRow = cleanInput(rawHeaderLine, delimiter);
-				feedfile.maps.merchant_layout = headerRow;
-				check_for_blank_columns(headerRow, allLines);
-				determine_fields(headerRow);
-				file_data(input);
 
+				file_data(input);
 				// SAMPLE ROW CONVERSION
 				const sampleLimit = 500;
 				const sampleRowsAsObjects = [];

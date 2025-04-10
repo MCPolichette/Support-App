@@ -50,7 +50,7 @@ const MapDisplay = ({
 						return (
 							<tr key={index}>
 								<td>{row.header}</td>
-								<td>
+								<td className="text-start">
 									<div className="dropdown">
 										<button
 											className={`btn btn-sm btn-${getVariant(

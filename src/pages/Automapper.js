@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { file_reader } from "../logic/file_reader.js";
-import { feedfile } from "../logic/feedFile.js";
-import InfoDisplay from "../components/InfoDisplay.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
 import autoMapHeaders from "../logic/mappingEngine";
-import ShopifyModal from "../components/modals/ShopifyModal.js"; // placeholder if needed
 import MapModal from "../components/modals/MapModal";
 import fieldAliases from "../logic/fieldAliases.json";
 
@@ -38,7 +35,7 @@ const Automapper = () => {
 
 		setMappingResults({
 			...mappingResults,
-			mapping: newMapping, // correctly spelled
+			mapping: newMapping,
 		});
 	};
 

@@ -13,6 +13,10 @@ function App() {
 	return (
 		<Router>
 			<Navbar />
+			<div className="container">
+				<h1>NAVBAR GOES HERE!</h1>
+				{/* This is for fun. */}
+			</div>
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/automapper" element={<Automapper />} />

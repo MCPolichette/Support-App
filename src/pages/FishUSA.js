@@ -125,29 +125,3 @@ const FishUSA = () => {
 };
 
 export default FishUSA;
-
-//
-//
-//
-//
-//
-//
-// Adjusted Affiliate Earnings =
-// Adjusted Network Earnings
-
-//
-//
-// Adjusted Sales
-
-//
-//
-//
-// IN THE WEBSITE API Number_of_Adjustments, Conversion_Rate,
-//
-//
-//
-//
-//
-//
-//
-//
