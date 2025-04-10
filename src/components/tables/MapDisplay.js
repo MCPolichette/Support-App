@@ -29,7 +29,7 @@ const MapDisplay = ({
 }) => {
 	return (
 		<div className="table-responsive">
-			<table className="table table-bordered table-hover align-middle">
+			<table className="table table-bordered table-hover table-sm align-middle">
 				<thead className="table-light">
 					<tr>
 						<th>Original Header</th>

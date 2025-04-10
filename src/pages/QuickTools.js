@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import REIDateConverter from "../components/modals/REIDateConverter";
-import LinkCard from "../components/LinkCard";
+import LinkCard from "../components/cards/LinkCard";
 
 const QuickTools = () => {
 	const tools_list = [

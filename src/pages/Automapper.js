@@ -4,6 +4,8 @@ import MapDisplay from "../components/tables/MapDisplay.js";
 import autoMapHeaders from "../logic/mappingEngine";
 import MapModal from "../components/modals/MapModal";
 import fieldAliases from "../logic/fieldAliases.json";
+import { feedfile } from "../referenceFiles/feedFile.js";
+import StatusCard from "../components/cards/StatusCard.js";
 
 const Automapper = () => {
 	const [allHeaders, setAllHeaders] = useState([]);
@@ -34,12 +36,15 @@ const Automapper = () => {
 				  }
 				: m
 		);
+		const cardDisplay = feedfile;
+		console.log(cardDisplay);
 
 		setMappingResults({
 			...mappingResults,
 			mapping: newMapping,
 		});
 	};
+	const test = feedfile.fileData;
 
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
@@ -53,7 +58,6 @@ const Automapper = () => {
 					headers,
 					sampleRows
 				);
-				console.log(mapped);
 				setMappingResults({
 					mapping: mapped,
 					warnings: warnings,
@@ -71,6 +75,7 @@ const Automapper = () => {
 
 	const handleRefresh = () => {
 		window.location.reload();
+		test.push("DDDDDD");
 	};
 
 	return (
@@ -88,7 +93,6 @@ const Automapper = () => {
 						Map a new file
 					</button>
 				)}
-
 				<div id="file_input">
 					<label htmlFor="formFileLg" className="form-label h6">
 						Select Feed-File to Map
@@ -111,41 +115,40 @@ const Automapper = () => {
 						</div>
 					</div>
 				)}
-
-				{mappingComplete && (
-					<div className="row mt-4 w-100 text-start">
-						{/* You can uncomment this when you're ready for file info again */}
-						{/* <div className="col-lg-6 col-md-6 col-sm-12">
-							<InfoDisplay
-								title="File Information"
-								items={Object.values(feedfile.fileInfo)}
-							/>
-						</div> */}
-					</div>
-				)}
-
 				{selectedFile && mappingResults && (
-					<div className="row mt-4 w-100">
-						<div class="row">
-							<div className="mb-2 d-flex justify-content-start">
-								<button
-									className="btn btn-outline-secondary btn-sm"
-									onClick={() =>
-										setShowVariantMap((prev) => !prev)
-									}
-								>
-									Map Variants
-								</button>
+					<div>
+						<div className="row mt-4 w-100 text-start">
+							<div className="col-lg-6 col-md-6 col-sm-12">
+								<StatusCard
+									status="success"
+									title="File Stats"
+									items={test}
+								/>
 							</div>
 						</div>
-						<div className="col-12">
-							<MapDisplay
-								mapping={mappingResults?.mapping}
-								warnings={mappingResults.warnings}
-								allHeaders={mappingResults.allHeaders}
-								onOverride={handleOverride}
-								showVariantMap={showVariantMap}
-							/>
+
+						<div className="row mt-4 w-100">
+							<div className="row">
+								<div className="mb-2 d-flex justify-content-start">
+									<button
+										className="btn btn-outline-secondary btn-sm"
+										onClick={() =>
+											setShowVariantMap((prev) => !prev)
+										}
+									>
+										Map Variants
+									</button>
+								</div>
+							</div>
+							<div className="col-12">
+								<MapDisplay
+									mapping={mappingResults?.mapping}
+									warnings={mappingResults.warnings}
+									allHeaders={mappingResults.allHeaders}
+									onOverride={handleOverride}
+									showVariantMap={showVariantMap}
+								/>
+							</div>
 						</div>
 					</div>
 				)}

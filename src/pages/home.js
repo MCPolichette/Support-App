@@ -1,6 +1,6 @@
 import React from "react";
 import _PageDirectory from "./__PageDirectory";
-import LinkCard from "../components/LinkCard";
+import LinkCard from "../components/cards/LinkCard";
 
 const Home = () => {
 	return (
