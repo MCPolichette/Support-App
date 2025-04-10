@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { runFishUSAReport } from "../logic/fishUSAreport";
 import LoadingSpinner from "../components/LoadingSpinner";
 import DateRangePicker from "../components/DateRangePicker";
+import StylizedModal from "../components/modals/_ModalStylized";
+import UpdateKey from "../components/modals/UpdateKey";
 
 const FishUSA = () => {
 	const getDefaultStartDate = () => {
@@ -47,6 +49,16 @@ const FishUSA = () => {
 
 	return (
 		<div className="container container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center">
+			{/* BELOW is the template for the REQUIRED API KEY PAGES.  Continue to paste it at the top of the containers, for visibility. */}
+			{showModal && (
+				<StylizedModal
+					show={showModal}
+					onHide={() => setShowModal(false)}
+					title="This Tool Requires an API Key"
+				>
+					<UpdateKey />
+				</StylizedModal>
+			)}
 			<h1 className="text-2xl font-bold mb-4">FishUSA Custom Report</h1>
 			<div className="alert alert-danger mt-4" role="alert">
 				<h5 className="alert-heading">⚠️ Important Report Notice</h5>
@@ -62,28 +74,6 @@ const FishUSA = () => {
 					to <strong>yesterday</strong>.
 				</p>
 			</div>
-
-			{showModal && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white p-6 rounded shadow">
-						<h2 className="text-lg font-semibold mb-2">
-							Enter AVL UUID
-						</h2>
-						<input
-							type="text"
-							value={uuid}
-							onChange={(e) => setUuid(e.target.value)}
-							className="border p-2 w-full mb-4"
-						/>
-						<button
-							onClick={handleSaveUUID}
-							className="bg-blue-600 text-white px-4 py-2 rounded"
-						>
-							Save
-						</button>
-					</div>
-				</div>
-			)}
 
 			{!showModal && (
 				<div className="w-full max-w-md">
@@ -125,29 +115,3 @@ const FishUSA = () => {
 };
 
 export default FishUSA;
-
-//
-//
-//
-//
-//
-//
-// Adjusted Affiliate Earnings =
-// Adjusted Network Earnings
-
-//
-//
-// Adjusted Sales
-
-//
-//
-//
-// IN THE WEBSITE API Number_of_Adjustments, Conversion_Rate,
-//
-//
-//
-//
-//
-//
-//
-//

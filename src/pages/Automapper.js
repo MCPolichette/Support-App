@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { file_reader } from "../logic/file_reader.js";
-import { feedfile } from "../logic/feedFile.js";
-import InfoDisplay from "../components/InfoDisplay.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
 import autoMapHeaders from "../logic/mappingEngine";
-import ShopifyModal from "../components/modals/ShopifyModal.js"; // placeholder if needed
 import MapModal from "../components/modals/MapModal";
 import fieldAliases from "../logic/fieldAliases.json";
 
@@ -17,6 +14,7 @@ const Automapper = () => {
 	const [showMapModal, setShowMapModal] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [showRefresh, setShowRefresh] = useState(false);
+	const [showVariantMap, setShowVariantMap] = useState(false);
 
 	const handleOverride = (header, newFieldName) => {
 		const field = fieldAliases.find((f) => f.fieldName === newFieldName);
@@ -30,6 +28,7 @@ const Automapper = () => {
 						...m,
 						fieldName: field.fieldName,
 						valueTitle: field.valueTitle,
+						variant: field.variant,
 						manual: true,
 						score: 99,
 				  }
@@ -38,7 +37,7 @@ const Automapper = () => {
 
 		setMappingResults({
 			...mappingResults,
-			mapping: newMapping, // correctly spelled
+			mapping: newMapping,
 		});
 	};
 
@@ -127,12 +126,25 @@ const Automapper = () => {
 
 				{selectedFile && mappingResults && (
 					<div className="row mt-4 w-100">
+						<div class="row">
+							<div className="mb-2 d-flex justify-content-start">
+								<button
+									className="btn btn-outline-secondary btn-sm"
+									onClick={() =>
+										setShowVariantMap((prev) => !prev)
+									}
+								>
+									Map Variants
+								</button>
+							</div>
+						</div>
 						<div className="col-12">
 							<MapDisplay
 								mapping={mappingResults?.mapping}
 								warnings={mappingResults.warnings}
 								allHeaders={mappingResults.allHeaders}
 								onOverride={handleOverride}
+								showVariantMap={showVariantMap}
 							/>
 						</div>
 					</div>

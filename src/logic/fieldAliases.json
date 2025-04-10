@@ -4,7 +4,8 @@
 		"matches": ["sku", "productid", "itemnumber"],
 		"required": true,
 		"valueType": "text",
-		"valueTitle": "SKU"
+		"valueTitle": "SKU",
+		"variant": "variant-sku"
 	},
 	{
 		"fieldName": "dblProductPrice",
@@ -18,14 +19,16 @@
 		],
 		"required": true,
 		"valueType": "number",
-		"valueTitle": "Price"
+		"valueTitle": "Price",
+		"variant": "variant-retail_price"
 	},
 	{
 		"fieldName": "strProductName",
 		"matches": ["name", "title"],
 		"required": true,
 		"valueType": "text",
-		"valueTitle": "Product Name"
+		"valueTitle": "Product Name",
+		"variant": false
 	},
 	{
 		"fieldName": "stLongDescription",
@@ -38,7 +41,8 @@
 		],
 		"required": true,
 		"valueType": "text",
-		"valueTitle": "Description"
+		"valueTitle": "Description",
+		"variant": false
 	},
 	{
 		"fieldName": "strLargeImage",
@@ -53,28 +57,32 @@
 		],
 		"required": true,
 		"valueType": "url",
-		"valueTitle": "Image URL"
+		"valueTitle": "Image URL",
+		"variant": "variant-image_url"
 	},
 	{
 		"fieldName": "strBuyURL",
 		"matches": ["url", "link", "buyurl", "permalink"],
 		"required": true,
 		"valueType": "url",
-		"valueTitle": "Buy URL"
+		"valueTitle": "Buy URL",
+		"variant": "variant-detail_url"
 	},
 	{
 		"fieldName": "strDepartment",
 		"matches": ["department", "dept", "division"],
 		"required": true,
 		"valueType": "text",
-		"valueTitle": "Department"
+		"valueTitle": "Department",
+		"variant": false
 	},
 	{
 		"fieldName": "strCategory",
 		"matches": ["category", "cat", "group"],
 		"required": false,
 		"valueType": "text",
-		"valueTitle": "Category"
+		"valueTitle": "Category",
+		"variant": false
 	},
 	{
 		"fieldName": "strSubcategory",
@@ -84,18 +92,36 @@
 		"valueTitle": "Subcategory"
 	},
 	{
+		"fieldName": "strAttribute10",
+		"matches": ["googlecategory", "googlecategorization"],
+		"valueType": "text",
+		"required": false,
+		"variant": false,
+		"valueTitle": "Google's Categorization"
+	},
+	{
+		"fieldName": "dblItemCommission",
+		"matches": ["basedcommission", "ibc", "commission", "commissionrate"],
+		"valueTitle": "Item Based Commission",
+		"variant": false,
+		"valueType": "float",
+		"required": false
+	},
+	{
 		"fieldName": "strBrandName",
 		"matches": ["brand", "brandname", "maker", "manufacturer"],
 		"required": false,
 		"valueType": "text",
-		"valueTitle": "Brand"
+		"valueTitle": "Brand",
+		"variant": false
 	},
 	{
 		"fieldName": "strManufacturerPartNumber",
 		"matches": ["manufacturerpartnumber", "manufacturerid", "mpn"],
 		"required": false,
 		"valueType": "text",
-		"valueTitle": "MPN"
+		"valueTitle": "MPN",
+		"variant": "variant-vendor_sku"
 	},
 
 	{
@@ -103,13 +129,14 @@
 		"matches": ["saleprice", "discountedprice"],
 		"required": false,
 		"valueType": "number",
-		"valueTitle": "Sale Price"
+		"valueTitle": "Sale Price",
+		"variant": "variant-sale_price"
 	},
 	{
-		"field_name": "strAttribute1",
+		"fieldName": "strAttribute1",
 		"required": false,
 		"valueTitle": "Product Parent Grouping Id",
-		" type": "<type>string</type>",
+		"valueType": "text",
 		"matches": [
 			"parentid",
 			"parentgroup",
@@ -121,30 +148,38 @@
 	},
 
 	{
-		"field_name": "txtShortDescription",
+		"fieldName": "txtShortDescription",
 		"required": false,
 		"matches": ["shortdescription"],
-		"variant": false
+		"variant": false,
+		"valueType": "text"
 	},
 	{
-		"field_name": "strMediumImageURL",
+		"fieldName": "strMediumImageURL",
+		"valueTitle": "Medium Image",
+		"valueType": "url",
 		"required": false,
 		"matches": [
 			"mediumimageurl",
 			"mediumimage",
 			"mediumimagelink",
-			"imageurlmedium"
+			"imageurlmedium",
+			"additionalimagelink",
+			"additionalimageurl",
+			"additionalimage"
 		],
 		"variant": false
 	},
 	{
-		"field_name": "strBrandURL",
+		"fieldName": "strBrandURL",
+		"valueType": "url",
 		"required": false,
 		"matches": ["brandurl", "brandpagelink", "brandpage"],
 		"variant": false
 	},
 	{
-		"field_name": "strBrandLogoImage",
+		"fieldName": "strBrandLogoImage",
+		"valueType": "url",
 		"required": false,
 		"matches": [
 			"brandlogoimage",
@@ -158,7 +193,9 @@
 		"variant": false
 	},
 	{
-		"field_name": "strThumbnailURL",
+		"fieldName": "strThumbnailURL",
+		"valueTitle": "Thumbnail URL",
+		"valueType": "url",
 		"required": false,
 		"matches": [
 			"thumbnailurl",
@@ -171,6 +208,94 @@
 			"thumbimage",
 			"thumburl"
 		],
+		"variant": false
+	},
+	{
+		"fieldName": "strAttribute2",
+		"valueTitle": "Product Color",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["color"],
+		"variant": "variant-color"
+	},
+	{
+		"fieldName": "strAttribute3",
+		"valueTitle": "Product Size",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["size"],
+		"variant": "variant-size"
+	},
+	{
+		"fieldName": "strAttribute4",
+		"valueTitle": "Product Pattern",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["pattern", "style"],
+		"variant": "variant-style"
+	},
+	{
+		"fieldName": "strAttribute5",
+		"valueTitle": "Product Material",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["material"],
+		"variant": false
+	},
+	{
+		"fieldName": "strAttribute6",
+		"valueTitle": "Product Age Group",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["agegroup", "age"],
+		"variant": false
+	},
+	{
+		"fieldName": "strAttribute7",
+		"valueTitle": "Product Gender",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["gender"],
+		"variant": false
+	},
+	{
+		"fieldName": "strAttribute8",
+		"valueTitle": "Product UPC",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["upc"],
+		"variant": "variant-upc"
+	},
+	{
+		"fieldName": "strAttribute9",
+		"valueTitle": "Product Availability",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["availability", "available"],
+		"variant": false
+	},
+	{
+		"fieldName": "txtAttribute2",
+		"valueTitle": "GTIN",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["gtin"],
+		"variant": false
+	},
+	{
+		"fieldName": "txtAttribute3",
+		"valueTitle": "Key Words",
+		"ValueType": "string",
+		"required": false,
+		"matches": ["keywords"],
+		"variant": false
+	},
+	{
+		"fieldName": "txtAttribute1",
+		"valueTitle": "Variants XML",
+		"required": false,
+		"ValueType": "xml",
+		"matches": ["xml", "variantxml", "variants", "variantsxml"],
 		"variant": false
 	}
 ]
