@@ -25,6 +25,7 @@ const MapDisplay = ({
 	warnings = [],
 	allHeaders = [],
 	onOverride,
+	showVariantMap = false,
 }) => {
 	return (
 		<div className="table-responsive">
@@ -33,6 +34,7 @@ const MapDisplay = ({
 					<tr>
 						<th>Original Header</th>
 						<th>Mapped Field</th>
+						{showVariantMap && <th>Variant</th>}
 						<th>Preview</th>
 						<th>Score</th>
 					</tr>
@@ -95,6 +97,15 @@ const MapDisplay = ({
 										)}
 									</div>
 								</td>
+
+								{showVariantMap && (
+									<td>
+										<span className="text-muted">
+											{row.variant || "—"}
+										</span>
+									</td>
+								)}
+
 								<td
 									className="text-truncate"
 									style={{ maxWidth: "240px" }}

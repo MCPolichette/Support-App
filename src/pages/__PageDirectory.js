@@ -6,6 +6,12 @@ const _PageDirectory = [
 		route: "/automapper",
 	},
 	{
+		title: "Quick Tools ",
+		description:
+			"A series of quick conversion tools for DB queries, and other regular calculations.",
+		route: "/more_tools",
+	},
+	{
 		title: "Recursive Link Crawler",
 		description: "work in progress. ",
 		route: "/link-detector",
