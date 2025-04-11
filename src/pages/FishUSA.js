@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { runFishUSAReport } from "../logic/fishUSAreport";
+import { runFishUSAReport } from "../logic/specificMerchantLogic/fishUSAreport";
 import LoadingSpinner from "../components/LoadingSpinner";
 import DateRangePicker from "../components/DateRangePicker";
 import StylizedModal from "../components/modals/_ModalStylized";

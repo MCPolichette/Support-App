@@ -1,4 +1,5 @@
 import { feedfile } from "../referenceFiles/feedFile.js";
+import { formatBytes } from "../utils/conversions.js";
 
 // MAIN FILE READER
 export function file_reader(input) {
@@ -46,11 +47,9 @@ export function file_reader(input) {
 					sampleRows: sampleRowsAsObjects,
 				});
 			};
-
 			reader.onerror = function () {
 				reject(reader.error);
 			};
-
 			reader.readAsText(file);
 		} catch (err) {
 			console.log(err);
@@ -70,7 +69,6 @@ function determineDelimiter(header) {
 		feedfile.fileInfo.Delimiter.value = "Unknown";
 		return ",";
 	}
-
 	if (header.includes("|")) {
 		feedfile.fileInfo.Delimiter.value = "-|- PIPES";
 		return "|";
@@ -83,7 +81,6 @@ function determineDelimiter(header) {
 		feedfile.fileInfo.Delimiter.value = "-,- COMMAS";
 		return ",";
 	}
-
 	feedfile.fileInfo.Delimiter.value = "Unknown";
 	return ",";
 }
@@ -91,7 +88,15 @@ function determineDelimiter(header) {
 // FILE METADATA
 function file_data(myFile) {
 	let file = myFile.files[0];
-	feedfile.fileInfo.File_Name.value = file.name.replace(/ *\([^)]*\) */g, "");
-	feedfile.fileInfo.File_Size.value = file.size + " bytes";
-	feedfile.fileInfo.File_Type.value = file.type;
+	feedfile.fileData = [
+		"FILE NAME:   " +
+			(feedfile.fileInfo.File_Name.value = file.name.replace(
+				/ *\([^)]*\) */g,
+				""
+			)),
+		"SIZE:  " +
+			formatBytes((feedfile.fileInfo.File_Size.value = file.size)),
+		"FILE TYPE:  " + (feedfile.fileInfo.File_Type.value = file.type),
+		"DELIMITER:  " + feedfile.fileInfo.Delimiter.value,
+	];
 }

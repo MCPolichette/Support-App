@@ -1,9 +1,24 @@
 import React, { useState } from "react";
+import FTPshorthand from "../components/modals/FTPshorthand";
 import REIDateConverter from "../components/modals/REIDateConverter";
-import LinkCard from "../components/LinkCard";
+import UTMBuilder from "../components/modals/UTMBuilder";
+
+import LinkCard from "../components/cards/LinkCard";
 
 const QuickTools = () => {
 	const tools_list = [
+		{
+			title: "FTP conversion tools",
+			description:
+				"creating FTP strings, encoding passwords, and copypasta for explaining logins.",
+			modal: <FTPshorthand />,
+		},
+		{
+			title: "SIMPLE UTM Builder",
+			description:
+				"basic inputs for building UTMs, with lower chances of creating a syntax eroor",
+			modal: <UTMBuilder />,
+		},
 		{
 			title: "REI Date Converter",
 			description:

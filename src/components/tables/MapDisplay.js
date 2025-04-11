@@ -1,5 +1,6 @@
 import React from "react";
 import fieldAliases from "../../logic/fieldAliases.json";
+import { Dropdown } from "bootstrap";
 
 const getVariant = (row) => {
 	if (row.manual) return "info";
@@ -27,9 +28,20 @@ const MapDisplay = ({
 	onOverride,
 	showVariantMap = false,
 }) => {
+	const handleSelect = (header, fieldName) => {
+		onOverride(header, fieldName);
+
+		// manually close the dropdown
+		const dropdownEl = document.getElementById(`dropdown-${header}`);
+		if (dropdownEl) {
+			const instance =
+				Dropdown.getInstance(dropdownEl) || new Dropdown(dropdownEl);
+			instance.hide();
+		}
+	};
 	return (
 		<div className="table-responsive">
-			<table className="table table-bordered table-hover align-middle">
+			<table className="table table-bordered table-hover table-sm align-middle">
 				<thead className="table-light">
 					<tr>
 						<th>Original Header</th>
@@ -54,10 +66,23 @@ const MapDisplay = ({
 								<td>{row.header}</td>
 								<td className="text-start">
 									<div className="dropdown">
-										<button
-											className={`btn btn-sm btn-${getVariant(
+										{/* <button
+											className={`btn btn-sm dropdown-toggle btn-${getVariant(
 												row
 											)} dropdown-toggle`}
+											type="button"
+											data-bs-toggle="dropdown"
+											aria-expanded="false"
+										>
+											{row.fieldName
+												? `${row.fieldName} — ${row.valueTitle}`
+												: "Unassigned"}
+										</button> */}
+										<button
+											id={`dropdown-${row.header}`}
+											className={`btn btn-sm dropdown-toggle btn-${getVariant(
+												row
+											)}`}
 											type="button"
 											data-bs-toggle="dropdown"
 											aria-expanded="false"
@@ -73,7 +98,7 @@ const MapDisplay = ({
 														type="button"
 														className="dropdown-item"
 														onClick={() =>
-															onOverride(
+															handleSelect(
 																row.header,
 																field.fieldName
 															)
@@ -82,6 +107,21 @@ const MapDisplay = ({
 														{field.fieldName} —{" "}
 														{field.valueTitle}
 													</button>
+
+													{/* <button
+														type="button"
+														className="dropdown-item"
+														data-bs-dismiss="dropdown"
+														onClick={() =>
+															onOverride(
+																row.header,
+																field.fieldName
+															)
+														}
+													>
+														{field.fieldName} —{" "}
+														{field.valueTitle}
+													</button> */}
 												</li>
 											))}
 										</ul>

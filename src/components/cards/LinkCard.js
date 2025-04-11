@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import StylizedModal from "./modals/_ModalStylized";
+import StylizedModal from "../modals/_ModalStylized";
 
 const LinkCard = ({ title, text, route, modal }) => {
 	const [showModal, setShowModal] = useState(false);

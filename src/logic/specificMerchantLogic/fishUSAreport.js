@@ -1,6 +1,6 @@
-import { runAPI } from "../utils/apiRunner";
-import { exportToCSV } from "../utils/exportCSV";
-import existingData from "../components/data/FishUSAdata.json";
+import { runAPI } from "../../utils/apiRunner";
+import { exportToCSV } from "../../utils/exportCSV";
+import existingData from "../../components/data/FishUSAdata.json";
 
 function getDateRange(startDate, endDate) {
 	const range = [];

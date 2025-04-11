@@ -35,7 +35,6 @@ export default function autoMapHeaders(uploadedHeaders = [], sampleRows = []) {
 	for (let i = 0; i < normalizedHeaders.length; i++) {
 		const header = uploadedHeaders[i];
 		const normalized = normalizedHeaders[i];
-		console.log(normalized);
 
 		fieldAliases.forEach((field) => {
 			(field.matches || []).forEach((alias, index) => {
@@ -43,7 +42,6 @@ export default function autoMapHeaders(uploadedHeaders = [], sampleRows = []) {
 					const aliasScore = Math.max(10 - index, 1);
 					const fillRatio = calculateFillRatio(sampleRows, header);
 					const finalScore = Math.round(aliasScore * fillRatio);
-					console.log(header, normalized, alias, index);
 
 					const candidate = {
 						fieldName: field.fieldName,
@@ -59,8 +57,6 @@ export default function autoMapHeaders(uploadedHeaders = [], sampleRows = []) {
 						isURL: isValidURL(sampleRows, header),
 						manual: false,
 					};
-					console.log(candidate);
-
 					if (
 						!candidateMap[field.fieldName] ||
 						finalScore > candidateMap[field.fieldName].score

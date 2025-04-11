@@ -28,7 +28,7 @@
 		"required": true,
 		"valueType": "text",
 		"valueTitle": "Product Name",
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "stLongDescription",
@@ -42,7 +42,7 @@
 		"required": true,
 		"valueType": "text",
 		"valueTitle": "Description",
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strLargeImage",
@@ -74,7 +74,7 @@
 		"required": true,
 		"valueType": "text",
 		"valueTitle": "Department",
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strCategory",
@@ -82,7 +82,7 @@
 		"required": false,
 		"valueType": "text",
 		"valueTitle": "Category",
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strSubcategory",
@@ -96,14 +96,14 @@
 		"matches": ["googlecategory", "googlecategorization"],
 		"valueType": "text",
 		"required": false,
-		"variant": false,
+		"variant": "",
 		"valueTitle": "Google's Categorization"
 	},
 	{
 		"fieldName": "dblItemCommission",
 		"matches": ["basedcommission", "ibc", "commission", "commissionrate"],
 		"valueTitle": "Item Based Commission",
-		"variant": false,
+		"variant": "",
 		"valueType": "float",
 		"required": false
 	},
@@ -113,7 +113,7 @@
 		"required": false,
 		"valueType": "text",
 		"valueTitle": "Brand",
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strManufacturerPartNumber",
@@ -151,7 +151,7 @@
 		"fieldName": "txtShortDescription",
 		"required": false,
 		"matches": ["shortdescription"],
-		"variant": false,
+		"variant": "",
 		"valueType": "text"
 	},
 	{
@@ -168,14 +168,14 @@
 			"additionalimageurl",
 			"additionalimage"
 		],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strBrandURL",
 		"valueType": "url",
 		"required": false,
 		"matches": ["brandurl", "brandpagelink", "brandpage"],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strBrandLogoImage",
@@ -190,7 +190,7 @@
 			"logoimage",
 			"logourl"
 		],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strThumbnailURL",
@@ -208,7 +208,7 @@
 			"thumbimage",
 			"thumburl"
 		],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strAttribute2",
@@ -240,7 +240,7 @@
 		"ValueType": "string",
 		"required": false,
 		"matches": ["material"],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strAttribute6",
@@ -248,7 +248,7 @@
 		"ValueType": "string",
 		"required": false,
 		"matches": ["agegroup", "age"],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strAttribute7",
@@ -256,7 +256,7 @@
 		"ValueType": "string",
 		"required": false,
 		"matches": ["gender"],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "strAttribute8",
@@ -272,7 +272,7 @@
 		"ValueType": "string",
 		"required": false,
 		"matches": ["availability", "available"],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "txtAttribute2",
@@ -280,7 +280,7 @@
 		"ValueType": "string",
 		"required": false,
 		"matches": ["gtin"],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "txtAttribute3",
@@ -288,7 +288,7 @@
 		"ValueType": "string",
 		"required": false,
 		"matches": ["keywords"],
-		"variant": false
+		"variant": ""
 	},
 	{
 		"fieldName": "txtAttribute1",
@@ -296,6 +296,6 @@
 		"required": false,
 		"ValueType": "xml",
 		"matches": ["xml", "variantxml", "variants", "variantsxml"],
-		"variant": false
+		"variant": ""
 	}
 ]
