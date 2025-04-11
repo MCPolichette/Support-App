@@ -6,6 +6,7 @@ import MapModal from "../components/modals/MapModal";
 import fieldAliases from "../logic/fieldAliases.json";
 import { feedfile } from "../referenceFiles/feedFile.js";
 import StatusCard from "../components/cards/StatusCard.js";
+import { autoMapperWarningHandler } from "../logic/automapperWarningHandler.js";
 
 const Automapper = () => {
 	const [allHeaders, setAllHeaders] = useState([]);
@@ -36,9 +37,7 @@ const Automapper = () => {
 				  }
 				: m
 		);
-		const cardDisplay = feedfile;
-		console.log(cardDisplay);
-
+		autoMapperWarningHandler(newMapping);
 		setMappingResults({
 			...mappingResults,
 			mapping: newMapping,

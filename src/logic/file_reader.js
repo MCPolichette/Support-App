@@ -89,13 +89,14 @@ function determineDelimiter(header) {
 function file_data(myFile) {
 	let file = myFile.files[0];
 	feedfile.fileData = [
-		"FILE NAME  " +
+		"FILE NAME:   " +
 			(feedfile.fileInfo.File_Name.value = file.name.replace(
 				/ *\([^)]*\) */g,
 				""
 			)),
-		"SIZE " + formatBytes((feedfile.fileInfo.File_Size.value = file.size)),
-		"FILE TYPE " + (feedfile.fileInfo.File_Type.value = file.type),
-		"DELIMITER " + feedfile.fileInfo.Delimiter.value,
+		"SIZE:  " +
+			formatBytes((feedfile.fileInfo.File_Size.value = file.size)),
+		"FILE TYPE:  " + (feedfile.fileInfo.File_Type.value = file.type),
+		"DELIMITER:  " + feedfile.fileInfo.Delimiter.value,
 	];
 }

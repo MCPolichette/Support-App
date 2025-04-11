@@ -74,18 +74,14 @@ export function getTopValues(rows, fieldName, limit = 10) {
 }
 export function calculateFillRatio(rows = [], header = "", valueType = "") {
 	if (!rows.length) return 0;
-
 	let filledCount = 0;
-
 	rows.forEach((row) => {
 		let val = row[header];
 		if (val !== null && val !== undefined) {
 			val = String(val).trim();
-
 			if (val) {
 				if (valueType === "number" && isNaN(parseFloat(val))) return;
 				if (valueType === "url" && !isValidURL(val)) return;
-
 				filledCount++;
 			}
 		}
