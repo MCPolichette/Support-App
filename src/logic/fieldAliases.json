@@ -53,6 +53,12 @@
 			"imagelink",
 			"imagefeatured",
 			"picture",
+			"largeimage",
+			"largeimagelink",
+			"largeimageurl",
+			"largeimg",
+			"largeimglink",
+			"largeimgurl",
 			"img"
 		],
 		"required": true,
@@ -62,7 +68,7 @@
 	},
 	{
 		"fieldName": "strBuyURL",
-		"matches": ["url", "link", "buyurl", "permalink"],
+		"matches": ["url", "link", "buyurl", "buylink", "permalink"],
 		"required": true,
 		"valueType": "url",
 		"valueTitle": "Buy URL",

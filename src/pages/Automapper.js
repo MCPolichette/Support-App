@@ -1,22 +1,25 @@
 import React, { useState } from "react";
 import { file_reader } from "../logic/file_reader.js";
-import MapDisplay from "../components/tables/MapDisplay.js";
-import autoMapHeaders from "../logic/mappingEngine";
-import MapModal from "../components/modals/MapModal";
-import fieldAliases from "../logic/fieldAliases.json";
 import { feedfile } from "../referenceFiles/feedFile.js";
+import MapDisplay from "../components/tables/MapDisplay.js";
+//logic
+import { autoMapperWarningHandler } from "../logic/automapperWarningHandler.js";
+import autoMapHeaders from "../logic/mappingEngine";
+import fieldAliases from "../logic/fieldAliases.json";
+//modals
+import StylizedModal from "../components/modals/_ModalStylized.js";
+import MapModal from "../components/modals/MapModal";
+
+//cards
 import StatusCard from "../components/cards/StatusCard.js";
 import InfoCard from "../components/cards/InfoCard.js";
-import { autoMapperWarningHandler } from "../logic/automapperWarningHandler.js";
 
 const Automapper = () => {
 	const [allHeaders, setAllHeaders] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const [mappingComplete, setMappingComplete] = useState(false);
 	const [mappingResults, setMappingResults] = useState(null);
 	const [NotesAndWarnings, setNotesAndWarnings] = useState({ dataArray: [] });
 	const [selectedFile, setSelectedFile] = useState(null);
-	const [showMapModal, setShowMapModal] = useState(false);
 	const [showModal, setShowModal] = useState(false);
 	const [showRefresh, setShowRefresh] = useState(false);
 	const [showVariantMap, setShowVariantMap] = useState(false);
@@ -40,7 +43,7 @@ const Automapper = () => {
 				: m
 		);
 		setNotesAndWarnings(autoMapperWarningHandler(newMapping));
-		console.log(NotesAndWarnings.dataArray);
+		// console.log(NotesAndWarnings.dataArray);
 		setMappingResults({
 			...mappingResults,
 			mapping: newMapping,
@@ -77,10 +80,12 @@ const Automapper = () => {
 	const toggleButton = (
 		<div className="d-grid gap-2">
 			<button
-				className="btn btn-outline-success btn-sm"
+				className={`btn btn-sm ${
+					showVariantMap ? "btn-outline-info" : "btn-outline-success"
+				}`}
 				onClick={() => setShowVariantMap((prev) => !prev)}
 			>
-				Map Variants
+				{showVariantMap ? "RETURN TO STANDARD MAP" : "GET VARIANT MAP"}
 			</button>
 		</div>
 	);
@@ -135,6 +140,32 @@ const Automapper = () => {
 									title="File Stats"
 									items={documentData}
 								/>
+								<div className="d-grid gap-2">
+									<button
+										className={`btn btn-lg  ${
+											showVariantMap
+												? "btn-success"
+												: "btn-primary"
+										}`}
+										type="button"
+										onClick={() => setShowModal(true)}
+									>
+										{showVariantMap
+											? "Give Me the Variant Pipe Delimited Map"
+											: "Give Me the Standard Pipe Delimited Map"}
+									</button>
+
+									<StylizedModal
+										show={showModal}
+										onHide={() => setShowModal(false)}
+										title="map"
+									>
+										<MapModal
+											mapping={mappingResults?.mapping}
+											type={showVariantMap}
+										/>
+									</StylizedModal>
+								</div>
 							</div>
 							<div className="col-lg-6 col-md-6 col-sm-12">
 								<InfoCard
@@ -157,21 +188,6 @@ const Automapper = () => {
 								/>
 							</div>
 						</div>
-					</div>
-				)}
-				{mappingComplete && (
-					<div className="mt-3">
-						<button
-							className="btn btn-outline-secondary"
-							onClick={() => setShowMapModal(true)}
-						>
-							Show Mapped Fields
-						</button>
-						<MapModal
-							show={showMapModal}
-							onClose={() => setShowMapModal(false)}
-							mapping={mappingResults.mapping}
-						/>
 					</div>
 				)}
 			</div>

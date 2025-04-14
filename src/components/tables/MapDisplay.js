@@ -28,6 +28,8 @@ const MapDisplay = ({
 	onOverride,
 	showVariantMap = false,
 }) => {
+	console.log(mapping);
+	console.log("MAPPING");
 	return (
 		<div className="table-responsive">
 			<table className="table table-bordered table-hover table-sm align-middle">
