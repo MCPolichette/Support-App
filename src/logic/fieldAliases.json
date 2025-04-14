@@ -31,7 +31,7 @@
 		"variant": ""
 	},
 	{
-		"fieldName": "stLongDescription",
+		"fieldName": "txtLongDescription",
 		"matches": [
 			"longdescription",
 			"description",

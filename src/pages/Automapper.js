@@ -6,6 +6,7 @@ import MapModal from "../components/modals/MapModal";
 import fieldAliases from "../logic/fieldAliases.json";
 import { feedfile } from "../referenceFiles/feedFile.js";
 import StatusCard from "../components/cards/StatusCard.js";
+import InfoCard from "../components/cards/InfoCard.js";
 import { autoMapperWarningHandler } from "../logic/automapperWarningHandler.js";
 
 const Automapper = () => {
@@ -13,6 +14,7 @@ const Automapper = () => {
 	const [loading, setLoading] = useState(false);
 	const [mappingComplete, setMappingComplete] = useState(false);
 	const [mappingResults, setMappingResults] = useState(null);
+	const [NotesAndWarnings, setNotesAndWarnings] = useState({ dataArray: [] });
 	const [selectedFile, setSelectedFile] = useState(null);
 	const [showMapModal, setShowMapModal] = useState(false);
 	const [showModal, setShowModal] = useState(false);
@@ -37,14 +39,14 @@ const Automapper = () => {
 				  }
 				: m
 		);
-		autoMapperWarningHandler(newMapping);
+		setNotesAndWarnings(autoMapperWarningHandler(newMapping));
+		console.log(NotesAndWarnings.dataArray);
 		setMappingResults({
 			...mappingResults,
 			mapping: newMapping,
 		});
 	};
-	const test = feedfile.fileData;
-
+	const documentData = feedfile.fileData;
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
 		setSelectedFile(file);
@@ -64,6 +66,7 @@ const Automapper = () => {
 				});
 
 				setAllHeaders(headers);
+				setNotesAndWarnings(autoMapperWarningHandler(mapped));
 				setLoading(false);
 				console.log("Warnings:", warnings);
 				console.log("Headers:", headers);
@@ -71,10 +74,19 @@ const Automapper = () => {
 			});
 		}
 	};
+	const toggleButton = (
+		<div className="d-grid gap-2">
+			<button
+				className="btn btn-outline-success btn-sm"
+				onClick={() => setShowVariantMap((prev) => !prev)}
+			>
+				Map Variants
+			</button>
+		</div>
+	);
 
 	const handleRefresh = () => {
 		window.location.reload();
-		test.push("DDDDDD");
 	};
 
 	return (
@@ -121,24 +133,20 @@ const Automapper = () => {
 								<StatusCard
 									status="success"
 									title="File Stats"
-									items={test}
+									items={documentData}
+								/>
+							</div>
+							<div className="col-lg-6 col-md-6 col-sm-12">
+								<InfoCard
+									items={NotesAndWarnings.dataArray}
+									showVariantMap={showVariantMap}
+									parentGroup={mappingResults}
+									button={toggleButton}
 								/>
 							</div>
 						</div>
 
 						<div className="row mt-4 w-100">
-							<div className="row">
-								<div className="mb-2 d-flex justify-content-start">
-									<button
-										className="btn btn-outline-secondary btn-sm"
-										onClick={() =>
-											setShowVariantMap((prev) => !prev)
-										}
-									>
-										Map Variants
-									</button>
-								</div>
-							</div>
 							<div className="col-12">
 								<MapDisplay
 									mapping={mappingResults?.mapping}

@@ -1,6 +1,6 @@
 import React from "react";
 import fieldAliases from "../../logic/fieldAliases.json";
-import { Dropdown } from "bootstrap";
+import { Dropdown } from "react-bootstrap";
 
 const getVariant = (row) => {
 	if (row.manual) return "info";
@@ -28,17 +28,6 @@ const MapDisplay = ({
 	onOverride,
 	showVariantMap = false,
 }) => {
-	const handleSelect = (header, fieldName) => {
-		onOverride(header, fieldName);
-
-		// manually close the dropdown
-		const dropdownEl = document.getElementById(`dropdown-${header}`);
-		if (dropdownEl) {
-			const instance =
-				Dropdown.getInstance(dropdownEl) || new Dropdown(dropdownEl);
-			instance.hide();
-		}
-	};
 	return (
 		<div className="table-responsive">
 			<table className="table table-bordered table-hover table-sm align-middle">
@@ -64,78 +53,47 @@ const MapDisplay = ({
 						return (
 							<tr key={index}>
 								<td>{row.header}</td>
-								<td className="text-start">
-									<div className="dropdown">
-										{/* <button
-											className={`btn btn-sm dropdown-toggle btn-${getVariant(
-												row
-											)} dropdown-toggle`}
-											type="button"
-											data-bs-toggle="dropdown"
-											aria-expanded="false"
-										>
-											{row.fieldName
-												? `${row.fieldName} — ${row.valueTitle}`
-												: "Unassigned"}
-										</button> */}
-										<button
-											id={`dropdown-${row.header}`}
-											className={`btn btn-sm dropdown-toggle btn-${getVariant(
-												row
-											)}`}
-											type="button"
-											data-bs-toggle="dropdown"
-											aria-expanded="false"
-										>
-											{row.fieldName
-												? `${row.fieldName} — ${row.valueTitle}`
-												: "Unassigned"}
-										</button>
-										<ul className="dropdown-menu">
-											{fieldAliases.map((field, i) => (
-												<li key={i}>
-													<button
-														type="button"
-														className="dropdown-item"
-														onClick={() =>
-															handleSelect(
-																row.header,
-																field.fieldName
-															)
-														}
-													>
-														{field.fieldName} —{" "}
-														{field.valueTitle}
-													</button>
 
-													{/* <button
-														type="button"
-														className="dropdown-item"
-														data-bs-dismiss="dropdown"
-														onClick={() =>
-															onOverride(
-																row.header,
-																field.fieldName
-															)
-														}
-													>
-														{field.fieldName} —{" "}
-														{field.valueTitle}
-													</button> */}
-												</li>
+								<td className="text-start">
+									<Dropdown>
+										<Dropdown.Toggle
+											id={`dropdown-${row.header}`}
+											variant={getVariant(row)}
+											size="sm"
+										>
+											{row.fieldName
+												? `${row.fieldName} — ${row.valueTitle}`
+												: "Unassigned"}
+										</Dropdown.Toggle>
+
+										<Dropdown.Menu>
+											{fieldAliases.map((field, i) => (
+												<Dropdown.Item
+													key={i}
+													onClick={() =>
+														onOverride(
+															row.header,
+															field.fieldName
+														)
+													}
+												>
+													{field.fieldName} —{" "}
+													{field.valueTitle}
+												</Dropdown.Item>
 											))}
-										</ul>
-										{requiredField && (
-											<span className="badge bg-success ms-2">
-												Required
-											</span>
-										)}
-										{row.manual && (
-											<span className="badge bg-info ms-2">
-												Manual
-											</span>
-										)}
-									</div>
+										</Dropdown.Menu>
+									</Dropdown>
+
+									{requiredField && (
+										<span className="badge bg-success ms-2">
+											Required
+										</span>
+									)}
+									{row.manual && (
+										<span className="badge bg-info ms-2">
+											Manual
+										</span>
+									)}
 								</td>
 
 								{showVariantMap && (
