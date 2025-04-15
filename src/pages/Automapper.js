@@ -23,6 +23,7 @@ const Automapper = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [showRefresh, setShowRefresh] = useState(false);
 	const [showVariantMap, setShowVariantMap] = useState(false);
+	// const [fileDetails, setFileDetails] = useState(false);
 
 	const handleOverride = (header, newFieldName) => {
 		const field = fieldAliases.find((f) => f.fieldName === newFieldName);
@@ -57,11 +58,12 @@ const Automapper = () => {
 
 		if (file) {
 			file_reader(event.target).then((parsed) => {
-				const { headers, sampleRows } = parsed;
+				const { headers, sampleRows, delimiter } = parsed;
 				const { mapped, warnings } = autoMapHeaders(
 					headers,
 					sampleRows
 				);
+
 				setMappingResults({
 					mapping: mapped,
 					warnings: warnings,
@@ -158,11 +160,15 @@ const Automapper = () => {
 									<StylizedModal
 										show={showModal}
 										onHide={() => setShowModal(false)}
-										title="map"
+										title="CopyPasta and Additional Details"
 									>
 										<MapModal
 											mapping={mappingResults?.mapping}
 											type={showVariantMap}
+											delimiter={
+												feedfile.fileInfo.Delimiter
+													.value
+											}
 										/>
 									</StylizedModal>
 								</div>
