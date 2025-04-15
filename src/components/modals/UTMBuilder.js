@@ -34,7 +34,7 @@ const UTMBuilder = () => {
 			.map((f) => `${f.key.trim()}=${f.value.trim()}`);
 
 		const allParams = [...staticParts, ...dynamicParts].join("&");
-		setOutput(`avad=[COOKIESTRING]&${allParams}`);
+		setOutput(`avad=[COOKIE_STRING]&${allParams}`);
 	};
 
 	return (

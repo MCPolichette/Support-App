@@ -3,78 +3,49 @@ import { Link } from "react-router-dom";
 import _PageDirectory from "../pages/__PageDirectory";
 import StylizedModal from "../components/modals/_ModalStylized";
 import UpdateKey from "../components/modals/UpdateKey";
+import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 
-const Navbar = () => {
+const AppNavbar = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	return (
-		<nav className="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-			<div className="container">
-				<Link className="navbar-brand" to="/">
-					Chetti.Tools Support App
-				</Link>
-				<button
-					className="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarNav"
-					aria-controls="navbarNav"
-					aria-expanded="false"
-					aria-label="Toggle navigation"
-				>
-					<span className="navbar-toggler-icon"></span>
-				</button>
-				<div className="collapse navbar-collapse" id="navbarNav">
-					<ul className="navbar-nav me-auto">
-						<li className="nav-item dropdown">
-							<a
-								className="nav-link dropdown-toggle"
-								href="#"
-								id="pageDropdown"
-								role="button"
-								data-bs-toggle="dropdown"
-								aria-expanded="false"
+		<Navbar bg="primary" variant="dark" expand="lg" fixed="top">
+			<Container>
+				<Navbar.Brand as={Link} to="/">
+					<b>Chetti.Tools Support App</b>
+				</Navbar.Brand>
+				<Navbar.Toggle aria-controls="basic-navbar-nav" />
+				<Navbar.Collapse id="basic-navbar-nav">
+					<Nav className="me-auto">
+						<NavDropdown title="Tools" id="tools-dropdown">
+							{_PageDirectory.map((page, index) => (
+								<NavDropdown.Item
+									as={Link}
+									to={page.route}
+									key={index}
+								>
+									{page.title}
+								</NavDropdown.Item>
+							))}
+							<NavDropdown.Divider />
+							<NavDropdown.Item
+								onClick={() => setModalOpen(true)}
 							>
-								Tools
-							</a>
-							<ul
-								className="dropdown-menu"
-								aria-labelledby="pageDropdown"
-							>
-								{_PageDirectory.map((page, index) => (
-									<li key={index}>
-										<Link
-											className="dropdown-item"
-											to={page.route}
-										>
-											{page.title}
-										</Link>
-									</li>
-								))}
-								<li>
-									--
-									<Link
-										type="button"
-										className="btn btn-outline-secondary btn-sm"
-										onClick={() => setModalOpen(true)}
-									>
-										Update Key
-									</Link>
-									--
-									<StylizedModal
-										show={modalOpen}
-										onHide={() => setModalOpen(false)}
-										title="Update Key"
-									>
-										<UpdateKey />
-									</StylizedModal>
-								</li>
-							</ul>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
+								Update Key
+							</NavDropdown.Item>
+						</NavDropdown>
+					</Nav>
+				</Navbar.Collapse>
+			</Container>
+
+			<StylizedModal
+				show={modalOpen}
+				onHide={() => setModalOpen(false)}
+				title="Update Key"
+			>
+				<UpdateKey />
+			</StylizedModal>
+		</Navbar>
 	);
 };
 
-export default Navbar;
+export default AppNavbar;

@@ -1,22 +1,88 @@
 // This is where we handle all the warnings for the automapper.
 
 export function autoMapperWarningHandler(array) {
+	const dataArray = [];
 	const seen = new Set();
 	const duplicates = new Set();
 	const matches = []; //Identified scenarios for specific warning badges.
-	const warnings = []; //Identified critical issues.
+	const warnings = "text"; //Identified critical issues.
 
 	// is Match, is our SPECIFIC value catch, and application of unique scenarios. like modals and suggestions.
 	function isMatch(value) {
 		//First we check for specific fieldNames.
 		switch (value.fieldName) {
 			case "strAttribute1":
-				console.log("I GOT A MATCH");
-				// code block}
+				dataArray.push({
+					title: "Parent Group Identified",
+					type: "success",
+					description:
+						"Variant Mapping Should be Available.  Click the Variant Mapping button above.",
+				});
 				break;
 			default:
 			// code block
 		}
+	}
+	function getMissingRequiredFields(completedFields) {
+		console.log(completedFields);
+
+		const requiredFields = [
+			{
+				field: "strAttribute1",
+				title: "No Parent Group Id",
+				type: "info",
+				description: "Only Required if mapping in a variant feed",
+			},
+			{
+				field: "strProductName",
+				title: "ProductName MISSING",
+				type: "danger",
+				description: "Required for Feed Import.",
+			},
+			{
+				field: "strProductSKU",
+				title: "ProductSKU MISSING",
+				type: "danger",
+				description: "Required for Feed Import.",
+			},
+			{
+				field: "dblProductPrice",
+				title: "ProductPrice MISSING",
+				type: "danger",
+				description: "Required for Feed Import.",
+			},
+			{
+				field: "txtLongDescription",
+				title: "LongDescription MISSING",
+				type: "danger",
+				description: "Required for Feed Import.",
+			},
+			{
+				field: "strBuyURL",
+				title: "BuyURL MISSING",
+				type: "danger",
+				description: "Required for Feed Import.",
+			},
+			{
+				field: "strLargeImage",
+				title: "LargeImage MISSING",
+				type: "danger",
+				description: "Required for Feed Import.",
+			},
+			{
+				field: "strDepartment",
+				title: "Department MISSING",
+				type: "danger",
+				description: "Required for Feed Import.",
+			},
+		];
+
+		const result = requiredFields.filter(
+			(map) => !completedFields.has(map.field)
+		);
+
+		console.log("RESULT:", result);
+		return result;
 	}
 
 	for (const field of array) {
@@ -38,15 +104,20 @@ export function autoMapperWarningHandler(array) {
 
 	if (duplicates.size > 0) {
 		console.log("DUPLICATES", duplicates);
-		warnings.push(`Duplicate values found: ${[...duplicates].join(", ")}`);
+		const duplicateWarning = `found: ${[...duplicates].join(", ")} `;
+		console.log(duplicateWarning);
+		dataArray.push({
+			title: "Duplicated Columns",
+			type: "warning",
+			description: duplicateWarning,
+		});
 	}
+	const missing = getMissingRequiredFields(seen);
+	if (missing) {
+		console.log(missing);
+		dataArray.push(...missing);
+	}
+	console.log(dataArray);
 
-	// if (matches.length > 0) {
-	// 	warnings.push(
-	// 		`Matched value "${options.matchValue}" found ${matches.length} time(s)`
-	// 	);
-	// }
-
-	// Could also return diagnostics or raw lists
-	return { warnings, duplicates: [...duplicates], matches };
+	return { dataArray };
 }

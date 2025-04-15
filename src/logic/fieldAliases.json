@@ -8,6 +8,20 @@
 		"variant": "variant-sku"
 	},
 	{
+		"fieldName": "strAttribute1",
+		"required": false,
+		"valueTitle": "Product Parent Grouping Id",
+		"valueType": "text",
+		"matches": [
+			"parentid",
+			"parentgroup",
+			"parentgroupid",
+			"groupid",
+			"group"
+		],
+		"variant": "strProductSKU"
+	},
+	{
 		"fieldName": "dblProductPrice",
 		"matches": [
 			"price",
@@ -31,7 +45,7 @@
 		"variant": ""
 	},
 	{
-		"fieldName": "stLongDescription",
+		"fieldName": "txtLongDescription",
 		"matches": [
 			"longdescription",
 			"description",
@@ -53,6 +67,12 @@
 			"imagelink",
 			"imagefeatured",
 			"picture",
+			"largeimage",
+			"largeimagelink",
+			"largeimageurl",
+			"largeimg",
+			"largeimglink",
+			"largeimgurl",
 			"img"
 		],
 		"required": true,
@@ -62,7 +82,7 @@
 	},
 	{
 		"fieldName": "strBuyURL",
-		"matches": ["url", "link", "buyurl", "permalink"],
+		"matches": ["url", "link", "buyurl", "buylink", "permalink"],
 		"required": true,
 		"valueType": "url",
 		"valueTitle": "Buy URL",
@@ -131,20 +151,6 @@
 		"valueType": "number",
 		"valueTitle": "Sale Price",
 		"variant": "variant-sale_price"
-	},
-	{
-		"fieldName": "strAttribute1",
-		"required": false,
-		"valueTitle": "Product Parent Grouping Id",
-		"valueType": "text",
-		"matches": [
-			"parentid",
-			"parentgroup",
-			"parentgroupid",
-			"groupid",
-			"group"
-		],
-		"variant": "strProductSKU"
 	},
 
 	{

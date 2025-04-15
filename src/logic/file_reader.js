@@ -43,6 +43,7 @@ export function file_reader(input) {
 				);
 
 				resolve({
+					delimiter: delimiter,
 					headers: headerRow,
 					sampleRows: sampleRowsAsObjects,
 				});
@@ -74,7 +75,7 @@ function determineDelimiter(header) {
 		return "|";
 	}
 	if (header.includes("\t")) {
-		feedfile.fileInfo.Delimiter.value = "-\t- TABS";
+		feedfile.fileInfo.Delimiter.value = `-'\t'- TABS`;
 		return "\t";
 	}
 	if (header.includes(",")) {
