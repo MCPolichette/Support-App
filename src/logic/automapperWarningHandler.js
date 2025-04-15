@@ -2,6 +2,7 @@
 
 export function autoMapperWarningHandler(array) {
 	const dataArray = [];
+	let parents = false;
 	const seen = new Set();
 	const duplicates = new Set();
 	const matches = []; //Identified scenarios for specific warning badges.
@@ -12,20 +13,23 @@ export function autoMapperWarningHandler(array) {
 		//First we check for specific fieldNames.
 		switch (value.fieldName) {
 			case "strAttribute1":
-				dataArray.push({
-					title: "Parent Group Identified",
-					type: "success",
-					description:
-						"Variant Mapping Should be Available.  Click the Variant Mapping button above.",
-				});
+				if (parents) {
+					console.log("multiple parents identified");
+				} else {
+					parents = true;
+					dataArray.push({
+						title: "Parent Group Identified",
+						type: "success",
+						description:
+							"Variant Mapping Should be Available.  Click the Variant Mapping button above.",
+					});
+				}
 				break;
 			default:
 			// code block
 		}
 	}
 	function getMissingRequiredFields(completedFields) {
-		console.log(completedFields);
-
 		const requiredFields = [
 			{
 				field: "strAttribute1",
@@ -80,8 +84,10 @@ export function autoMapperWarningHandler(array) {
 		const result = requiredFields.filter(
 			(map) => !completedFields.has(map.field)
 		);
+		if (result.find((item) => item.field === "strAttribute1")) {
+			parents = false;
+		}
 
-		console.log("RESULT:", result);
 		return result;
 	}
 
@@ -104,8 +110,16 @@ export function autoMapperWarningHandler(array) {
 
 	if (duplicates.size > 0) {
 		console.log("DUPLICATES", duplicates);
-		const duplicateWarning = `found: ${[...duplicates].join(", ")} `;
-		console.log(duplicateWarning);
+		const duplicateWarning = (
+			<div>
+				The Following Columns have been mapped more than once:
+				{[...duplicates].map((d, i) => (
+					<code key={i} className="d-block">
+						{d}
+					</code>
+				))}
+			</div>
+		);
 		dataArray.push({
 			title: "Duplicated Columns",
 			type: "warning",

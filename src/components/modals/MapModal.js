@@ -46,7 +46,9 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 		<div className="p-4">
 			<Row>
 				<h4>"DELIMITER: " {delimiter}</h4>
-				<Col md={8}>
+				<hr></hr>
+				<Col md={7}>
+					<h6>Primary Feed</h6>
 					<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
 						<pre
 							style={{ width: "75%" }}
@@ -58,14 +60,17 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 					</div>
 
 					{type && (
-						<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
-							<pre
-								style={{ width: "75%" }}
-								className="bg-light p-2 border rounded  flex-grow-1"
-								id="secondaryPipeMap"
-							>
-								{mappedVarStr || "No fields mapped yet."}
-							</pre>
+						<div>
+							<h6>Secondary Feed</h6>
+							<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
+								<pre
+									style={{ width: "75%" }}
+									className="bg-light p-2 border rounded  flex-grow-1"
+									id="secondaryPipeMap"
+								>
+									{mappedVarStr || "No fields mapped yet."}
+								</pre>
+							</div>
 						</div>
 					)}
 
@@ -75,7 +80,7 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 							{attributeFields.map((field, i) => (
 								<li key={i}>
 									<b>{field.valueTitle} </b>
-									mapped in as:
+									as:
 									<code> {field.fieldName}</code>
 								</li>
 							))}
@@ -97,9 +102,9 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 						</code>
 					</div>
 				</Col>
-				<Col md={4}>
+				<Col md={5}>
 					<Button
-						style={{ width: "100%" }}
+						style={{ width: "100%", marginTop: "10%" }}
 						className="btn-lg btn-block"
 						variant="outline-primary"
 						onClick={() => copyToClipboard("primaryPipeMap")}
@@ -109,7 +114,7 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 					</Button>
 					{type && (
 						<Button
-							style={{ width: "100%", marginTop: 10 }}
+							style={{ width: "100%", marginTop: "33%" }}
 							className="btn-lg btn-block"
 							variant="outline-primary"
 							onClick={() => copyToClipboard("secondaryPipeMap")}
@@ -119,7 +124,7 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 						</Button>
 					)}
 					<Button
-						style={{ width: "100%", marginTop: 10 }}
+						style={{ width: "100%", marginTop: "33%" }}
 						className="btn-lg btn-block"
 						variant="outline-primary"
 						onClick={() => copyToClipboard("attMapTxt")}
@@ -142,11 +147,10 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 						</Toast.Body>
 					</Toast>
 				</ToastContainer>
+				<hr></hr>
 			</Row>
 
-			<Row>
-				<SecondaryFeedReference />
-			</Row>
+			<Row>{/* <SecondaryFeedReference /> */}</Row>
 		</div>
 	);
 };
