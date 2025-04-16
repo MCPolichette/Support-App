@@ -14,7 +14,7 @@ const AddAttribute = ({ onConfirm, mapping = [], header }) => {
 	const nextAttr = available.find((a) => !used.includes(a));
 
 	const attributeFields = mapping.filter((m) =>
-		/^txtAttribute\d+$/.test(m.fieldName)
+		/^Attribute\d+$/.test(m.fieldName)
 	);
 
 	const handleConfirm = () => {
