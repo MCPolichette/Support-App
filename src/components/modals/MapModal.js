@@ -28,10 +28,7 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 	const copyToClipboard = (id) => {
 		const element = document.getElementById(id);
 		const copy = element ? element.innerText : id;
-		if (!document.hasFocus()) {
-			console.warn("Clipboard copy failed: Document not focused");
-			return;
-		}
+
 		try {
 			navigator.clipboard.writeText(copy).then(() => {
 				setCopied(true);

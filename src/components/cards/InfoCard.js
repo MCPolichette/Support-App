@@ -34,7 +34,7 @@ const InfoCard = ({ title, items, showVariantMap, button }) => {
 		<Card className="mb-4 shadow">
 			<Card.Body>
 				<Card.Title>{title}</Card.Title>
-				{button && <div>{button}</div>}
+				{button && <div className="mb-3">{button}</div>}
 				{items.map((item, index) => (
 					<TypeBadge key={index} {...item} />
 				))}
