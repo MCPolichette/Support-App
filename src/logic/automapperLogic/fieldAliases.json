@@ -112,29 +112,24 @@
 		"valueTitle": "Subcategory"
 	},
 	{
-		"fieldName": "strAttribute10",
-		"matches": ["googlecategory", "googlecategorization"],
-		"valueType": "text",
+		"fieldName": "strThumbnailURL",
+		"valueTitle": "Thumbnail URL",
+		"valueType": "url",
 		"required": false,
-		"variant": "",
-		"valueTitle": "Google's Categorization"
-	},
-	{
-		"fieldName": "dblItemCommission",
-		"matches": ["basedcommission", "ibc", "commission", "commissionrate"],
-		"valueTitle": "Item Based Commission",
-		"variant": "",
-		"valueType": "float",
-		"required": false
-	},
-	{
-		"fieldName": "strBrandName",
-		"matches": ["brand", "brandname", "maker", "manufacturer"],
-		"required": false,
-		"valueType": "text",
-		"valueTitle": "Brand",
+		"matches": [
+			"thumbnailurl",
+			"thumbnail",
+			"thumbnaillink",
+			"thumbnailimage",
+			"imageurlsmall",
+			"imagesmall",
+			"thumblink",
+			"thumbimage",
+			"thumburl"
+		],
 		"variant": ""
 	},
+
 	{
 		"fieldName": "strManufacturerPartNumber",
 		"matches": ["manufacturerpartnumber", "manufacturerid", "mpn"],
@@ -157,6 +152,7 @@
 		"fieldName": "txtShortDescription",
 		"required": false,
 		"matches": ["shortdescription"],
+		"valueTitle": "Short Description",
 		"variant": "",
 		"valueType": "text"
 	},
@@ -177,7 +173,16 @@
 		"variant": ""
 	},
 	{
+		"fieldName": "strBrandName",
+		"matches": ["brand", "brandname", "maker", "manufacturer"],
+		"required": false,
+		"valueType": "text",
+		"valueTitle": "Brand",
+		"variant": ""
+	},
+	{
 		"fieldName": "strBrandURL",
+		"valueTitle": "Brand Link",
 		"valueType": "url",
 		"required": false,
 		"matches": ["brandurl", "brandpagelink", "brandpage"],
@@ -185,6 +190,7 @@
 	},
 	{
 		"fieldName": "strBrandLogoImage",
+		"valueTitle": "Brand Logo",
 		"valueType": "url",
 		"required": false,
 		"matches": [
@@ -198,24 +204,7 @@
 		],
 		"variant": ""
 	},
-	{
-		"fieldName": "strThumbnailURL",
-		"valueTitle": "Thumbnail URL",
-		"valueType": "url",
-		"required": false,
-		"matches": [
-			"thumbnailurl",
-			"thumbnail",
-			"thumbnaillink",
-			"thumbnailimage",
-			"imageurlsmall",
-			"imagesmall",
-			"thumblink",
-			"thumbimage",
-			"thumburl"
-		],
-		"variant": ""
-	},
+
 	{
 		"fieldName": "strAttribute2",
 		"valueTitle": "Product Color",
@@ -297,11 +286,28 @@
 		"variant": ""
 	},
 	{
+		"fieldName": "strAttribute10",
+		"matches": ["googlecategory", "googlecategorization"],
+		"valueType": "text",
+		"required": false,
+		"variant": "",
+		"valueTitle": "Google's Categorization"
+	},
+	{
 		"fieldName": "txtAttribute1",
 		"valueTitle": "Variants XML",
 		"required": false,
 		"ValueType": "xml",
 		"matches": ["xml", "variantxml", "variants", "variantsxml"],
 		"variant": ""
+	},
+
+	{
+		"fieldName": "dblItemCommission",
+		"matches": ["basedcommission", "ibc", "commission", "commissionrate"],
+		"valueTitle": "Item Based Commission",
+		"variant": "",
+		"valueType": "float",
+		"required": false
 	}
 ]

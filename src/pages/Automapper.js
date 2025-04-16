@@ -3,62 +3,71 @@ import { file_reader } from "../logic/file_reader.js";
 import { feedfile } from "../referenceFiles/feedFile.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
 //logic
-import { autoMapperWarningHandler } from "../logic/automapperWarningHandler.js";
-import autoMapHeaders from "../logic/mappingEngine";
-import fieldAliases from "../logic/fieldAliases.json";
+import { autoMapperWarningHandler } from "../logic/automapperLogic/automapperWarningHandler.js";
+import autoMapHeaders from "../logic/automapperLogic/mappingEngine.js";
+import fieldAliases from "../logic/automapperLogic/fieldAliases.json";
 //modals
 import StylizedModal from "../components/modals/_ModalStylized.js";
 import MapModal from "../components/modals/MapModal";
+import AddAttribute from "../components/modals/AddAttribute.js";
 
 //cards
 import StatusCard from "../components/cards/StatusCard.js";
 import InfoCard from "../components/cards/InfoCard.js";
 
 const Automapper = () => {
-	const [allHeaders, setAllHeaders] = useState([]);
+	const [showRefresh, setShowRefresh] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [mappingResults, setMappingResults] = useState(null);
 	const [NotesAndWarnings, setNotesAndWarnings] = useState({ dataArray: [] });
 	const [selectedFile, setSelectedFile] = useState(null);
-	const [showModal, setShowModal] = useState(false);
-	const [showRefresh, setShowRefresh] = useState(false);
+	const [modalType, setModalType] = useState(null);
 	const [showVariantMap, setShowVariantMap] = useState(false);
-	// const [fileDetails, setFileDetails] = useState(false);
-
-	const handleOverride = (header, newFieldName) => {
-		const field = fieldAliases.find((f) => f.fieldName === newFieldName);
-		if (!field) {
-			return;
-		}
+	const openModal = (type, header = "") => {
+		setModalType(type);
+		setActiveHeader(header);
+	};
+	const closeModal = () => setModalType(null);
+	const [activeHeader, setActiveHeader] = useState("");
+	const handleOverride = (header, newFieldName, custom = {}) => {
+		const field = fieldAliases.find(
+			(f) => f.fieldName === newFieldName
+		) || {
+			fieldName: newFieldName,
+			valueTitle: custom.valueTitle || newFieldName,
+			variant: "",
+		};
 
 		const newMapping = mappingResults.mapping.map((m) =>
 			m.header === header
 				? {
 						...m,
 						fieldName: field.fieldName,
-						valueTitle: field.valueTitle,
+						valueTitle: custom.valueTitle || field.valueTitle,
 						variant: field.variant,
 						manual: true,
-						score: 99,
+						score: "NA",
 				  }
 				: m
 		);
+
 		setNotesAndWarnings(autoMapperWarningHandler(newMapping));
-		// console.log(NotesAndWarnings.dataArray);
 		setMappingResults({
 			...mappingResults,
 			mapping: newMapping,
 		});
 	};
+
 	const documentData = feedfile.fileData;
 	const handleFileChange = (event) => {
 		const file = event.target.files[0];
 		setSelectedFile(file);
 		setLoading(true);
+		setShowRefresh(true);
 
 		if (file) {
 			file_reader(event.target).then((parsed) => {
-				const { headers, sampleRows, delimiter } = parsed;
+				const { headers, sampleRows } = parsed;
 				const { mapped, warnings } = autoMapHeaders(
 					headers,
 					sampleRows
@@ -69,30 +78,30 @@ const Automapper = () => {
 					warnings: warnings,
 					allHeaders: headers,
 				});
-
-				setAllHeaders(headers);
 				setNotesAndWarnings(autoMapperWarningHandler(mapped));
 				setLoading(false);
-				console.log("Warnings:", warnings);
-				console.log("Headers:", headers);
-				console.log("mapped", mapped);
 			});
 		}
 	};
 	const toggleButton = (
 		<div className="d-grid gap-2">
 			<button
-				className={`btn btn-sm ${
+				className={`btn btn-lg ${
 					showVariantMap ? "btn-outline-info" : "btn-outline-success"
 				}`}
 				onClick={() => setShowVariantMap((prev) => !prev)}
 			>
-				{showVariantMap ? "RETURN TO STANDARD MAP" : "GET VARIANT MAP"}
+				<strong>
+					{showVariantMap
+						? "RETURN TO STANDARD MAP"
+						: "GET VARIANT MAP"}
+				</strong>
 			</button>
 		</div>
 	);
 
 	const handleRefresh = () => {
+		setShowRefresh(false);
 		window.location.reload();
 	};
 
@@ -101,27 +110,28 @@ const Automapper = () => {
 			<div className="row flex-column text-center">
 				<h2>Datafeed Automapper 2.0</h2>
 
-				{showRefresh && (
+				{showRefresh ? (
 					<button
 						id="refresh_page"
 						type="button"
-						className="btn btn-primary btn-lg mb-3"
+						className="btn btn-info mb-3"
 						onClick={handleRefresh}
 					>
 						Map a new file
 					</button>
+				) : (
+					<div id="file_input">
+						<label htmlFor="formFileLg" className="form-label h6">
+							Select Feed-File to Map
+						</label>
+						<input
+							className="form-control form-control-lg"
+							id="formFileLg"
+							type="file"
+							onChange={handleFileChange}
+						/>
+					</div>
 				)}
-				<div id="file_input">
-					<label htmlFor="formFileLg" className="form-label h6">
-						Select Feed-File to Map
-					</label>
-					<input
-						className="form-control form-control-lg"
-						id="formFileLg"
-						type="file"
-						onChange={handleFileChange}
-					/>
-				</div>
 
 				{loading && (
 					<div className="d-flex justify-content-center mt-4">
@@ -150,27 +160,12 @@ const Automapper = () => {
 												: "btn-primary"
 										}`}
 										type="button"
-										onClick={() => setShowModal(true)}
+										onClick={() => openModal("map")}
 									>
 										{showVariantMap
 											? "Give Me the Variant Pipe Delimited Map"
 											: "Give Me the Standard Pipe Delimited Map"}
 									</button>
-
-									<StylizedModal
-										show={showModal}
-										onHide={() => setShowModal(false)}
-										title="CopyPasta and Additional Details"
-									>
-										<MapModal
-											mapping={mappingResults?.mapping}
-											type={showVariantMap}
-											delimiter={
-												feedfile.fileInfo.Delimiter
-													.value
-											}
-										/>
-									</StylizedModal>
 								</div>
 							</div>
 							<div className="col-lg-6 col-md-6 col-sm-12">
@@ -191,12 +186,37 @@ const Automapper = () => {
 									allHeaders={mappingResults.allHeaders}
 									onOverride={handleOverride}
 									showVariantMap={showVariantMap}
+									newAtt={openModal}
 								/>
 							</div>
 						</div>
 					</div>
 				)}
 			</div>
+			<StylizedModal
+				show={!!modalType}
+				onHide={closeModal}
+				title={
+					modalType === "map"
+						? "CopyPasta and Additional Details"
+						: "Add Custom Attribute"
+				}
+			>
+				{modalType === "map" && (
+					<MapModal
+						mapping={mappingResults?.mapping}
+						type={showVariantMap}
+						delimiter={feedfile.fileInfo.Delimiter.value}
+					/>
+				)}
+				{modalType === "attribute" && (
+					<AddAttribute
+						onConfirm={handleOverride}
+						mapping={mappingResults.mapping}
+						header={activeHeader}
+					/>
+				)}
+			</StylizedModal>
 		</div>
 	);
 };
