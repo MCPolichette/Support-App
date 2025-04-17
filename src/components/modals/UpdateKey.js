@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 
-const UpdateKey = ({ onClose }) => {
+const UpdateKey = ({ onClose, Warnings }) => {
 	const [uuid, setUuid] = useState(localStorage.getItem("avl_UUID") || "");
 	const [showForm, setShowForm] = useState(true);
 	const [error, setError] = useState("");
@@ -18,20 +18,7 @@ const UpdateKey = ({ onClose }) => {
 
 	return (
 		<div>
-			<Alert variant="danger">
-				<Alert.Heading>⚠️ Important Report Notice</Alert.Heading>
-				<p>
-					This report has been updated with backlogged data going back
-					to <strong>2023</strong>.
-				</p>
-				<p className="mb-0">
-					<strong>
-						Please leave the START date set to January 1st, 2025
-					</strong>{" "}
-					to ensure an accurate report. You may select any END DATE up
-					to <strong>yesterday</strong>.
-				</p>
-			</Alert>
+			{Warnings}
 
 			{showForm ? (
 				<div className="p-3 bg-white border rounded shadow-sm">

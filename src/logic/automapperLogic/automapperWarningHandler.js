@@ -6,7 +6,7 @@ export function autoMapperWarningHandler(array) {
 	const seen = new Set();
 	const duplicates = new Set();
 	const matches = []; //Identified scenarios for specific warning badges.
-	const warnings = "text"; //Identified critical issues.
+	// const warnings = "text"; //Identified critical issues.
 
 	// is Match, is our SPECIFIC value catch, and application of unique scenarios. like modals and suggestions.
 	function isMatch(value) {
