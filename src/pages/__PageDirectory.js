@@ -15,12 +15,21 @@ const _PageDirectory = [
 		title: "Recursive Link Crawler",
 		description: "work in progress. ",
 		route: "/link-detector",
+		inDev: true,
 	},
 	{
 		title: "FISH USA custom report",
 		description:
 			"For Anthony, and Fish USA produces a 7 day report.  And concept construction for future report building.",
 		route: "/fish_usa",
+		inDev: true,
+	},
+	{
+		title: "Affiliate Week Report",
+		description:
+			"A comprehensive week report on Affiliate performance. YOY / Products and More.",
+		route: "/affReport",
+		inDev: true,
 	},
 ];
 

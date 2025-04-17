@@ -2,10 +2,27 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import _PageDirectory from "../pages/__PageDirectory";
 import StylizedModal from "../components/modals/_ModalStylized";
-import UpdateKey from "../components/modals/UpdateKey";
-import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
+import SettingsModal from "./modals/SettingsModal";
+import {
+	Navbar,
+	Nav,
+	NavDropdown,
+	Container,
+	Alert,
+	Badge,
+} from "react-bootstrap";
+
+const getSettings = () => {
+	try {
+		const raw = localStorage.getItem("ChettiToolsSettings");
+		return raw ? JSON.parse(raw) : {};
+	} catch {
+		return {};
+	}
+};
 
 const AppNavbar = () => {
+	const [settings, setSettings] = useState(getSettings());
 	const [modalOpen, setModalOpen] = useState(false);
 	return (
 		<Navbar bg="primary" variant="dark" expand="lg" fixed="top">
@@ -30,19 +47,27 @@ const AppNavbar = () => {
 							<NavDropdown.Item
 								onClick={() => setModalOpen(true)}
 							>
-								Update Key
+								Update Settings
 							</NavDropdown.Item>
 						</NavDropdown>
 					</Nav>
 				</Navbar.Collapse>
+				{settings.admin && (
+					<Alert variant="info">
+						<Badge bg="success" className="me-2">
+							Verified Admin Key
+						</Badge>
+						You have admin privileges.
+					</Alert>
+				)}
 			</Container>
 
 			<StylizedModal
 				show={modalOpen}
 				onHide={() => setModalOpen(false)}
-				title="Update Key"
+				title="Update Settings"
 			>
-				<UpdateKey />
+				<SettingsModal />
 			</StylizedModal>
 		</Navbar>
 	);
