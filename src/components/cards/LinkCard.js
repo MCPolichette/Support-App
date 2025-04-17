@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "react-bootstrap";
+import { Button, Badge } from "react-bootstrap";
 import StylizedModal from "../modals/_ModalStylized";
 
-const LinkCard = ({ title, text, route, modal }) => {
+const LinkCard = ({ title, text, route, modal, dev }) => {
 	const [showModal, setShowModal] = useState(false);
+	const [showDev, setShowDev] = useState(dev);
 	const hasRoute = !!route;
 	const hasModal = !!modal;
 
@@ -41,10 +42,17 @@ const LinkCard = ({ title, text, route, modal }) => {
 
 	return (
 		<div className="col-12 col-md-6 col-lg-4 mb-4">
-			<div className="card h-100 position-relative shadow bg-light-subtle">
+			<div className="card h-100 position-relative  bg-light-subtle shadow bg-light-subtle my-card transition-shadow">
 				<div className="card-body d-flex flex-column justify-content-between">
 					<div>
 						<h5 className="card-title">{title}</h5>
+						{showDev && (
+							<h5 className="mt-4 text-muted">
+								<Badge bg="warning" text="dark">
+									Not published yet.
+								</Badge>
+							</h5>
+						)}
 						<p className="card-text">{text}</p>
 					</div>
 					{(hasRoute || hasModal) && (

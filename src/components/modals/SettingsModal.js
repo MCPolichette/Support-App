@@ -171,29 +171,32 @@ const SettingsModal = () => {
 			{editKey ? (
 				<Form.Group className="mb-3">
 					<Form.Label>Enter Key:</Form.Label>
-					<Form.Control
-						type="text"
-						value={uuid}
-						onChange={(e) => setUuid(e.target.value)}
-						isInvalid={!!error}
-					/>
+					<InputGroup>
+						<Form.Control
+							type="text"
+							value={uuid}
+							onChange={(e) => setUuid(e.target.value)}
+							isInvalid={!!error}
+						/>
+						<Button variant="primary" onClick={handleSaveUUID}>
+							Save Key
+						</Button>
+					</InputGroup>
 					<Form.Control.Feedback type="invalid">
 						{error}
 					</Form.Control.Feedback>
-					<Button
-						variant="primary"
-						className="mt-2"
-						onClick={handleSaveUUID}
-					>
-						Save Key
-					</Button>
 				</Form.Group>
 			) : (
 				<Row className="d-flex align-items-center mb-3">
 					<Col md={8} className="align-middle">
-						<Badge bg="primary" className="me-2" size="lg">
-							Key stored in browser
-						</Badge>
+						<Button
+							disabled
+							bg="primary"
+							className="me-2 "
+							size="sm"
+						>
+							API Key stored in browser
+						</Button>
 						<Button
 							size="sm"
 							variant="outline-secondary"
