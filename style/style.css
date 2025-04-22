@@ -13,6 +13,14 @@ h5 {
 h6 {
 	font-weight: bold;
 }
+.my-card {
+	box-shadow: 7px 7px 5px grey;
+	transition: box-shadow 0.3s ease;
+}
+
+.my-card:hover {
+	box-shadow: 10px 10px 5px;
+}
 #affTable {
 	border-color: blue;
 	border-width: 3px;
@@ -55,13 +63,6 @@ h6 {
 .psuedoinvisible {
 	height: 350px;
 	color: white;
-}
-.my-card {
-	transition: box-shadow 0.3s ease;
-}
-
-.my-card:hover {
-	box-shadow: 0 15rem 4rem rgba(206, 17, 17, 0.65); /* intense shadow */
 }
 
 @media print {
