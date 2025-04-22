@@ -15,9 +15,6 @@ import AddAttribute from "../components/modals/AddAttribute.js";
 import StatusCard from "../components/cards/StatusCard.js";
 import InfoCard from "../components/cards/InfoCard.js";
 
-// TODO:  Get the attribute map <types> fixed.
-// TODO: txt files with comma delimiter didnt show columns
-
 const Automapper = () => {
 	const [showRefresh, setShowRefresh] = useState(false);
 	const [loading, setLoading] = useState(false);
