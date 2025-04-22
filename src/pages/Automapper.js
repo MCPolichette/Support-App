@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { file_reader } from "../logic/file_reader.js";
-import { feedfile } from "../referenceFiles/feedFile.js";
+import { feedfile } from "../logic/automapperLogic/feedFile.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
 //logic
 import { autoMapperWarningHandler } from "../logic/automapperLogic/automapperWarningHandler.js";
@@ -14,6 +14,9 @@ import AddAttribute from "../components/modals/AddAttribute.js";
 //cards
 import StatusCard from "../components/cards/StatusCard.js";
 import InfoCard from "../components/cards/InfoCard.js";
+
+// TODO:  Get the attribute map <types> fixed.
+// TODO: txt files with comma delimiter didnt show columns
 
 const Automapper = () => {
 	const [showRefresh, setShowRefresh] = useState(false);

@@ -16,8 +16,10 @@ function normalizeHeader(header = "") {
 }
 
 function getPreviewValue(rows, header) {
+	console.log(rows, header);
 	for (let i = 0; i < rows.length; i++) {
 		const val = rows[i][header];
+		console.log(val);
 		if (val && String(val).trim() !== "") {
 			return String(val).trim();
 		}
