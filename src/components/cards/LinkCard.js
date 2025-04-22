@@ -42,7 +42,7 @@ const LinkCard = ({ title, text, route, modal, dev }) => {
 
 	return (
 		<div className="col-12 col-md-6 col-lg-4 mb-4">
-			<div className="card h-100 position-relative  bg-light-subtle shadow bg-light-subtle my-card transition-shadow">
+			<div className="card h-100 position-relative  bg-light-subtle bg-light-subtle  transition-shadow my-card">
 				<div className="card-body d-flex flex-column justify-content-between">
 					<div>
 						<h5 className="card-title">{title}</h5>

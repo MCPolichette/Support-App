@@ -60,8 +60,8 @@ const FTPshorthand = () => {
 		<Container className="mt-4">
 			<div
 				style={{
-					minHeight: "480px",
-					maxHeight: "480px",
+					minHeight: "700px",
+					maxHeight: "700px",
 					overflowY: "auto",
 				}}
 			>

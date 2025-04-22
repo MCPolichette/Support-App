@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { file_reader } from "../logic/file_reader.js";
-import { feedfile } from "../referenceFiles/feedFile.js";
+import { feedfile } from "../logic/automapperLogic/feedFile.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
 //logic
 import { autoMapperWarningHandler } from "../logic/automapperLogic/automapperWarningHandler.js";

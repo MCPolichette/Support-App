@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Form, Button, InputGroup, Row, Col, Alert } from "react-bootstrap";
 
 const AddAttribute = ({ onConfirm, mapping = [], header }) => {
-	console.log(mapping);
-	const [customTitle, setCustomTitle] = useState("");
+	console.log(header);
+	const [customTitle, setCustomTitle] = useState(header);
 
 	// Get already used txtAttributes
 	const used = mapping.map((m) => m.fieldName);
@@ -12,9 +12,8 @@ const AddAttribute = ({ onConfirm, mapping = [], header }) => {
 		(_, i) => `txtAttribute${i + 2}`
 	);
 	const nextAttr = available.find((a) => !used.includes(a));
-
 	const attributeFields = mapping.filter((m) =>
-		/^Attribute\d+$/.test(m.fieldName)
+		/Attribute\d+$/.test(m.fieldName)
 	);
 
 	const handleConfirm = () => {
@@ -41,7 +40,10 @@ const AddAttribute = ({ onConfirm, mapping = [], header }) => {
 					</Alert>
 				) : (
 					<Form.Group controlId="customAttrInput">
-						<Form.Label>Add Custom Attribute</Form.Label>
+						<Form.Label>
+							<h6>Add Custom Attribute</h6>
+						</Form.Label>
+						<p>auto-populated with the file's column header</p>
 						<InputGroup>
 							<Form.Control
 								type="text"

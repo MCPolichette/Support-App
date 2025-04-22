@@ -1,4 +1,4 @@
-import { feedfile } from "../referenceFiles/feedFile.js";
+import { feedfile } from "./automapperLogic/feedFile.js";
 import { formatBytes } from "../utils/conversions.js";
 
 // MAIN FILE READER
@@ -18,10 +18,11 @@ export function file_reader(input) {
 				const delimiter = determineDelimiter(rawHeaderLine);
 				const headerRow = cleanInput(rawHeaderLine, delimiter);
 
-				file_data(input);
+				file_data(input, headerRow.length, allLines.length);
 				// SAMPLE ROW CONVERSION
 				const sampleLimit = 500;
 				const sampleRowsAsObjects = [];
+				console.log("LINE COUNT!!!! ", allLines.length);
 
 				for (
 					let i = 1;
@@ -29,19 +30,17 @@ export function file_reader(input) {
 					i++
 				) {
 					const values = cleanInput(allLines[i], delimiter);
-					if (values.length === headerRow.length) {
-						const rowObj = {};
-						headerRow.forEach((key, idx) => {
-							rowObj[key] = values[idx];
-						});
-						sampleRowsAsObjects.push(rowObj);
-					}
+
+					const rowObj = {};
+					headerRow.forEach((key, idx) => {
+						rowObj[key] = values[idx];
+					});
+					sampleRowsAsObjects.push(rowObj);
 				}
 
 				console.log(
 					`Sample size: ${sampleRowsAsObjects.length} rows used`
 				);
-
 				resolve({
 					delimiter: delimiter,
 					headers: headerRow,
@@ -87,7 +86,7 @@ function determineDelimiter(header) {
 }
 
 // FILE METADATA
-function file_data(myFile) {
+function file_data(myFile, colCount, rowCount) {
 	let file = myFile.files[0];
 	feedfile.fileData = [
 		"FILE NAME:   " +
@@ -99,5 +98,7 @@ function file_data(myFile) {
 			formatBytes((feedfile.fileInfo.File_Size.value = file.size)),
 		"FILE TYPE:  " + (feedfile.fileInfo.File_Type.value = file.type),
 		"DELIMITER:  " + feedfile.fileInfo.Delimiter.value,
+		"Number of Rows:   " + rowCount,
+		"Number of Columns:   " + colCount,
 	];
 }

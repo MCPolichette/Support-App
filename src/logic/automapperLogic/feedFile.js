@@ -27,6 +27,7 @@ export const feedfile = {
 		File_Size: { label: "File Size", value: "" },
 		File_Type: { label: "File Type", value: "" },
 		Number_of_Columns: { label: "Columns", value: 0 },
+		Number_of_Rows: { label: "Rows", value: 0 },
 		Delimiter: { label: "Delimiter", value: "" },
 	},
 };

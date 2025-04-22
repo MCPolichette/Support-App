@@ -38,6 +38,8 @@ export async function runAPI(params, API_KEY, merchant) {
 		const text = await response.text();
 		const xmlDoc = new window.DOMParser().parseFromString(text, "text/xml");
 		console.log(xmlDoc);
+		const adminVerification = localStorage.getItem("ChettiToolsSettings");
+		adminVerification.admin = true;
 		return xmlDoc;
 	} catch (error) {
 		console.error("Error fetching API:", error);

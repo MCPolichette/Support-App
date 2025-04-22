@@ -28,8 +28,9 @@
 			"retailprice",
 			"retail",
 			"regularprice",
-			"retialprice",
-			"retial"
+			"retailprice",
+			"retail",
+			"currentprice"
 		],
 		"required": true,
 		"valueType": "number",
@@ -82,7 +83,7 @@
 	},
 	{
 		"fieldName": "strBuyURL",
-		"matches": ["url", "link", "buyurl", "buylink", "permalink"],
+		"matches": ["url", "link", "buyurl", "buylink", "permalink", "linkurl"],
 		"required": true,
 		"valueType": "url",
 		"valueTitle": "Buy URL",
@@ -105,7 +106,7 @@
 		"variant": ""
 	},
 	{
-		"fieldName": "strSubcategory",
+		"fieldName": "strSubCategory",
 		"matches": ["subcategory", "subcat", "type"],
 		"required": false,
 		"valueType": "text",
@@ -141,7 +142,7 @@
 
 	{
 		"fieldName": "dblProductSalePrice",
-		"matches": ["saleprice", "discountedprice"],
+		"matches": ["saleprice", "salesprice", "discountedprice"],
 		"required": false,
 		"valueType": "number",
 		"valueTitle": "Sale Price",
@@ -208,7 +209,7 @@
 	{
 		"fieldName": "strAttribute2",
 		"valueTitle": "Product Color",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["color"],
 		"variant": "variant-color"
@@ -216,7 +217,7 @@
 	{
 		"fieldName": "strAttribute3",
 		"valueTitle": "Product Size",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["size"],
 		"variant": "variant-size"
@@ -224,7 +225,7 @@
 	{
 		"fieldName": "strAttribute4",
 		"valueTitle": "Product Pattern",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["pattern", "style"],
 		"variant": "variant-style"
@@ -232,7 +233,7 @@
 	{
 		"fieldName": "strAttribute5",
 		"valueTitle": "Product Material",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["material"],
 		"variant": ""
@@ -240,7 +241,7 @@
 	{
 		"fieldName": "strAttribute6",
 		"valueTitle": "Product Age Group",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["agegroup", "age"],
 		"variant": ""
@@ -248,7 +249,7 @@
 	{
 		"fieldName": "strAttribute7",
 		"valueTitle": "Product Gender",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["gender"],
 		"variant": ""
@@ -256,7 +257,7 @@
 	{
 		"fieldName": "strAttribute8",
 		"valueTitle": "Product UPC",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["upc"],
 		"variant": "variant-upc"
@@ -264,7 +265,7 @@
 	{
 		"fieldName": "strAttribute9",
 		"valueTitle": "Product Availability",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["availability", "available"],
 		"variant": ""
@@ -272,7 +273,7 @@
 	{
 		"fieldName": "txtAttribute2",
 		"valueTitle": "GTIN",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["gtin"],
 		"variant": ""
@@ -280,7 +281,7 @@
 	{
 		"fieldName": "txtAttribute3",
 		"valueTitle": "Key Words",
-		"ValueType": "string",
+		"valueType": "string",
 		"required": false,
 		"matches": ["keywords"],
 		"variant": ""
@@ -297,7 +298,7 @@
 		"fieldName": "txtAttribute1",
 		"valueTitle": "Variants XML",
 		"required": false,
-		"ValueType": "xml",
+		"valueType": "xml",
 		"matches": ["xml", "variantxml", "variants", "variantsxml"],
 		"variant": ""
 	},
