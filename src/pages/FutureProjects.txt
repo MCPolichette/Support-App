@@ -1,0 +1,7 @@
+PAGES I want to add to the tool list.
+
+
+1. Tracking troubleshooting checklist.
+2. outage estimate
+3. advanced reports
+4. 
