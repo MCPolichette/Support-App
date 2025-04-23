@@ -1,5 +1,6 @@
 import { feedfile } from "./automapperLogic/feedFile.js";
 import { formatBytes } from "../utils/conversions.js";
+import Papa from "papaparse";
 
 // MAIN FILE READER
 export function file_reader(input) {
@@ -22,7 +23,6 @@ export function file_reader(input) {
 				// SAMPLE ROW CONVERSION
 				const sampleLimit = 500;
 				const sampleRowsAsObjects = [];
-				console.log("LINE COUNT!!!! ", allLines.length);
 
 				for (
 					let i = 1;
@@ -57,10 +57,18 @@ export function file_reader(input) {
 		}
 	});
 }
-
-// CLEAN INPUT USING DYNAMIC DELIMITER
+// CLEAN INPUT USING DYNAMIC DELIMITER & QUOTE HANDLING
 function cleanInput(line, delimiter) {
-	return line.split(delimiter).map((s) => s.trim());
+	const config = {
+		delimiter: delimiter || "", // Auto-detect if not specified
+		newline: "", // Auto-detect
+		quoteChar: '"',
+		escapeChar: '"',
+		header: false,
+	};
+
+	const result = Papa.parse(line, config);
+	return result.data[0]; //  line as array
 }
 
 // DETECT DELIMITER FROM HEADER ROW

@@ -107,7 +107,7 @@
 	},
 	{
 		"fieldName": "strSubCategory",
-		"matches": ["subcategory", "subcat", "type"],
+		"matches": ["subcategory", "sub-category", "subcat", "type"],
 		"required": false,
 		"valueType": "text",
 		"valueTitle": "Subcategory"
@@ -267,7 +267,13 @@
 		"valueTitle": "Product Availability",
 		"valueType": "string",
 		"required": false,
-		"matches": ["availability", "available"],
+		"matches": [
+			"availability",
+			"available",
+			"stockavailability",
+			"instock",
+			"stock"
+		],
 		"variant": ""
 	},
 	{
@@ -275,7 +281,7 @@
 		"valueTitle": "GTIN",
 		"valueType": "string",
 		"required": false,
-		"matches": ["gtin"],
+		"matches": ["gtin", "gtintype"],
 		"variant": ""
 	},
 	{
@@ -306,7 +312,7 @@
 	{
 		"fieldName": "dblItemCommission",
 		"matches": ["basedcommission", "ibc", "commission", "commissionrate"],
-		"valueTitle": "Item Based Commission",
+		"valueTitle": "NOT RECOMMENDED - backend IBC",
 		"variant": "",
 		"valueType": "float",
 		"required": false
