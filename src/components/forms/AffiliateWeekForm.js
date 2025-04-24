@@ -9,20 +9,22 @@ const getMerchantLogo = (id) =>
 		: `https://static.avantlink.com/merchant-logos/${id}.png`;
 
 const AffiliateWeekForm = ({
-	startDate,
-	endDate,
-	compStartDate,
-	compEndDate,
-	setStartDate,
-	setEndDate,
-	setCompStartDate,
-	setCompEndDate,
+	currentStartDate,
+	currentEndDate,
+	previousPeriodStart,
+	previousPeriodEnd,
+	setCurrentStartDate,
+	setCurrentEndDate,
+	setPreviousPeriodStart,
+	setPreviousPeriodEnd,
 	merchantId,
 	setMerchantId,
 	handleRunReport,
 	loading,
 	openSettings,
 	commonMerchants,
+	modules,
+	toggleModule,
 }) => {
 	return (
 		<Form className="shadow-sm p-4 bg-white border rounded mb-4">
@@ -91,22 +93,51 @@ const AffiliateWeekForm = ({
 				<Col md={3}>
 					<Form.Label>Primary Week</Form.Label>
 					<DateRangePicker
-						startDate={startDate}
-						endDate={endDate}
-						onStartChange={setStartDate}
-						onEndChange={setEndDate}
+						startDate={currentStartDate}
+						endDate={currentEndDate}
+						onStartChange={setCurrentStartDate}
+						onEndChange={setCurrentEndDate}
 					/>
 				</Col>
 
 				<Col md={3}>
 					<Form.Label>Comparison Week (Last Year)</Form.Label>
 					<DateRangePicker
-						startDate={compStartDate}
-						endDate={compEndDate}
-						onStartChange={setCompStartDate}
-						onEndChange={setCompEndDate}
+						startDate={previousPeriodStart}
+						endDate={previousPeriodEnd}
+						onStartChange={setPreviousPeriodStart}
+						onEndChange={setPreviousPeriodEnd}
 					/>
 				</Col>
+			</Row>
+			<hr />
+			<h5 className="mt-4">Included Modules</h5>
+			<Row>
+				{[0, 1, 2].map((colIndex) => (
+					<Col
+						md={4}
+						key={`col-${colIndex}`}
+						className="pe-3 border-end"
+					>
+						{Object.entries(modules)
+							.filter((_, i) => i % 3 === colIndex)
+							.map(([name, mod]) => (
+								<Form.Check
+									key={name}
+									type="checkbox"
+									id={`mod-${name}`}
+									label={
+										<span style={{ fontSize: "0.85rem" }}>
+											{name.replace(/_/g, " ")}
+										</span>
+									}
+									checked={mod.inReport}
+									onChange={() => toggleModule(name)}
+									className="mb-1"
+								/>
+							))}
+					</Col>
+				))}
 			</Row>
 
 			<div className="d-flex justify-content-end">

@@ -1,7 +1,6 @@
 export function getDefaultStartDate() {
 	const date = new Date();
 	date.setDate(date.getDate() - 7);
-	console.log(date.toISOString().split("T")[0]);
 	return date.toISOString().split("T")[0];
 }
 

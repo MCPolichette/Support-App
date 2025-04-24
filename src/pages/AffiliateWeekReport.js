@@ -5,28 +5,25 @@ import {
 	InputGroup,
 	Row,
 	Col,
+	Container,
 	Alert,
 	Image,
 	Badge,
 } from "react-bootstrap";
+import AvantLinkApiTester from "../components/modals/adminAPItester";
+import LoadingSpinner from "../components/LoadingSpinner";
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
 import AffiliateWeekForm from "../components/forms/AffiliateWeekForm";
-
+import { adminReportAPI } from "../utils/reportEngine";
+import { _adminApiModules, getSettings } from "../utils/_ApiApiModules";
+import DynamicReportTable from "../components/tables/DynamicReportTable";
 import {
 	getDefaultStartDate,
 	getDefaultEndDate,
 	getLastYearSameWeek,
 } from "../utils/getTime";
-
-const getSettings = () => {
-	try {
-		const raw = localStorage.getItem("ChettiToolsSettings");
-		return raw ? JSON.parse(raw) : {};
-	} catch {
-		return {};
-	}
-};
+import { load } from "cheerio";
 
 const getMerchantLogo = (id) => {
 	return id === "23437"
@@ -36,34 +33,72 @@ const getMerchantLogo = (id) => {
 
 const AffiliateWeekReport = () => {
 	const settings = getSettings();
+	const [loading, setLoading] = useState(false);
+	const [loadingStage, setLoadingStage] = useState("N/A");
 	const [modalType, setModalType] = useState(settings.key ? null : "noKey");
-
+	const [modules, setModules] = useState(_adminApiModules);
+	const [completedModules, setCompletedModules] = useState([]);
+	const [reportResults, setReportResults] = useState({});
 	const [merchantId, setMerchantId] = useState(
 		settings.primaryMerchant || ""
 	);
-	const [uuid] = useState(settings.key || "");
 	const [startDate, setStartDate] = useState(getDefaultStartDate());
 	const [endDate, setEndDate] = useState(getDefaultEndDate());
-	const [compStartDate, setCompStartDate] = useState(
+	const [previousPeriodStart, setPreviousPeriodStart] = useState(
 		getLastYearSameWeek(startDate, endDate).start
 	);
-	const [compEndDate, setCompEndDate] = useState(
+	const [previousPeriodEnd, setPreviousPeriodEnd] = useState(
 		getLastYearSameWeek(startDate, endDate).end
 	);
-
 	const [errorModal, setErrorModal] = useState("");
-	const [loading, setLoading] = useState(false);
+	const [showComparisonTable, setShowComparisonTable] = useState(false);
 
+	const toggleModule = (name) => {
+		setModules((prev) => ({
+			...prev,
+			[name]: { ...prev[name], inReport: !prev[name].inReport },
+		}));
+	};
 	const handleRunReport = async () => {
-		const today = new Date().toISOString().split("T")[0];
-		if (endDate === today) {
-			setErrorModal("End date cannot be today. Today isn't done yet.");
-			return;
+		setShowComparisonTable(false);
+		setCompletedModules([]);
+		setLoading(true);
+		setLoadingStage("Initializing...");
+
+		const selectedModules = Object.entries(modules).filter(
+			([_, mod]) => mod.inReport
+		);
+
+		try {
+			const results = await adminReportAPI({
+				selectedModules,
+				startDate,
+				endDate,
+				previousStartDate: previousPeriodStart,
+				previousEndDate: previousPeriodEnd,
+				merchant: merchantId,
+				updateProgress: (message) => {
+					setLoadingStage(message);
+					if (message.includes("✅")) {
+						const name = message.split(" ")[0];
+						setCompletedModules((prev) => [...prev, name]);
+					}
+				},
+			});
+			console.log(results);
+			setReportResults(results);
+			setShowComparisonTable(true);
+		} catch (err) {
+			console.error("Report run failed", err);
+			setErrorModal("One or more reports failed.");
+		} finally {
+			setLoading(false);
+			setLoadingStage("N/A");
+			console.log(reportResults);
 		}
 	};
 
 	const openSettings = () => setModalType("noKey");
-
 	const commonMerchants = settings.commonMerchants || [];
 
 	return (
@@ -77,38 +112,160 @@ const AffiliateWeekReport = () => {
 				</Col>
 			</Row>
 
-			<AffiliateWeekForm
-				startDate={startDate}
-				endDate={endDate}
-				compStartDate={compStartDate}
-				compEndDate={compEndDate}
-				setStartDate={setStartDate}
-				setEndDate={setEndDate}
-				setCompStartDate={setCompStartDate}
-				setCompEndDate={setCompEndDate}
-				merchantId={merchantId}
-				setMerchantId={setMerchantId}
-				handleRunReport={handleRunReport}
-				loading={loading}
-				openSettings={openSettings}
-				commonMerchants={commonMerchants}
-			/>
+			<div className="position-relative">
+				<div className={loading ? "blur-sm pointer-events-none" : ""}>
+					<AffiliateWeekForm
+						modules={modules}
+						toggleModule={toggleModule}
+						handleRunReport={handleRunReport}
+						currentStartDate={startDate}
+						currentEndDate={endDate}
+						previousPeriodStart={previousPeriodStart}
+						previousPeriodEnd={previousPeriodEnd}
+						setCurrentStartDate={setStartDate}
+						setCurrentEndDate={setEndDate}
+						setpreviousPeriodStart={setPreviousPeriodStart}
+						setPreviousPeriodEnd={setPreviousPeriodEnd}
+						merchantId={merchantId}
+						setMerchantId={setMerchantId}
+						loading={loading}
+						openSettings={openSettings}
+						commonMerchants={commonMerchants}
+					/>
+				</div>
+				{loading && (
+					<Row>
+						<div
+							className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+							style={{
+								backgroundColor: "rgba(255, 255, 255, 0.7)",
+								backdropFilter: "blur(4px)",
+								zIndex: 10,
+							}}
+						></div>
+						<Row
+							className="position-absolute top-0 start-0 w-100 h-100 d-flex   align-items-center justify-content-center"
+							style={{ zIndex: 10 }}
+						>
+							<Col md={4}>
+								<h3>Step 1: Running APIs</h3>
+							</Col>
+							<Col md={2}>
+								<div
+									className="spinner-border text-primary"
+									role="status"
+								>
+									<h1 className="visually-hidden">
+										Loading...
+									</h1>
+								</div>
+							</Col>
+							<Col
+								md={6}
+								className="bg-white rounded shadow-sm p-3"
+							>
+								<h5 className="mb-3">Running Reports</h5>
+								<div
+									style={{
+										maxHeight: "300px",
+										overflowY: "auto",
+									}}
+								>
+									{Object.entries(modules)
+										.filter(([_, mod]) => mod.inReport)
+										.map(([name, mod]) => (
+											<div
+												key={name}
+												className="d-flex align-items-center mb-2 small"
+											>
+												<span
+													className="me-2"
+													style={{
+														fontSize: "1.2rem",
+														color: "#0d6efd",
+													}}
+												>
+													{completedModules.includes(
+														name
+													)
+														? "✅"
+														: "⏳"}
+												</span>
+												<span>
+													{name.replace(/_/g, " ")}
+												</span>
+											</div>
+										))}
+								</div>
+							</Col>
+						</Row>
+					</Row>
+				)}
+			</div>
 
-			{/* Placeholder for future steps */}
-			<Form className="shadow-sm p-4 bg-light border rounded">
+			<Container>
+				{showComparisonTable && (
+					<Row>
+						<DynamicReportTable
+							title="Product Sold Report"
+							currentPeriodReport={
+								reportResults.Product_Sold_current
+							}
+							previousPeriodReport={
+								reportResults.Product_Sold_previous
+							}
+							headers={["Sales", "# of Sales"]}
+							sortBy="Sales"
+							limit={100}
+							mergeBy="Product Id" // <- used for matching rows
+							staticDisplay={["Product Name", "Product SKU"]} // <- shown in left column
+						/>
+						<DynamicReportTable
+							title="Affiliate Website Report"
+							currentPeriodReport={
+								reportResults.Performance_Summary_By_Affiliate_Website_current
+							}
+							previousPeriodReport={
+								reportResults.Performance_Summary_By_Affiliate_Website_previous
+							}
+							headers={["Click Throughs", "Sales", "# of Sales"]}
+							sortBy="Sales"
+							mergeBy="Website Id"
+							limit={100}
+							staticDisplay={["Website Name", "Affiliate Id"]}
+						/>
+						<DynamicReportTable
+							title="Affiliate Report"
+							currentPeriodReport={
+								reportResults.Performance_Summary_By_Affiliate_current
+							}
+							previousPeriodReport={
+								reportResults.Performance_Summary_By_Affiliate_previous
+							}
+							headers={["Click Throughs", "Sales", "# of Sales"]}
+							sortBy="Sales"
+							limit={100}
+							mergeBy="Affiliate Id"
+							staticDisplay={["Affiliate", "Affiliate Id"]}
+						/>
+					</Row>
+				)}
+			</Container>
+			{/* <Form className="shadow-sm p-4 bg-light border rounded">
 				<h5 className="mb-3">More Report Options (Coming Soon)</h5>
 				<p className="text-muted mb-0">
 					Filters, partner types, and detailed metrics will be added
 					here.
 				</p>
-			</Form>
+			</Form> */}
 
 			<StylizedModal
 				show={!!modalType}
 				onHide={() => setModalType(null)}
 				title="Settings"
 			>
-				{modalType === "noKey" && <SettingsModal />}
+				{modalType === "noKey" && <SettingsModal />},
+				{modalType === "test" && <AvantLinkApiTester />}
 			</StylizedModal>
 
 			{errorModal && (

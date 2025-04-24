@@ -1,6 +1,8 @@
 // utils/apiRunner.js
+import { getSettings } from "./_ApiApiModules";
 
-export async function runAPI(params, API_KEY, merchant) {
+export async function runAPI(params, API_KEY, merchantId) {
+	const settings = getSettings();
 	const {
 		report_id,
 		startDate,
@@ -11,12 +13,7 @@ export async function runAPI(params, API_KEY, merchant) {
 		affiliate_id,
 		website_id,
 		affiliate_group_id,
-	} = applyDefaults({ ...params, merchant_id: merchant?.id });
-	console.log(
-		"API SENT",
-		report_id,
-		"Line 16 in // utils/apiRunner.js for Troubleshoting."
-	);
+	} = applyDefaults({ ...params, merchant_id: merchantId });
 
 	const networkParam = getNetworkParam(networkCode);
 
@@ -31,16 +28,14 @@ export async function runAPI(params, API_KEY, merchant) {
 		`&date_end=${endDate}` +
 		`&affiliate_group_id=${affiliate_group_id}` +
 		`&report_id=${report_id}` +
-		`&output=xml${networkParam}`;
+		`&output=json${networkParam}`;
 
 	try {
 		const response = await fetch(url);
-		const text = await response.text();
-		const xmlDoc = new window.DOMParser().parseFromString(text, "text/xml");
-		console.log(xmlDoc);
-		const adminVerification = localStorage.getItem("ChettiToolsSettings");
-		adminVerification.admin = true;
-		return xmlDoc;
+		if (!response.ok) throw new Error("API returned error status");
+		const json = await response.json();
+		console.log("JSON response:", json);
+		return json;
 	} catch (error) {
 		console.error("Error fetching API:", error);
 	}
