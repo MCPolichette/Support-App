@@ -1,4 +1,5 @@
 import React from "react";
+import { Form, Row, Col } from "react-bootstrap";
 
 const DateRangePicker = ({
 	startDate,
@@ -7,26 +8,30 @@ const DateRangePicker = ({
 	onEndChange,
 }) => {
 	return (
-		<div className="mb-4">
-			<div className="mb-2">
-				<label className="block mb-1 font-medium">Start Date</label>
-				<input
-					type="date"
-					value={startDate}
-					onChange={(e) => onStartChange(e.target.value)}
-					className="border p-2 w-full"
-				/>
-			</div>
-			<div>
-				<label className="block mb-1 font-medium">End Date</label>
-				<input
-					type="date"
-					value={endDate}
-					onChange={(e) => onEndChange(e.target.value)}
-					className="border p-2 w-full"
-				/>
-			</div>
-		</div>
+		<Form>
+			<Row className="g-2 align-items-end">
+				<Col md={12} lg={6}>
+					<Form.Group controlId="startDate">
+						<Form.Label>Start Date</Form.Label>
+						<Form.Control
+							type="date"
+							value={startDate}
+							onChange={(e) => onStartChange(e.target.value)}
+						/>
+					</Form.Group>
+				</Col>
+				<Col md={12} lg={6}>
+					<Form.Group controlId="endDate">
+						<Form.Label>End Date</Form.Label>
+						<Form.Control
+							type="date"
+							value={endDate}
+							onChange={(e) => onEndChange(e.target.value)}
+						/>
+					</Form.Group>
+				</Col>
+			</Row>
+		</Form>
 	);
 };
 

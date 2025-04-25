@@ -4,7 +4,7 @@ fetch("/crawler-tunnel.txt")
 	.then((res) => res.text())
 	.then((text) => {
 		CRAWLER_API_URL = text.trim();
-		console.log("✅ Tunnel URL loaded:", CRAWLER_API_URL);
+		// console.log("✅ Tunnel URL loaded:", CRAWLER_API_URL);
 	})
 	.catch((err) => {
 		console.warn("⚠️ Failed to load tunnel file. Using fallback.");

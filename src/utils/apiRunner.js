@@ -1,5 +1,5 @@
 // utils/apiRunner.js
-import { getSettings } from "./_ApiApiModules";
+import { getSettings } from "./_AdminApiModules";
 
 export async function runAPI(params, API_KEY, merchantId) {
 	const settings = getSettings();
@@ -34,7 +34,7 @@ export async function runAPI(params, API_KEY, merchantId) {
 		const response = await fetch(url);
 		if (!response.ok) throw new Error("API returned error status");
 		const json = await response.json();
-		console.log("JSON response:", json);
+
 		return json;
 	} catch (error) {
 		console.error("Error fetching API:", error);

@@ -1,0 +1,46 @@
+.merchant-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+
+.merchant-card {
+	flex: 0 0 auto;
+	width: 150px;
+	transition: transform 0.3s ease, z-index 0.3s;
+	position: relative;
+	display: block;
+	margin: 0 auto;
+}
+.merchant-logo {
+	display: block;
+}
+
+.merchant-card.primary {
+	border: 2px solid #0d6efd;
+	box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+/* When clicking to move left/right, this helps simulate z-index movement if you want more animation later */
+.merchant-card.moving-right {
+	z-index: 1;
+}
+.merchant-card.moving-left {
+	z-index: 0;
+}
+.merchant-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin-top: 1rem;
+}
+.merchant-card.moving-left {
+	transform: translateX(-20px);
+	z-index: 10;
+}
+
+.merchant-card.moving-right {
+	transform: translateX(20px);
+	z-index: 1;
+}

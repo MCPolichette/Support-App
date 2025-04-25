@@ -16,7 +16,7 @@ const calculateChange = (current, previous) => {
 	return { delta, percent };
 };
 
-const DynamicReportTable = ({
+const DynamicComparisonReportTable = ({
 	title,
 	currentPeriodReport = [],
 	previousPeriodReport = [],
@@ -102,4 +102,4 @@ const DynamicReportTable = ({
 	);
 };
 
-export default DynamicReportTable;
+export default DynamicComparisonReportTable;

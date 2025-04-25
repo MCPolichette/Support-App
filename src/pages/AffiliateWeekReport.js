@@ -16,8 +16,9 @@ import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
 import AffiliateWeekForm from "../components/forms/AffiliateWeekForm";
 import { adminReportAPI } from "../utils/reportEngine";
-import { _adminApiModules, getSettings } from "../utils/_ApiApiModules";
-import DynamicReportTable from "../components/tables/DynamicReportTable";
+import { _adminApiModules, getSettings } from "../utils/_AdminApiModules";
+import DynamicComparisonReportTable from "../components/tables/DynamicComparisonReportTable";
+import DynamicComparisonReportContainer from "../components/tables/DynamicComparisonContainer";
 import {
 	getDefaultStartDate,
 	getDefaultEndDate,
@@ -33,14 +34,17 @@ const getMerchantLogo = (id) => {
 
 const AffiliateWeekReport = () => {
 	const settings = getSettings();
-	const [loading, setLoading] = useState(false);
-	const [loadingStage, setLoadingStage] = useState("N/A");
 	const [modalType, setModalType] = useState(settings.key ? null : "noKey");
+	const [errorModal, setErrorModal] = useState("");
 	const [modules, setModules] = useState(_adminApiModules);
 	const [completedModules, setCompletedModules] = useState([]);
 	const [reportResults, setReportResults] = useState({});
+	// Report params
 	const [merchantId, setMerchantId] = useState(
-		settings.primaryMerchant || ""
+		settings.primaryMerchant.id || ""
+	);
+	const [network, setNetwork] = useState(
+		settings.primaryMerchant.network || ""
 	);
 	const [startDate, setStartDate] = useState(getDefaultStartDate());
 	const [endDate, setEndDate] = useState(getDefaultEndDate());
@@ -50,21 +54,23 @@ const AffiliateWeekReport = () => {
 	const [previousPeriodEnd, setPreviousPeriodEnd] = useState(
 		getLastYearSameWeek(startDate, endDate).end
 	);
-	const [errorModal, setErrorModal] = useState("");
-	const [showComparisonTable, setShowComparisonTable] = useState(false);
 
+	// Display states
+	const [showComparisonTable, setShowComparisonTable] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [loadingStage, setLoadingStage] = useState("N/A");
 	const toggleModule = (name) => {
 		setModules((prev) => ({
 			...prev,
 			[name]: { ...prev[name], inReport: !prev[name].inReport },
 		}));
 	};
+
 	const handleRunReport = async () => {
 		setShowComparisonTable(false);
 		setCompletedModules([]);
 		setLoading(true);
 		setLoadingStage("Initializing...");
-
 		const selectedModules = Object.entries(modules).filter(
 			([_, mod]) => mod.inReport
 		);
@@ -77,6 +83,7 @@ const AffiliateWeekReport = () => {
 				previousStartDate: previousPeriodStart,
 				previousEndDate: previousPeriodEnd,
 				merchant: merchantId,
+				networkCode: network,
 				updateProgress: (message) => {
 					setLoadingStage(message);
 					if (message.includes("✅")) {
@@ -88,13 +95,13 @@ const AffiliateWeekReport = () => {
 			console.log(results);
 			setReportResults(results);
 			setShowComparisonTable(true);
+			console.log(completedModules);
 		} catch (err) {
 			console.error("Report run failed", err);
 			setErrorModal("One or more reports failed.");
 		} finally {
 			setLoading(false);
 			setLoadingStage("N/A");
-			console.log(reportResults);
 		}
 	};
 
@@ -103,15 +110,6 @@ const AffiliateWeekReport = () => {
 
 	return (
 		<div className="container mt-5">
-			<Row className="mb-4">
-				<Col>
-					<h1 className="mb-2">AffiliateWeekReport</h1>
-					<p className="text-muted">
-						Custom weekly affiliate performance report
-					</p>
-				</Col>
-			</Row>
-
 			<div className="position-relative">
 				<div className={loading ? "blur-sm pointer-events-none" : ""}>
 					<AffiliateWeekForm
@@ -131,6 +129,8 @@ const AffiliateWeekReport = () => {
 						loading={loading}
 						openSettings={openSettings}
 						commonMerchants={commonMerchants}
+						network={network}
+						setNetwork={setNetwork}
 					/>
 				</div>
 				{loading && (
@@ -206,7 +206,11 @@ const AffiliateWeekReport = () => {
 			<Container>
 				{showComparisonTable && (
 					<Row>
-						<DynamicReportTable
+						<DynamicComparisonReportContainer
+							reportResults={reportResults}
+							completedModules={completedModules}
+						/>
+						<DynamicComparisonReportTable
 							title="Product Sold Report"
 							currentPeriodReport={
 								reportResults.Product_Sold_current
@@ -215,12 +219,11 @@ const AffiliateWeekReport = () => {
 								reportResults.Product_Sold_previous
 							}
 							headers={["Sales", "# of Sales"]}
-							sortBy="Sales"
 							limit={100}
 							mergeBy="Product Id" // <- used for matching rows
 							staticDisplay={["Product Name", "Product SKU"]} // <- shown in left column
 						/>
-						<DynamicReportTable
+						<DynamicComparisonReportTable
 							title="Affiliate Website Report"
 							currentPeriodReport={
 								reportResults.Performance_Summary_By_Affiliate_Website_current
@@ -234,7 +237,7 @@ const AffiliateWeekReport = () => {
 							limit={100}
 							staticDisplay={["Website Name", "Affiliate Id"]}
 						/>
-						<DynamicReportTable
+						<DynamicComparisonReportTable
 							title="Affiliate Report"
 							currentPeriodReport={
 								reportResults.Performance_Summary_By_Affiliate_current

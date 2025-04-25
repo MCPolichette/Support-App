@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, CloseButton } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const StylizedModal = ({ show, onHide, title, children, footer }) => {
