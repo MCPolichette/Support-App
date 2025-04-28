@@ -38,6 +38,7 @@ const AffiliateWeekReport = () => {
 	const [errorModal, setErrorModal] = useState("");
 	const [modules, setModules] = useState(_adminApiModules);
 	const [completedModules, setCompletedModules] = useState([]);
+
 	const [reportResults, setReportResults] = useState({});
 	// Report params
 	const [merchantId, setMerchantId] = useState(
@@ -64,6 +65,34 @@ const AffiliateWeekReport = () => {
 			...prev,
 			[name]: { ...prev[name], inReport: !prev[name].inReport },
 		}));
+	};
+	const toggleHeaderDisplay = (moduleName, headerName) => {
+		setModules((prevModules) => {
+			const updatedModules = { ...prevModules }; // shallow copy modules
+			const updatedModule = { ...updatedModules[moduleName] }; // shallow copy specific module
+			const updatedHeaders = { ...updatedModule.headers }; // shallow copy headers
+
+			const headerSettings = updatedHeaders[headerName];
+
+			if (headerSettings !== undefined) {
+				if (typeof headerSettings === "object") {
+					updatedHeaders[headerName] = {
+						...headerSettings,
+						display: headerSettings.display === false, // flip true/false properly
+					};
+				} else {
+					updatedHeaders[headerName] = {
+						yoy: headerSettings,
+						display: true,
+					};
+				}
+			}
+
+			updatedModule.headers = updatedHeaders;
+			updatedModules[moduleName] = updatedModule;
+
+			return updatedModules;
+		});
 	};
 
 	const handleRunReport = async () => {
@@ -114,6 +143,7 @@ const AffiliateWeekReport = () => {
 				<div className={loading ? "blur-sm pointer-events-none" : ""}>
 					<AffiliateWeekForm
 						modules={modules}
+						setModules={setModules}
 						toggleModule={toggleModule}
 						handleRunReport={handleRunReport}
 						currentStartDate={startDate}
@@ -131,6 +161,7 @@ const AffiliateWeekReport = () => {
 						commonMerchants={commonMerchants}
 						network={network}
 						setNetwork={setNetwork}
+						toggleHeaderDisplay={toggleHeaderDisplay}
 					/>
 				</div>
 				{loading && (
@@ -209,47 +240,7 @@ const AffiliateWeekReport = () => {
 						<DynamicComparisonReportContainer
 							reportResults={reportResults}
 							completedModules={completedModules}
-						/>
-						<DynamicComparisonReportTable
-							title="Product Sold Report"
-							currentPeriodReport={
-								reportResults.Product_Sold_current
-							}
-							previousPeriodReport={
-								reportResults.Product_Sold_previous
-							}
-							headers={["Sales", "# of Sales"]}
-							limit={100}
-							mergeBy="Product Id" // <- used for matching rows
-							staticDisplay={["Product Name", "Product SKU"]} // <- shown in left column
-						/>
-						<DynamicComparisonReportTable
-							title="Affiliate Website Report"
-							currentPeriodReport={
-								reportResults.Performance_Summary_By_Affiliate_Website_current
-							}
-							previousPeriodReport={
-								reportResults.Performance_Summary_By_Affiliate_Website_previous
-							}
-							headers={["Click Throughs", "Sales", "# of Sales"]}
-							sortBy="Sales"
-							mergeBy="Website Id"
-							limit={100}
-							staticDisplay={["Website Name", "Affiliate Id"]}
-						/>
-						<DynamicComparisonReportTable
-							title="Affiliate Report"
-							currentPeriodReport={
-								reportResults.Performance_Summary_By_Affiliate_current
-							}
-							previousPeriodReport={
-								reportResults.Performance_Summary_By_Affiliate_previous
-							}
-							headers={["Click Throughs", "Sales", "# of Sales"]}
-							sortBy="Sales"
-							limit={100}
-							mergeBy="Affiliate Id"
-							staticDisplay={["Affiliate", "Affiliate Id"]}
+							modules={modules}
 						/>
 					</Row>
 				)}

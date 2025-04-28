@@ -10,7 +10,7 @@
 	{
 		"fieldName": "strAttribute1",
 		"required": false,
-		"valueTitle": "Product Parent Grouping Id",
+		"valueTitle": "Product Parent Id",
 		"valueType": "string",
 		"matches": [
 			"parentid",

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, InputGroup, Row, Col, Image } from "react-bootstrap";
 import DateRangePicker from "../DateRangePicker";
+import ReportSettings from "./ReportSettingsPanel";
 
 const getMerchantLogo = (id) =>
 	id === "23437"
@@ -25,7 +26,9 @@ const AffiliateWeekForm = ({
 	openSettings,
 	commonMerchants,
 	modules,
+	setModules,
 	toggleModule,
+	toggleHeaderDisplay,
 }) => {
 	return (
 		<Form className="shadow-sm p-4 bg-white border rounded mb-4">
@@ -163,31 +166,33 @@ const AffiliateWeekForm = ({
 			<hr />
 			<h5 className="mt-4">Report Modules</h5>
 			<Row>
-				{[0, 1, 2].map((colIndex) => (
-					<Col
-						md={4}
-						key={`col-${colIndex}`}
-						className="pe-3 border-end"
-					>
-						{Object.entries(modules)
-							.filter((_, i) => i % 3 === colIndex)
-							.map(([name, mod]) => (
-								<Form.Check
-									key={name}
-									type="checkbox"
-									id={`mod-${name}`}
-									label={
-										<span style={{ fontSize: "0.85rem" }}>
-											{name.replace(/_/g, " ")}
-										</span>
-									}
-									checked={mod.inReport}
-									onChange={() => toggleModule(name)}
-									className="mb-1"
-								/>
-							))}
-					</Col>
-				))}
+				<Col md={4} className="pe-3 border-end">
+					{Object.entries(modules).map(([name, mod]) => (
+						<Form.Check
+							key={name}
+							type="checkbox"
+							id={`mod-${name}`}
+							label={
+								<span style={{ fontSize: "0.85rem" }}>
+									{name.replace(/_/g, " ")}
+								</span>
+							}
+							checked={mod.inReport}
+							onChange={() => toggleModule(name)}
+							className="mb-1"
+						/>
+					))}
+				</Col>
+
+				<Col md={8}>
+					{/* Accordion Panel */}
+					<ReportSettings
+						modules={modules}
+						setModules={setModules}
+						merchantId={merchantId}
+						toggleHeaderDisplay={toggleHeaderDisplay}
+					/>
+				</Col>
 			</Row>
 
 			<div className="d-flex justify-content-end">

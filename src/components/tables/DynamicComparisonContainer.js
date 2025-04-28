@@ -1,17 +1,17 @@
 import React from "react";
 import { Container, Row, Col, Alert } from "react-bootstrap";
 import DynamicComparisonReportTable from "./DynamicComparisonReportTable"; // adjust path if needed
-import { _adminApiModules } from "../../utils/_AdminApiModules";
 
 const DynamicComparisonReportContainer = ({
 	completedModules,
 	reportResults,
+	modules,
 }) => {
 	return (
 		<Container fluid className="mt-4">
-			{completedModules.map((moduleName, idx) => {
+			{/* {completedModules.map((moduleName, idx) => {
 				const moduleSettings = _adminApiModules[moduleName];
-
+				const hiddenHeaders = hidden.moduleName;
 				if (!moduleSettings) {
 					console.warn(
 						`Module settings not found for: ${moduleName}`
@@ -19,19 +19,10 @@ const DynamicComparisonReportContainer = ({
 					return null;
 				}
 
-				const { sortBy, headers, mergeBy, staticDisplay, inReport } =
-					moduleSettings;
-
-				// Create headers list based on what's set to true
-				const activeHeaders = headers
-					? Object.keys(headers).filter((header) => headers[header])
-					: [];
-
 				return (
 					<Row key={idx} className="mb-5">
 						<Col>
-							{/* INFO Styled Topper */}
-							<Alert variant="info">
+												<Alert variant="info">
 								<strong>
 									{moduleName.replaceAll("_", " ")}
 								</strong>{" "}
@@ -46,16 +37,14 @@ const DynamicComparisonReportContainer = ({
 								previousPeriodReport={
 									reportResults[`${moduleName}_previous`]
 								}
-								headers={activeHeaders}
-								sortBy={sortBy}
-								mergeBy={mergeBy}
-								staticDisplay={staticDisplay}
+								reportSettings={moduleSettings}
 								limit={100}
+								hiddenFields={hiddenHeaders}
 							/>
 						</Col>
 					</Row>
 				);
-			})}
+			})} */}
 		</Container>
 	);
 };

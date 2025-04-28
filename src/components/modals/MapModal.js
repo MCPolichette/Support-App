@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Row, Col, Toast, ToastContainer } from "react-bootstrap";
-import SecondaryFeedReference from "../data/SedondaryFeedMapReference";
+import SecondaryFileTab from "../ALTools/tabs/SecondaryFileTab";
 
 const MapModal = ({ mapping = [], type, delimiter }) => {
 	const getAttributeFields = (arr) => {
@@ -45,33 +45,12 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 				<h4>"DELIMITER: " {delimiter}</h4>
 				<hr></hr>
 				<Col md={7}>
-					<h6>Primary Feed</h6>
-					<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
-						<pre
-							style={{ width: "75%" }}
-							className="bg-light p-2 border rounded text-wrap flex-grow-1"
-							id="primaryPipeMap"
-						>
-							{mappedStr || "No fields mapped yet."}
-						</pre>
-					</div>
-
-					{type && (
-						<div>
-							<h6>Secondary Feed</h6>
-							<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
-								<pre
-									style={{ width: "75%" }}
-									className="bg-light p-2 border rounded  flex-grow-1"
-									id="secondaryPipeMap"
-								>
-									{mappedVarStr || "No fields mapped yet."}
-								</pre>
-							</div>
-						</div>
-					)}
-
-					<h6 className="mt-2">Attributes Mapped</h6>
+					<h6
+						style={{ width: "100%", marginTop: "10%" }}
+						className="mt-2"
+					>
+						Attributes Mapped
+					</h6>
 					<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
 						<ul>
 							{attributeFields.map((field, i) => (
@@ -98,10 +77,30 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 							{"</Fields>"}
 						</code>
 					</div>
+					<Button
+						style={{ width: "100%", marginBottom: "10px" }}
+						className="btn-lg btn-block"
+						variant="outline-primary"
+						onClick={() => copyToClipboard("attMapTxt")}
+						disabled={!mappedVarStr}
+					>
+						Copy Attribute Map
+					</Button>
 				</Col>
 				<Col md={5}>
+					<h6>Primary Feed</h6>
+					<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
+						<pre
+							style={{ width: "75%" }}
+							className="bg-light p-2 border rounded flex-grow-1"
+							id="primaryPipeMap"
+						>
+							{mappedStr || "No fields mapped yet."}
+						</pre>
+					</div>
+
 					<Button
-						style={{ width: "100%", marginTop: "10%" }}
+						style={{ width: "100%", marginTop: "-20px" }}
 						className="btn-lg btn-block"
 						variant="outline-primary"
 						onClick={() => copyToClipboard("primaryPipeMap")}
@@ -110,25 +109,31 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 						Copy Primary Map
 					</Button>
 					{type && (
-						<Button
-							style={{ width: "100%", marginTop: "33%" }}
-							className="btn-lg btn-block"
-							variant="outline-primary"
-							onClick={() => copyToClipboard("secondaryPipeMap")}
-							disabled={!mappedVarStr}
-						>
-							Copy Secondary Map
-						</Button>
+						<div style={{ width: "100%", marginTop: "15%" }}>
+							<h6>Secondary Feed</h6>
+							<div className="mb-3 d-flex justify-content-between align-items-start gap-2">
+								<pre
+									style={{ width: "75%" }}
+									className="bg-light p-2 border rounded  flex-grow-1"
+									id="secondaryPipeMap"
+								>
+									{mappedVarStr || "No fields mapped yet."}
+								</pre>
+							</div>
+
+							<Button
+								style={{ width: "100%", marginTop: "-20px" }}
+								className="btn-lg btn-block"
+								variant="outline-primary"
+								onClick={() =>
+									copyToClipboard("secondaryPipeMap")
+								}
+								disabled={!mappedVarStr}
+							>
+								Copy Secondary Map
+							</Button>
+						</div>
 					)}
-					<Button
-						style={{ width: "100%", marginTop: "33%" }}
-						className="btn-lg btn-block"
-						variant="outline-primary"
-						onClick={() => copyToClipboard("attMapTxt")}
-						disabled={!mappedVarStr}
-					>
-						Copy Attribute Map
-					</Button>
 				</Col>
 				{/* Transient Copied Notification */}
 				<ToastContainer position="bottom-center" className="p-3">
@@ -147,7 +152,12 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 				<hr></hr>
 			</Row>
 
-			<Row>{/* <SecondaryFeedReference /> */}</Row>
+			<Row>
+				<SecondaryFileTab
+					delimiter={delimiter}
+					mappedVarStr={mappedVarStr}
+				/>
+			</Row>
 		</div>
 	);
 };
