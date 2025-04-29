@@ -1,10 +1,10 @@
 import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
 
-const SecondaryFileTab = () => {
+const SecondaryFileTab = (params) => {
 	return (
 		<Form>
-			<Row className="mb-2">
+			{/* <Row className="mb-2">
 				<Form.Label column sm={4} className="text-end fw-bold">
 					Secondary Feed File Url:
 				</Form.Label>
@@ -12,24 +12,26 @@ const SecondaryFileTab = () => {
 					<Form.Control
 						size="sm"
 						type="text"
-						defaultValue="https://steals.com/feeds/google-products-feed.xml"
+						defaultValue="https://feedURL.xml"
 					/>
 				</Col>
-			</Row>
+			</Row> */}
 
 			<Row className="mb-2">
 				<Form.Label column sm={4} className="text-end fw-bold">
 					Secondary Feed Delimiter:
 				</Form.Label>
 				<Col sm={4}>
-					<Form.Select size="sm" defaultValue=",">
-						<option value=""></option>
-						<option value=",">comma</option>
-						<option value="|">pipe "|"</option>
-						<option value="tab">tab</option>
-						<option value=";">semicolon</option>
-						<option value="xml">xml</option>
-					</Form.Select>
+					<code>
+						<Form.Select size="sm" defaultValue="">
+							<option value="">{params.delimiter}</option>
+							<option value=",">comma</option>
+							<option value="|">pipe "|"</option>
+							<option value="tab">tab</option>
+							<option value=";">semicolon</option>
+							<option value="xml">xml</option>
+						</Form.Select>
+					</code>
 				</Col>
 			</Row>
 
@@ -41,7 +43,7 @@ const SecondaryFileTab = () => {
 					<Form.Control
 						size="sm"
 						type="text"
-						defaultValue="variant-sku|strProductSKU||variant-detail_url|variant-image_url|variant-retail_price|variant-sale_price|variant-vendor_sku||||variant-color|variant-size|variant-style|||||variant-upc||||variant-available|||variant-vendor_sku||||||||"
+						defaultValue={params.mappedVarStr}
 					/>
 				</Col>
 			</Row>
