@@ -1,36 +1,25 @@
-import React, { useState, useEffect } from "react";
-import {
-	Form,
-	Button,
-	InputGroup,
-	Row,
-	Col,
-	Container,
-	Alert,
-	Image,
-	Badge,
-} from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Row, Col, Container } from "react-bootstrap";
 import AvantLinkApiTester from "../components/modals/adminAPItester";
-import LoadingSpinner from "../components/LoadingSpinner";
+
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
 import AffiliateWeekForm from "../components/forms/AffiliateWeekForm";
 import { adminReportAPI } from "../utils/reportEngine";
 import { _adminApiModules, getSettings } from "../utils/_AdminApiModules";
-import DynamicComparisonReportTable from "../components/tables/DynamicComparisonReportTable";
+
 import DynamicComparisonReportContainer from "../components/tables/DynamicComparisonContainer";
 import {
 	getDefaultStartDate,
 	getDefaultEndDate,
 	getLastYearSameWeek,
 } from "../utils/getTime";
-import { load } from "cheerio";
 
-const getMerchantLogo = (id) => {
-	return id === "23437"
-		? `https://static.avantlink.com/merchant-logos/23437`
-		: `https://static.avantlink.com/merchant-logos/${id}.png`;
-};
+// const getMerchantLogo = (id) => {
+// 	return id === "23437"
+// 		? `https://static.avantlink.com/merchant-logos/23437`
+// 		: `https://static.avantlink.com/merchant-logos/${id}.png`;
+// };
 
 const AffiliateWeekReport = () => {
 	const settings = getSettings();
@@ -96,6 +85,7 @@ const AffiliateWeekReport = () => {
 	};
 
 	const handleRunReport = async () => {
+		console.log(loadingStage);
 		setShowComparisonTable(false);
 		setCompletedModules([]);
 		setLoading(true);

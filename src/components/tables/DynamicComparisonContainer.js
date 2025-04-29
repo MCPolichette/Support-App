@@ -9,20 +9,32 @@ const DynamicComparisonReportContainer = ({
 }) => {
 	return (
 		<Container fluid className="mt-4">
-			{/* {completedModules.map((moduleName, idx) => {
-				const moduleSettings = _adminApiModules[moduleName];
-				const hiddenHeaders = hidden.moduleName;
-				if (!moduleSettings) {
-					console.warn(
-						`Module settings not found for: ${moduleName}`
-					);
-					return null;
-				}
+			{completedModules.map((moduleName, idx) => {
+				const moduleData = modules[moduleName]; // <- grab module's header settings from modules
+
+				// if (!moduleSettings || !moduleData) {
+				// 	console.warn(
+				// 		`Module settings not found for: ${moduleName}`
+				// 	);
+				// 	return null;
+				// }
+
+				// Build hidden fields dynamically
+				const hiddenHeaders = moduleData.headers
+					? Object.entries(moduleData.headers)
+							.filter(([headerName, headerSettings]) => {
+								if (typeof headerSettings === "object") {
+									return headerSettings.display === false;
+								}
+								return headerSettings === false;
+							})
+							.map(([headerName]) => headerName)
+					: [];
 
 				return (
 					<Row key={idx} className="mb-5">
 						<Col>
-												<Alert variant="info">
+							<Alert variant="info">
 								<strong>
 									{moduleName.replaceAll("_", " ")}
 								</strong>{" "}
@@ -37,14 +49,14 @@ const DynamicComparisonReportContainer = ({
 								previousPeriodReport={
 									reportResults[`${moduleName}_previous`]
 								}
-								reportSettings={moduleSettings}
+								reportSettings={moduleData}
 								limit={100}
-								hiddenFields={hiddenHeaders}
+								hiddenFields={hiddenHeaders} // <--- clean hidden fields now
 							/>
 						</Col>
 					</Row>
 				);
-			})} */}
+			})}
 		</Container>
 	);
 };

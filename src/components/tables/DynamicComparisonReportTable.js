@@ -42,7 +42,7 @@ const DynamicComparisonReportTable = ({
 	});
 
 	const headersConfig = reportSettings.headers || {};
-	const joinKey = reportSettings.joinKey || "Affiliate Id";
+	const joinKey = reportSettings.joinKey;
 
 	const prevLookup = Object.fromEntries(
 		previousPeriodReport.map((row) => [row[joinKey], row])
@@ -74,8 +74,6 @@ const DynamicComparisonReportTable = ({
 				displayValues.push({ label: field, value: curVal });
 			}
 		});
-		console.log(displayValues, dynamicFields);
-
 		return {
 			joinKey: cur[joinKey],
 			displayValues,
