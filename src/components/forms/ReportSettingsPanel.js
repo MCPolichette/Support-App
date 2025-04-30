@@ -1,163 +1,157 @@
+// Updated ReportSettingsPanel.js
 import React, { useState, useEffect } from "react";
-import {
-	Accordion,
-	Card,
-	Form,
-	Button,
-	Alert,
-	Row,
-	Col,
-} from "react-bootstrap";
+import { Accordion, Col, Alert, Form } from "react-bootstrap";
+import ModuleSettingsAccordionItem from "./ModuleSettingsAccordionItem";
 
-const ReportSettings = ({ modules, toggleHeaderDisplay, merchantId }) => {
+const ReportSettings = ({
+	modules,
+	setModules,
+	toggleHeaderDisplay,
+	merchantId,
+}) => {
 	const [success, setSuccess] = useState(false);
+	const [localModules, setLocalModules] = useState(modules);
+	const [saving, setSaving] = useState({});
+	const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
 	useEffect(() => {
-		console.log("Modules updated:", modules);
+		setLocalModules(modules);
+		setInitialLoadComplete(true);
 	}, [modules]);
 
-	const saveSettingsForMerchant = () => {
+	const toggleYoyDisplay = (moduleName, headerName, value) => {
+		setLocalModules((prevModules) => {
+			const updatedModules = { ...prevModules };
+			const module = updatedModules[moduleName];
+			if (!module || !module.headers) return updatedModules;
+
+			if (typeof module.headers[headerName] !== "object") {
+				module.headers[headerName] = {};
+			}
+
+			module.headers[headerName] = {
+				...module.headers[headerName],
+				yoy: value,
+			};
+
+			return updatedModules;
+		});
+	};
+
+	const handleSaveReportSettings = async (moduleName) => {
+		setSaving((prev) => ({ ...prev, [moduleName]: true }));
+		setModules((prev) => ({
+			...prev,
+			[moduleName]: localModules[moduleName],
+		}));
+		setSuccess(true);
+		setTimeout(() => setSuccess(false), 2000);
+		setSaving((prev) => ({ ...prev, [moduleName]: false }));
+	};
+
+	const handleSaveDefaultSettings = async (moduleName) => {
+		setSaving((prev) => ({ ...prev, [moduleName]: true }));
 		try {
 			const settingsRaw = localStorage.getItem("ChettiToolsSettings");
 			if (!settingsRaw) return;
-
 			const settings = JSON.parse(settingsRaw);
 			if (!settings.commonMerchants) return;
 
 			const merchantIndex = settings.commonMerchants.findIndex(
 				(m) => m.id === merchantId
 			);
-
 			if (merchantIndex === -1) return;
 
-			const reportMap = {};
-			Object.entries(modules).forEach(([moduleName, moduleData]) => {
-				if (!moduleData.inReport) return;
-				const headersMap = {};
-				Object.entries(moduleData.headers || {}).forEach(
-					([headerName, headerSettings]) => {
-						headersMap[headerName] =
-							typeof headerSettings === "object"
-								? headerSettings.display !== false
-								: headerSettings !== false;
-					}
-				);
-				reportMap[moduleName] = headersMap;
-			});
-
+			const reportMap =
+				settings.commonMerchants[merchantIndex].reportMap || {};
+			reportMap[moduleName] = localModules[moduleName];
 			settings.commonMerchants[merchantIndex].reportMap = reportMap;
+
 			localStorage.setItem(
 				"ChettiToolsSettings",
 				JSON.stringify(settings)
 			);
 			setSuccess(true);
-			setTimeout(() => setSuccess(false), 3000);
-		} catch (error) {
-			console.error("Error saving settings:", error);
+			setTimeout(() => setSuccess(false), 2000);
+		} catch (e) {
+			console.error("Failed to save default settings", e);
 		}
+		setSaving((prev) => ({ ...prev, [moduleName]: false }));
 	};
 
 	return (
-		<div className="position-relative">
-			<Accordion defaultActiveKey="">
-				{Object.entries(modules)
-					.filter(([_, mod]) => mod.inReport)
-					.map(([moduleName, moduleData], index) => (
-						<Card key={moduleName} className="mb-2">
-							<Accordion.Item eventKey={index.toString()}>
-								<Accordion.Header
-									style={{ padding: "1px 8px" }}
-								>
-									{moduleName.replace(/_/g, " ")}
-								</Accordion.Header>
-								<Accordion.Body>
-									<Row>
-										{moduleData.headers &&
-											Object.entries(
-												moduleData.headers
-											).map(
-												([
-													headerName,
-													headerSettings,
-												]) => {
-													const display =
-														typeof headerSettings ===
-														"object"
-															? headerSettings.display !==
-															  false
-															: headerSettings !==
-															  false;
-													return (
-														<Col
-															key={headerName}
-															md={4}
-															className="mb-2"
-														>
-															<Form.Group
-																controlId={`header-${moduleName}-${headerName}`}
-																className="mb-1"
-															>
-																<Form.Check
-																	type="checkbox"
-																	label={
-																		<span
-																			style={{
-																				fontSize:
-																					"11px",
-																				paddingTop:
-																					"4px",
-																				paddingBottom:
-																					"4px",
-																			}}
-																		>
-																			{
-																				headerName
-																			}
-																		</span>
-																	}
-																	checked={
-																		display
-																	}
-																	onClick={(
-																		e
-																	) => {
-																		e.stopPropagation(); // Important: prevent accordion toggle
-																	}}
-																	onChange={() =>
-																		toggleHeaderDisplay(
-																			moduleName,
-																			headerName
-																		)
-																	}
-																/>
-															</Form.Group>
-														</Col>
-													);
-												}
-											)}
-									</Row>
-								</Accordion.Body>
-							</Accordion.Item>
-						</Card>
-					))}
-			</Accordion>
-			<Button
-				variant="success"
-				size="sm"
-				className="mt-3"
-				onClick={saveSettingsForMerchant}
-			>
-				Save Display Settings for Selected Merchant
-			</Button>
-			{success && (
-				<Alert
-					variant="success"
-					className="shadow position-absolute"
-					style={{ top: "10px", right: "10px" }}
-				>
-					Settings saved! ✅
-				</Alert>
-			)}
+		<div className="row">
+			<Col md={3}>
+				<h5>Reports:</h5>
+				{Object.entries(localModules).map(([name, mod]) => (
+					<Form.Check
+						key={name}
+						type="checkbox"
+						id={`mod-${name}`}
+						label={
+							<span style={{ fontSize: "0.85rem" }}>
+								{name.replace(/_/g, " ")}
+							</span>
+						}
+						checked={mod.inReport}
+						onChange={() =>
+							setLocalModules((prev) => ({
+								...prev,
+								[name]: {
+									...prev[name],
+									inReport: !prev[name].inReport,
+								},
+							}))
+						}
+						className="mb-1"
+					/>
+				))}
+			</Col>
+
+			<Col md={9}>
+				<h5>Adjust Available columns for display</h5>
+				<Accordion defaultActiveKey="0">
+					{Object.entries(localModules)
+						.filter(([_, moduleData]) => moduleData.inReport)
+						.map(([moduleName, moduleData], i) => (
+							<ModuleSettingsAccordionItem
+								key={moduleName}
+								index={i}
+								moduleName={moduleName}
+								moduleData={moduleData}
+								onSortChange={(name, value) =>
+									setLocalModules((prev) => ({
+										...prev,
+										[name]: {
+											...prev[name],
+											sortBy: value,
+										},
+									}))
+								}
+								onLimitChange={(name, value) =>
+									setLocalModules((prev) => ({
+										...prev,
+										[name]: {
+											...prev[name],
+											limit: value,
+										},
+									}))
+								}
+								toggleYoyDisplay={toggleYoyDisplay}
+								setFormSelections={setLocalModules}
+								onSave={() =>
+									handleSaveReportSettings(moduleName)
+								}
+								onSaveDefault={() =>
+									handleSaveDefaultSettings(moduleName)
+								}
+								isDisabled={
+									!initialLoadComplete || saving[moduleName]
+								}
+							/>
+						))}
+				</Accordion>
+			</Col>
 		</div>
 	);
 };

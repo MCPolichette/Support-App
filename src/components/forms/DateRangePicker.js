@@ -8,7 +8,7 @@ const DateRangePicker = ({
 	onEndChange,
 }) => {
 	return (
-		<Form>
+		<fieldset>
 			<Row className="g-2 align-items-end">
 				<Col md={12} lg={6}>
 					<Form.Group controlId="startDate">
@@ -31,7 +31,7 @@ const DateRangePicker = ({
 					</Form.Group>
 				</Col>
 			</Row>
-		</Form>
+		</fieldset>
 	);
 };
 

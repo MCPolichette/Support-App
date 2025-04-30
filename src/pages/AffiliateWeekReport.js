@@ -5,8 +5,8 @@ import AvantLinkApiTester from "../components/modals/adminAPItester";
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
 import AffiliateWeekForm from "../components/forms/AffiliateWeekForm";
-import { adminReportAPI } from "../utils/reportEngine";
-import { _adminApiModules, getSettings } from "../utils/_AdminApiModules";
+import { adminReportAPI } from "../utils/API/reportEngine";
+import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
 
 import DynamicComparisonReportContainer from "../components/tables/DynamicComparisonContainer";
 import {
@@ -49,40 +49,6 @@ const AffiliateWeekReport = () => {
 	const [showComparisonTable, setShowComparisonTable] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [loadingStage, setLoadingStage] = useState("N/A");
-	const toggleModule = (name) => {
-		setModules((prev) => ({
-			...prev,
-			[name]: { ...prev[name], inReport: !prev[name].inReport },
-		}));
-	};
-	const toggleHeaderDisplay = (moduleName, headerName) => {
-		setModules((prevModules) => {
-			const updatedModules = { ...prevModules }; // shallow copy modules
-			const updatedModule = { ...updatedModules[moduleName] }; // shallow copy specific module
-			const updatedHeaders = { ...updatedModule.headers }; // shallow copy headers
-
-			const headerSettings = updatedHeaders[headerName];
-
-			if (headerSettings !== undefined) {
-				if (typeof headerSettings === "object") {
-					updatedHeaders[headerName] = {
-						...headerSettings,
-						display: headerSettings.display === false, // flip true/false properly
-					};
-				} else {
-					updatedHeaders[headerName] = {
-						yoy: headerSettings,
-						display: true,
-					};
-				}
-			}
-
-			updatedModule.headers = updatedHeaders;
-			updatedModules[moduleName] = updatedModule;
-
-			return updatedModules;
-		});
-	};
 
 	const handleRunReport = async () => {
 		console.log(loadingStage);
@@ -134,7 +100,6 @@ const AffiliateWeekReport = () => {
 					<AffiliateWeekForm
 						modules={modules}
 						setModules={setModules}
-						toggleModule={toggleModule}
 						handleRunReport={handleRunReport}
 						currentStartDate={startDate}
 						currentEndDate={endDate}
@@ -151,7 +116,6 @@ const AffiliateWeekReport = () => {
 						commonMerchants={commonMerchants}
 						network={network}
 						setNetwork={setNetwork}
-						toggleHeaderDisplay={toggleHeaderDisplay}
 					/>
 				</div>
 				{loading && (
