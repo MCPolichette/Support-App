@@ -20,7 +20,7 @@ function App() {
 			<Navbar />
 			<div className="container text-white bg-opacity-75">
 				<h1>NAVBAR GOES HERE!</h1>
-				{/* This is a Stupid simple solution for padding.  YES I know there are smarter ways to do this. but this was my way.  and who else will ever read this? */}
+				{/* This is a Stupid simple solution for padding.  YES I know there are better ways to do this. but this was my way.  and who else will ever read this? */}
 			</div>
 			<Routes>
 				<Route path="/" element={<Home />} />

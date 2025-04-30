@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { runFishUSAReport } from "../logic/specificMerchantLogic/fishUSAreport";
 import LoadingSpinner from "../components/LoadingSpinner";
-import DateRangePicker from "../components/DateRangePicker";
+import DateRangePicker from "../components/forms/DateRangePicker";
 import StylizedModal from "../components/modals/_ModalStylized";
 import UpdateKey from "../components/modals/UpdateKey";
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, InputGroup, Row, Col, Image } from "react-bootstrap";
-import DateRangePicker from "../DateRangePicker";
+import DateRangePicker from "./DateRangePicker";
 import ReportSettings from "./ReportSettingsPanel";
 
 const getMerchantLogo = (id) =>
@@ -27,9 +27,14 @@ const AffiliateWeekForm = ({
 	commonMerchants,
 	modules,
 	setModules,
-	toggleModule,
-	toggleHeaderDisplay,
 }) => {
+	const [formSelections, setFormSelections] = useState(modules);
+
+	const updateSettingsRunReport = () => {
+		handleRunReport();
+		setModules(formSelections);
+	};
+
 	return (
 		<Form className="shadow-sm p-4 bg-white border rounded mb-4">
 			<Row className="align-items-end mb-3">
@@ -102,7 +107,7 @@ const AffiliateWeekForm = ({
 					</div>
 				</Col>
 				<Col md={6}>
-					<div className="mt-3">
+					<div>
 						<Form.Label>Network</Form.Label>
 						<div>
 							<Form.Check
@@ -137,9 +142,9 @@ const AffiliateWeekForm = ({
 					<Row>
 						<hr />
 						<Col md={6} className="pe-3 border-end">
-							<Form.Label>
+							<h5>
 								<strong>Primary Week </strong>
-							</Form.Label>
+							</h5>
 							<DateRangePicker
 								startDate={currentStartDate}
 								endDate={currentEndDate}
@@ -149,9 +154,9 @@ const AffiliateWeekForm = ({
 						</Col>
 
 						<Col md={6}>
-							<Form.Label>
+							<h5>
 								<strong>Comparison Week </strong>
-							</Form.Label>
+							</h5>
 							<DateRangePicker
 								startDate={previousPeriodStart}
 								endDate={previousPeriodEnd}
@@ -164,41 +169,18 @@ const AffiliateWeekForm = ({
 			</Row>
 
 			<hr />
-			<h5 className="mt-4">Report Modules</h5>
 			<Row>
-				<Col md={4} className="pe-3 border-end">
-					{Object.entries(modules).map(([name, mod]) => (
-						<Form.Check
-							key={name}
-							type="checkbox"
-							id={`mod-${name}`}
-							label={
-								<span style={{ fontSize: "0.85rem" }}>
-									{name.replace(/_/g, " ")}
-								</span>
-							}
-							checked={mod.inReport}
-							onChange={() => toggleModule(name)}
-							className="mb-1"
-						/>
-					))}
-				</Col>
-
-				<Col md={8}>
-					{/* Accordion Panel */}
-					<ReportSettings
-						modules={modules}
-						setModules={setModules}
-						merchantId={merchantId}
-						toggleHeaderDisplay={toggleHeaderDisplay}
-					/>
-				</Col>
+				<ReportSettings
+					modules={formSelections}
+					setModules={setFormSelections}
+					merchantId={merchantId}
+				/>
 			</Row>
 
 			<div className="d-flex justify-content-end">
 				<Button
 					variant="primary"
-					onClick={handleRunReport}
+					onClick={updateSettingsRunReport}
 					disabled={loading}
 				>
 					{loading ? "Running..." : "Run Report"}

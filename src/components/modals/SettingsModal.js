@@ -1,14 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-	Form,
-	Button,
-	Alert,
-	Badge,
-	InputGroup,
-	Row,
-	Col,
-	Image,
-} from "react-bootstrap";
+import React, { useState } from "react";
+import { Form, Button, Alert, Badge, InputGroup, Image } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import "./SettingsModal.css";
 

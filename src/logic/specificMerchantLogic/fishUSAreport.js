@@ -1,4 +1,4 @@
-import { runAPI } from "../../utils/apiRunner";
+import { runAPI } from "../../utils/API/apiRunner";
 import { exportToCSV } from "../../utils/exportCSV";
 import existingData from "../../components/data/FishUSAdata.json";
 
