@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Button, Alert, Badge, InputGroup, Image } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import "./SettingsModal.css";
+import { Link } from "react-router-dom";
 
 const SETTINGS_KEY = "ChettiToolsSettings";
 
@@ -24,7 +25,7 @@ const getMerchantLogo = (id) => {
 		: `https://static.avantlink.com/merchant-logos/${id}.png`;
 };
 
-const SettingsModal = () => {
+const SettingsModal = (keyRequired) => {
 	const [settings, setSettings] = useState(getSettings());
 	const [uuid, setUuid] = useState(settings.key || "");
 	const [editKey, setEditKey] = useState(!settings.key);
@@ -32,6 +33,7 @@ const SettingsModal = () => {
 	const [newMerchantNetwork, setNewMerchantNetwork] = useState("US");
 	const [success, setSuccess] = useState(false);
 	const [error, setError] = useState("");
+	const [validKey, setValidKey] = useState(settings.validKey ? null : false);
 
 	const updateSettings = (updatedFields) => {
 		const updated = { ...settings, ...updatedFields };
@@ -44,8 +46,10 @@ const SettingsModal = () => {
 	const handleSaveUUID = () => {
 		if (uuid.length !== 32) {
 			setError("UUID must be exactly 32 characters long.");
+			setValidKey(false);
 			return;
 		}
+		setValidKey(true);
 		updateSettings({ key: uuid, validKey: true });
 		setEditKey(false);
 		setError("");

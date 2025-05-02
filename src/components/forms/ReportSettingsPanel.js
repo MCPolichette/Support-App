@@ -3,19 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Accordion, Col, Alert, Form } from "react-bootstrap";
 import ModuleSettingsAccordionItem from "./ModuleSettingsAccordionItem";
 
-const ReportSettings = ({
-	modules,
-	setModules,
-	toggleHeaderDisplay,
-	merchantId,
-}) => {
+const ReportSettings = ({ modules, setModules, merchantId }) => {
 	const [success, setSuccess] = useState(false);
 	const [localModules, setLocalModules] = useState(modules);
 	const [saving, setSaving] = useState({});
 	const [initialLoadComplete, setInitialLoadComplete] = useState(false);
 
 	useEffect(() => {
-		setLocalModules(modules);
+		console.log(localModules);
+		setLocalModules(localModules);
 		setInitialLoadComplete(true);
 	}, [modules]);
 
@@ -56,7 +52,6 @@ const ReportSettings = ({
 			if (!settingsRaw) return;
 			const settings = JSON.parse(settingsRaw);
 			if (!settings.commonMerchants) return;
-
 			const merchantIndex = settings.commonMerchants.findIndex(
 				(m) => m.id === merchantId
 			);
@@ -82,7 +77,7 @@ const ReportSettings = ({
 	return (
 		<div className="row">
 			<Col md={3}>
-				<h5>Reports:</h5>
+				<h5>List of Reports:</h5>
 				{Object.entries(localModules).map(([name, mod]) => (
 					<Form.Check
 						key={name}
@@ -117,6 +112,7 @@ const ReportSettings = ({
 							<ModuleSettingsAccordionItem
 								key={moduleName}
 								index={i}
+								merchantId
 								moduleName={moduleName}
 								moduleData={moduleData}
 								onSortChange={(name, value) =>

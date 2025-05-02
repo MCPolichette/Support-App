@@ -1,6 +1,6 @@
 // Updated ModuleSettingsAccordionItem.js
-import React from "react";
-import { Accordion, Card, Row, Col, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Accordion, Card, Row, Col, Button, Stack } from "react-bootstrap";
 import SortAndLimitControls from "./SortAndLimitControls";
 import HeaderSettingsRow from "./HeaderSettingsRow";
 
@@ -14,7 +14,13 @@ const ModuleSettingsAccordionItem = ({
 	setFormSelections,
 	onSave,
 	onSaveDefault,
+	merchantId,
 }) => {
+	const [commonMerchant, setCommonMerchant] = useState(false);
+	console.log(merchantId);
+
+	const [success, setSuccess] = useState(false);
+
 	const toggleHeaderDisplay = (moduleName, headerName) => {
 		setFormSelections((prevModules) => {
 			const updatedModules = { ...prevModules };
@@ -48,25 +54,28 @@ const ModuleSettingsAccordionItem = ({
 		<Card key={moduleName} className="mb-2">
 			<Accordion.Item eventKey={index.toString()}>
 				<Accordion.Header style={{ padding: "1px 8px" }}>
-					Adjust {moduleName.replace(/_/g, " ")} Headers
+					Adjust {moduleName.replace(/_/g, " ")} Headers for{" "}
+					{merchantId}
 				</Accordion.Header>
 				<Accordion.Body>
 					<Row className="mb-2">
 						<Col>
-							<Button
-								size="sm"
-								variant="primary"
-								onClick={() => onSave(moduleName)}
-							>
-								Save for this report
-							</Button>{" "}
-							<Button
-								size="sm"
-								variant="secondary"
-								onClick={() => onSaveDefault(moduleName)}
-							>
-								Save as default
-							</Button>
+							<Stack gap={0} className=" mx-auto">
+								<Button
+									size="sm"
+									variant="primary"
+									onClick={() => onSave(moduleName)}
+								>
+									Save for this report for {merchantId}
+								</Button>{" "}
+								<Button
+									size="sm"
+									variant="secondary"
+									onClick={() => onSaveDefault(moduleName)}
+								>
+									Save as default
+								</Button>
+							</Stack>
 						</Col>
 						<Col>
 							<SortAndLimitControls
