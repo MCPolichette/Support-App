@@ -27,10 +27,10 @@ const _PageDirectory = [
 		devOnly: false,
 	},
 	{
-		title: "Affiliate Week Report",
+		title: "Parrallel Pulse Report",
 		description:
-			"A comprehensive week report on Affiliate performance. YOY / Products and More.",
-		route: "/affReport",
+			"A comprehensive and modular report designed for parallel metrics analysis and historical comparison",
+		route: "/ParrallelPulse",
 		devOnly: true,
 	},
 ];

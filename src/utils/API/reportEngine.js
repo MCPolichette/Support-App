@@ -8,20 +8,30 @@ export async function adminReportAPI({
 	previousStartDate,
 	previousEndDate,
 	merchant,
+	networkCode,
 	updateProgress = () => {},
 }) {
+	console.log(
+		startDate,
+		endDate,
+		previousStartDate,
+		previousEndDate,
+		merchant,
+		networkCode
+	);
 	const results = {};
-
 	for (const [name, mod] of selectedModules) {
 		try {
-			updateProgress(`Running ${name.replace(/_/g, " ")}`);
+			updateProgress(`Running ${name.replace(/_/g, " ")}_current`);
 
 			const current = await runAPI(
 				{ startDate, endDate, report_id: mod.id },
 				getSettings().key,
-				merchant
+				merchant,
+				networkCode
 			);
 			results[`${name}_current`] = current;
+			updateProgress(`Running ${name.replace(/_/g, " ")}_previous`);
 
 			const previous = await runAPI(
 				{
@@ -30,7 +40,8 @@ export async function adminReportAPI({
 					report_id: mod.id,
 				},
 				getSettings().key,
-				merchant
+				merchant,
+				networkCode
 			);
 			results[`${name}_previous`] = previous;
 			updateProgress(`${name} ✅`);

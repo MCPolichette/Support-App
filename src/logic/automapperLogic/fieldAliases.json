@@ -310,7 +310,7 @@
 	},
 
 	{
-		"fieldName": "dblItemCommission",
+		"fieldName": "",
 		"matches": ["basedcommission", "ibc", "commission", "commissionrate"],
 		"valueTitle": "NOT RECOMMENDED - backend IBC",
 		"variant": "",
