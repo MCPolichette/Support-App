@@ -4,38 +4,30 @@ import AvantLinkApiTester from "../components/modals/adminAPItester";
 
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
-import AffiliateWeekForm from "../components/forms/AffiliateWeekForm";
+import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
 import { adminReportAPI } from "../utils/API/reportEngine";
 import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
 
-import DynamicComparisonReportContainer from "../components/tables/DynamicComparisonContainer";
-
-// const getMerchantLogo = (id) => {
-// 	return id === "23437"
-// 		? `https://static.avantlink.com/merchant-logos/23437`
-// 		: `https://static.avantlink.com/merchant-logos/${id}.png`;
-// };
-
-const AffiliateWeekReport = () => {
+const ParrallelPulseReport = () => {
 	const settings = getSettings();
 	const [modalType, setModalType] = useState(settings.key ? null : "noKey");
-	const [pageDisplay, setPageDisplay] = useState(false);
+	const [pageDisplay, setPageDisplay] = useState(
+		settings.key ? null : "noKey"
+	);
 	const [errorModal, setErrorModal] = useState("");
 	const [modules, setModules] = useState(_adminApiModules);
 	const [completedModules, setCompletedModules] = useState([]);
 	const [reportResults, setReportResults] = useState({});
 	// Report params
-	const [merchantId, setMerchantId] = useState("");
-	const [network, setNetwork] = useState("");
-	const [dates, setDates] = useState({});
-
 	// Display states
 	const [showComparisonTable, setShowComparisonTable] = useState(false);
 	const [loading, setLoading] = useState(false);
-	const [loadingStage, setLoadingStage] = useState("N/A");
+	const [loadingStage, setLoadingStage] = useState("");
+	const [tableButton, setTableButton] = useState(<div></div>);
 
-	const handleRunReport = async () => {
+	const handleRunReport = async (dates, merchantId, network) => {
 		console.log(loadingStage);
+		console.log(merchantId, network);
 		setShowComparisonTable(false);
 		setCompletedModules([]);
 		setLoading(true);
@@ -64,15 +56,22 @@ const AffiliateWeekReport = () => {
 			});
 			console.log(results);
 			setReportResults(results);
-			setShowComparisonTable(true);
-			console.log(completedModules);
 		} catch (err) {
 			console.error("Report run failed", err);
 			setErrorModal("One or more reports failed.");
 		} finally {
-			setLoading(false);
-			setLoadingStage("N/A");
+			setTableButton(
+				<Button variant="success" size="lg" onClick={buildTables}>
+					Compare Data and Display Tables
+				</Button>
+			);
+			setLoadingStage("Ready To Build Tables.");
 		}
+	};
+	const buildTables = () => {
+		setLoading(false);
+		setLoadingStage("");
+		setPageDisplay(true);
 	};
 
 	const openSettings = () => setModalType("noKey");
@@ -80,7 +79,7 @@ const AffiliateWeekReport = () => {
 	return (
 		<div className="container mt-5">
 			<div className="position-relative">
-				{pageDisplay ? (
+				{pageDisplay === "NoKey" && (
 					<Stack gap={3} className="text-center">
 						<Button
 							variant="danger"
@@ -93,21 +92,17 @@ const AffiliateWeekReport = () => {
 							Return to Home Page
 						</Button>
 					</Stack>
-				) : (
+				)}
+				{pageDisplay === null && (
 					<div
 						className={loading ? "blur-sm pointer-events-none" : ""}
 					>
-						<AffiliateWeekForm
+						<ParrallelPulseForm
 							modules={modules}
 							setModules={setModules}
 							handleRunReport={handleRunReport}
-							setDates={setDates}
-							merchantId={merchantId}
-							setMerchantId={setMerchantId}
 							loading={loading}
 							openSettings={openSettings}
-							network={network}
-							setNetwork={setNetwork}
 						/>
 					</div>
 				)}
@@ -129,14 +124,16 @@ const AffiliateWeekReport = () => {
 								<h3>Step 1: Running APIs</h3>
 							</Col>
 							<Col md={2}>
-								<div
-									className="spinner-border text-primary"
-									role="status"
-								>
-									<h1 className="visually-hidden">
-										Loading...
-									</h1>
-								</div>
+								{loadingStage != "Ready To Build Tables." && (
+									<div
+										className="spinner-border text-primary"
+										role="status"
+									>
+										<h1 className="visually-hidden">
+											Loading...
+										</h1>
+									</div>
+								)}
 							</Col>
 							<Col
 								md={6}
@@ -176,22 +173,24 @@ const AffiliateWeekReport = () => {
 										))}
 								</div>
 							</Col>
+							<Col md={8}>
+								<Stack gap={2} className="col-md-5 mx-auto">
+									<h5 style={{ textAlign: "center" }}>
+										{loadingStage}
+									</h5>
+									{tableButton}
+								</Stack>
+							</Col>
 						</Row>
 					</Row>
 				)}
 			</div>
+			{pageDisplay === "Tables" && (
+				<Container>
+					<Row></Row>
+				</Container>
+			)}
 
-			<Container>
-				{showComparisonTable && (
-					<Row>
-						<DynamicComparisonReportContainer
-							reportResults={reportResults}
-							completedModules={completedModules}
-							modules={modules}
-						/>
-					</Row>
-				)}
-			</Container>
 			{/* <Form className="shadow-sm p-4 bg-light border rounded">
 				<h5 className="mb-3">More Report Options (Coming Soon)</h5>
 				<p className="text-muted mb-0">
@@ -226,4 +225,4 @@ const AffiliateWeekReport = () => {
 	);
 };
 
-export default AffiliateWeekReport;
+export default ParrallelPulseReport;

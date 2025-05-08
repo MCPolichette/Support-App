@@ -17,7 +17,6 @@ const ModuleSettingsAccordionItem = ({
 	merchantId,
 }) => {
 	const [commonMerchant, setCommonMerchant] = useState(false);
-	console.log(merchantId);
 
 	const [success, setSuccess] = useState(false);
 

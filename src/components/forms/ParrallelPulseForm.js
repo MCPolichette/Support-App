@@ -25,11 +25,9 @@ const getMerchantLogo = (id) =>
 		? `https://static.avantlink.com/merchant-logos/23437`
 		: `https://static.avantlink.com/merchant-logos/${id}.png`;
 
-const AffiliateWeekForm = ({
+const ParrallelPulseForm = ({
 	setDates,
-	merchantId,
-	setMerchantId,
-	setNetwork,
+
 	handleRunReport,
 	loading,
 	openSettings,
@@ -38,11 +36,12 @@ const AffiliateWeekForm = ({
 }) => {
 	const settings = getSettings();
 	commonMerchants = settings.commonMerchants || [];
-	console.log(settings);
-
 	function determineMerchantSettings(data) {
 		if (data) {
+			console.log(data, commonMerchants[0]);
 			const index = commonMerchants.findIndex((m) => m.id === data);
+			console.log(index);
+
 			return settings.commonMerchants[index];
 		} else if (settings.commonMerchants) {
 			return settings.commonMerchants[0];
@@ -59,15 +58,13 @@ const AffiliateWeekForm = ({
 		getLastYearSameWeek(startDate, endDate).end
 	);
 	const [formSelections, setFormSelections] = useState(
-		determineMerchantSettings(
-			(settings.primaryMerchant.id || null).reportMap
-		)
+		settings.commonMerchants[0].reportmap || _adminApiModules
 	);
 	const [selectedMerchant, setSelectedMerchant] = useState(
-		determineMerchantSettings(settings.primaryMerchant.id || null)
+		settings.commonMerchants[0].id || null
 	);
-	let network = determineMerchantSettings(
-		(settings.primaryMerchant.id || null).network
+	const [selectedNetwork, setSelectedNetwork] = useState(
+		settings.commonMerchants[0].network || null
 	);
 
 	const saveMerchantSettings = () => {
@@ -75,16 +72,18 @@ const AffiliateWeekForm = ({
 	};
 
 	const updateSettingsRunReport = () => {
-		setMerchantId(selectedMerchant.id);
-		setNetwork(network);
-		setModules(formSelections);
-		setDates({
-			startDate: startDate,
-			endDate: endDate,
-			previousPeriodStart: previousPeriodStart,
-			previousPeriodEnd: previousPeriodEnd,
-		});
-		handleRunReport();
+		// setModules(formSelections);
+
+		handleRunReport(
+			{
+				startDate: startDate,
+				endDate: endDate,
+				previousPeriodStart: previousPeriodStart,
+				previousPeriodEnd: previousPeriodEnd,
+			},
+			selectedMerchant,
+			selectedNetwork
+		);
 
 		// TODO: I should just use the handleRunReport, and pass in these variables... and not have to set the state on the page.
 	};
@@ -101,9 +100,9 @@ const AffiliateWeekForm = ({
 								<strong>Merchant:_ </strong>
 							</h5>
 						</Form.Label>
-						{selectedMerchant.id && (
+						{selectedMerchant && (
 							<Image
-								src={getMerchantLogo(selectedMerchant.id)}
+								src={getMerchantLogo(selectedMerchant)}
 								style={{
 									maxHeight: "36px",
 									background: "#fff",
@@ -116,7 +115,7 @@ const AffiliateWeekForm = ({
 						<Form.Control
 							type="text"
 							placeholder="Enter Merchant ID"
-							value={selectedMerchant.id}
+							value={selectedMerchant}
 							onChange={(e) =>
 								setSelectedMerchant(e.target.value)
 							}
@@ -133,8 +132,8 @@ const AffiliateWeekForm = ({
 								name="network"
 								type="radio"
 								id="network-us"
-								checked={selectedMerchant.network === "US"}
-								onChange={() => (network = "US")}
+								checked={selectedNetwork === "US"}
+								onChange={() => setSelectedNetwork("US")}
 							/>
 							<Form.Check
 								inline
@@ -142,8 +141,8 @@ const AffiliateWeekForm = ({
 								name="network"
 								type="radio"
 								id="network-ca"
-								checked={selectedMerchant.network === "CA"}
-								onChange={() => (network = "CA")}
+								checked={selectedNetwork === "CA"}
+								onChange={() => setSelectedNetwork("CA")}
 							/>
 							<Form.Check
 								inline
@@ -151,8 +150,8 @@ const AffiliateWeekForm = ({
 								name="network"
 								type="radio"
 								id="network-au"
-								checked={selectedMerchant.network === "AU"}
-								onChange={() => (network = "AU")}
+								checked={selectedNetwork === "AU"}
+								onChange={() => setSelectedNetwork("AU")}
 							/>
 						</div>
 					</div>
@@ -178,6 +177,7 @@ const AffiliateWeekForm = ({
 								className="me-2 mb-2"
 								onClick={() => {
 									setSelectedMerchant(m.id);
+									setSelectedNetwork(m.network);
 								}}
 							>
 								<Image
@@ -229,17 +229,22 @@ const AffiliateWeekForm = ({
 			</Row>
 
 			<hr />
-			<Row>
+			{/* TODO  
+			-Move these COMMENTED ROWS / settings into a MODAL, where the details can be edited..   
+			-Have a standard report. and an option to SELECT a custom report.. (made in the modal, and mapped in the same way that the above merchant details are displayed.   (with a single modal that opens up and allows one to edit, and SAVE on click. e.g LOAD STATE > SAVE STATE 
+			-But the overall document should rely on defaults.. I'm working way to fucking hard on making this part adjustable now, and I need/want a working product sooner.. THIS can be fined tuned once I HAVE REAL REPORTS GOING))
+			 */}
+			{/* <Row>
 				<ReportSettings
-					modules={selectedMerchant.reportMap}
+					modules={formSelections}
 					setModules={setFormSelections}
 					merchantId={selectedMerchant.id}
 				/>
-			</Row>
+			</Row> */}
 
 			<div className="d-flex justify-content-end">
 				<Stack>
-					<Button
+					{/* <Button
 						variant="info "
 						onClick={saveMerchantSettings()}
 						disabled
@@ -258,10 +263,10 @@ const AffiliateWeekForm = ({
 										borderRadius: "4px",
 									}}
 									className="me-2"
-								/>{" "}
+								/>
 							</h6>
 						)}
-					</Button>
+					</Button> */}
 					<Button
 						variant="success"
 						onClick={updateSettingsRunReport}
@@ -275,4 +280,4 @@ const AffiliateWeekForm = ({
 	);
 };
 
-export default AffiliateWeekForm;
+export default ParrallelPulseForm;

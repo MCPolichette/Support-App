@@ -82,26 +82,6 @@ const SettingsModal = (keyRequired) => {
 		updateSettings(updates);
 	};
 
-	const moveMerchant = (index, direction) => {
-		const cardElements = document.querySelectorAll(".merchant-card");
-		const card = cardElements[index];
-		if (card) {
-			card.classList.add(direction > 0 ? "moving-right" : "moving-left");
-			setTimeout(() => {
-				card.classList.remove("moving-right", "moving-left");
-			}, 300);
-		}
-
-		const merchants = [...(settings.commonMerchants || [])];
-		const newIndex = index + direction;
-		if (newIndex < 0 || newIndex >= merchants.length) return;
-		[merchants[index], merchants[newIndex]] = [
-			merchants[newIndex],
-			merchants[index],
-		];
-		updateSettings({ commonMerchants: merchants });
-	};
-
 	const renderMerchantList = () => {
 		const merchants = settings.commonMerchants || [];
 		if (!merchants.length) return <p>No merchants added yet.</p>;
@@ -109,16 +89,23 @@ const SettingsModal = (keyRequired) => {
 		return (
 			<div className="d-flex flex-wrap gap-3 merchant-list">
 				{merchants.map((m, index) => {
-					const isPrimary = settings.primaryMerchant?.id === m.id;
+					const isPrimary = index === 0;
 					return (
 						<div
 							key={m.id}
 							className={`merchant-card ${
 								isPrimary ? "primary" : ""
 							}`}
-							onClick={() =>
-								updateSettings({ primaryMerchant: m })
-							}
+							onClick={() => {
+								const newList = [
+									m,
+									...merchants.filter((_, i) => i !== index),
+								];
+								updateSettings({
+									commonMerchants: newList,
+									primaryMerchant: m,
+								});
+							}}
 						>
 							<div className="d-flex align-items-center">
 								<Image
@@ -138,28 +125,6 @@ const SettingsModal = (keyRequired) => {
 							</div>
 							<div className="mt-2 d-flex justify-content-center">
 								<Button
-									size="sm"
-									variant="outline-secondary"
-									onClick={(e) => {
-										e.stopPropagation();
-										moveMerchant(index, -1);
-									}}
-									className="me-1"
-								>
-									◀
-								</Button>
-								<Button
-									size="sm"
-									variant="outline-secondary"
-									onClick={(e) => {
-										e.stopPropagation();
-										moveMerchant(index, 1);
-									}}
-									className="me-1"
-								>
-									▶
-								</Button>
-								<Button
 									variant="danger"
 									size="sm"
 									onClick={(e) => {
@@ -173,10 +138,7 @@ const SettingsModal = (keyRequired) => {
 							{isPrimary && (
 								<Badge
 									bg="primary"
-									className="
-									position-absolute 
-									top-0 end-0
-									 m-1"
+									className="position-absolute top-0 end-0 m-1"
 								>
 									Primary
 								</Badge>
@@ -225,11 +187,11 @@ const SettingsModal = (keyRequired) => {
 				</div>
 			)}
 			{success && (
-				<Alert variant="success" className="shadow position-absolute ">
+				<Alert variant="success" className="shadow position-absolute">
 					Settings saved! ✅
 				</Alert>
 			)}
-			<h6>Merchant Setup</h6>{" "}
+			<h6>Merchant Setup</h6>
 			<Form.Group className="mb-3">
 				<Form.Label>Add Merchant by ID:</Form.Label>
 				<InputGroup className="mb-2">
@@ -289,7 +251,7 @@ const SettingsModal = (keyRequired) => {
 				<Form.Text className="text-muted">
 					When enabled, you'll see unfinished or in-progress features.
 				</Form.Text>
-			</Form.Group>{" "}
+			</Form.Group>
 		</div>
 	);
 };

@@ -1,7 +1,7 @@
 // utils/apiRunner.js
 import { getSettings } from "./_AdminApiModules";
 
-export async function runAPI(params, API_KEY, merchantId) {
+export async function runAPI(params, API_KEY, merchantId, network) {
 	const settings = getSettings();
 	const {
 		report_id,
@@ -13,7 +13,11 @@ export async function runAPI(params, API_KEY, merchantId) {
 		affiliate_id,
 		website_id,
 		affiliate_group_id,
-	} = applyDefaults({ ...params, merchant_id: merchantId });
+	} = applyDefaults({
+		...params,
+		merchant_id: merchantId,
+		networkCode: network,
+	});
 
 	const networkParam = getNetworkParam(networkCode);
 

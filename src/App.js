@@ -12,7 +12,7 @@ import RecursiveCrawler from "./pages/RecursiveCrawler";
 import Home from "./pages/home.js";
 import FishUSA from "./pages/FishUSA.js";
 import QuickTools from "./pages/QuickTools.js";
-import AffiliateWeekReport from "./pages/AffiliateWeekReport.js";
+import ParrallelPulseReport from "./pages/ParrallelPulseReport.js";
 
 function App() {
 	return (
@@ -28,7 +28,10 @@ function App() {
 				<Route path="/fish_usa" element={<FishUSA />} />
 				<Route path="/website_scanner" element={<RecursiveCrawler />} />
 				<Route path="/more_tools" element={<QuickTools />} />
-				<Route path="/AffReport" element={<AffiliateWeekReport />} />
+				<Route
+					path="/ParrallelPulse"
+					element={<ParrallelPulseReport />}
+				/>
 			</Routes>
 		</Router>
 	);
