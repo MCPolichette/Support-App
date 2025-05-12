@@ -28,16 +28,14 @@ const ParrallelPulseReport = () => {
 	const [tableButton, setTableButton] = useState(<div></div>);
 	const [currentDates, setCurrentDates] = useState({});
 	const [previousDates, setPreviousDates] = useState({});
+	const [merchantReference, setmerchantReference] = useState("");
 
 	const handleRunReport = async (dates, merchantId, network) => {
 		setCurrentDates(getReportTexts(dates.startDate, dates.endDate));
 		setPreviousDates(
 			getReportTexts(dates.previousPeriodStart, dates.previousPeriodEnd)
 		);
-		console.log(currentDates, previousDates);
-
-		console.log(loadingStage);
-		console.log(merchantId, network);
+		setmerchantReference(merchantId);
 		setShowComparisonTable(false);
 		setCompletedModules([]);
 		setLoading(true);
@@ -198,6 +196,7 @@ const ParrallelPulseReport = () => {
 				<Container>
 					<Row>
 						<ReportTableBuilder
+							mid={merchantReference}
 							reports={reportResults}
 							currentDates={currentDates}
 							previousDates={previousDates}

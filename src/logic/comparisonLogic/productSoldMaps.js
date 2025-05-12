@@ -1,7 +1,10 @@
 export function getTotals(data, groupKey, totalFields) {
-	const resultMap = {};
-	console.log(data, groupKey, totalFields);
+	if (!Array.isArray(data)) {
+		console.error("getTotals expected an array, received:", data);
+		return [];
+	}
 
+	const resultMap = {};
 	data.forEach((item) => {
 		const group = item[groupKey]?.trim() || "Unknown";
 
@@ -18,81 +21,102 @@ export function getTotals(data, groupKey, totalFields) {
 			resultMap[group][field] += parsedValue;
 		});
 	});
-
-	// Convert to sorted array of totals
-	const sorted = Object.entries(resultMap)
-		.map(([group, totals]) => ({
-			[groupKey]: group,
-			...totals,
-		}))
-		.sort((a, b) => a[groupKey].localeCompare(b[groupKey]));
-
-	return sorted;
+	return resultMap;
 }
-
 export const AttributeDelta = (attribute, reportC, datesC, reportP, datesP) => {
-	const totalsC = getTotals(reportC, attribute, [
-		[
-			"Sale Count ",
-			"Total Product Sale Quantity",
-			"Total Product Sale Amount",
-		],
+	const attr = attribute;
+	const name = attr[0];
+
+	const totalsC = getTotals(reportC, attr, [
+		"Sale Count ",
+		"Total Product Sale Quantity",
+		"Total Product Sale Amount",
 	]);
-	const totalsP = getTotals(reportP, attribute, [
-		[
-			"Sale Count ",
-			"Total Product Sale Quantity",
-			"Total Product Sale Amount",
-		],
+
+	const totalsP = getTotals(reportP, attr, [
+		"Sale Count ",
+		"Total Product Sale Quantity",
+		"Total Product Sale Amount",
 	]);
-	const percentChange = (value) => {
-		return (totalsC?.[value] - totalsP?.[value]) / totalsC?.[value];
-	};
-	const demandChange = (value) => {
-		return totalsC?.[value] - totalsP?.[value];
+	let deltaReport = [];
+	const tableData = () => {
+		let arr = [];
+		Object.entries(totalsC).forEach(([category, curr]) => {
+			const match = totalsP[category] || {};
+
+			const prevAmount = match["Total Product Sale Amount"] || 0;
+			const currAmount = curr["Total Product Sale Amount"] || 0;
+
+			const prevQty = match["Total Product Sale Quantity"] || 0;
+			const currQty = curr["Total Product Sale Quantity"] || 0;
+
+			arr.push([
+				category,
+				currQty,
+				prevQty,
+				percentChange(currQty, prevQty),
+				demandChange(currQty, prevQty),
+				currAmount,
+				prevAmount,
+				percentChange(currAmount, prevAmount),
+				demandChange(currAmount, prevAmount),
+			]);
+		});
+
+		return arr.sort((a, b) => b[1] - a[1]); // sort by currQty (index 1)
 	};
 
-	return [
-		{ label: attribute, value: totalsC?.[attribute], type: "text" },
+	const percentChange = (curr, prev) => {
+		if (curr === 0) return 0;
+		return (curr - prev) / curr;
+	};
+
+	const demandChange = (curr, prev) => {
+		return curr - prev;
+	};
+	deltaReport = tableData();
+	const tableMap = [
+		{ label: attr[0], type: "text" },
 		{
 			label: "Units " + datesC.year,
-			value: totalsC?.["Total Product Sale Quantity"],
+
 			type: "int",
 		},
 		{
-			label: ("Units ", +datesP.year),
-			value: totalsP?.["Total Product Sale Quantity"],
+			label: "Units " + datesP.year,
+
 			type: "int",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
-			value: percentChange("Total Product Sale Quantity"),
+
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Demand Change",
-			value: demandChange("Total Product Sale Quantity"),
+
 			type: "int",
 		},
 		{
 			label: "Sales " + datesC.year,
-			value: totalsC?.["Total Product Sale Amount"],
+
 			type: "dollar",
 		},
 		{
-			label: ("Sales ", +datesP.year),
-			value: totalsP?.["Total Product Sale Amount"],
+			label: "Sales " + datesP.year,
+
 			type: "dollar",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
-			value: percentChange("Total Product Sale Amount"),
+
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
-			value: demandChange("Total Product Sale Amount"),
+
 			type: "dollar",
 		},
 	];
+	return { name, tableMap, deltaReport };
 };
