@@ -5,8 +5,10 @@ import AvantLinkApiTester from "../components/modals/adminAPItester";
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
 import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
+import ReportTableBuilder from "../logic/comparisonLogic/reportTableBuilder";
 import { adminReportAPI } from "../utils/API/reportEngine";
 import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
+import { getReportTexts } from "../utils/getTime";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
@@ -24,10 +26,16 @@ const ParrallelPulseReport = () => {
 	const [loading, setLoading] = useState(false);
 	const [loadingStage, setLoadingStage] = useState("");
 	const [tableButton, setTableButton] = useState(<div></div>);
+	const [currentDates, setCurrentDates] = useState({});
+	const [previousDates, setPreviousDates] = useState({});
+	const [merchantReference, setmerchantReference] = useState("");
 
 	const handleRunReport = async (dates, merchantId, network) => {
-		console.log(loadingStage);
-		console.log(merchantId, network);
+		setCurrentDates(getReportTexts(dates.startDate, dates.endDate));
+		setPreviousDates(
+			getReportTexts(dates.previousPeriodStart, dates.previousPeriodEnd)
+		);
+		setmerchantReference(merchantId);
 		setShowComparisonTable(false);
 		setCompletedModules([]);
 		setLoading(true);
@@ -71,14 +79,14 @@ const ParrallelPulseReport = () => {
 	const buildTables = () => {
 		setLoading(false);
 		setLoadingStage("");
-		setPageDisplay(true);
+		setPageDisplay("Tables");
 	};
 
 	const openSettings = () => setModalType("noKey");
 
 	return (
-		<div className="container mt-5">
-			<div className="position-relative">
+		<div className="container mt-5 ">
+			<div className="position-relative ">
 				{pageDisplay === "NoKey" && (
 					<Stack gap={3} className="text-center">
 						<Button
@@ -173,31 +181,29 @@ const ParrallelPulseReport = () => {
 										))}
 								</div>
 							</Col>
-							<Col md={8}>
-								<Stack gap={2} className="col-md-5 mx-auto">
-									<h5 style={{ textAlign: "center" }}>
-										{loadingStage}
-									</h5>
-									{tableButton}
-								</Stack>
-							</Col>
+
+							<Stack gap={2} className="col-md-5 mx-auto">
+								<h5 style={{ textAlign: "center" }}>
+									{loadingStage}
+								</h5>
+								{tableButton}
+							</Stack>
 						</Row>
 					</Row>
 				)}
 			</div>
 			{pageDisplay === "Tables" && (
 				<Container>
-					<Row></Row>
+					<Row>
+						<ReportTableBuilder
+							mid={merchantReference}
+							reports={reportResults}
+							currentDates={currentDates}
+							previousDates={previousDates}
+						/>
+					</Row>
 				</Container>
 			)}
-
-			{/* <Form className="shadow-sm p-4 bg-light border rounded">
-				<h5 className="mb-3">More Report Options (Coming Soon)</h5>
-				<p className="text-muted mb-0">
-					Filters, partner types, and detailed metrics will be added
-					here.
-				</p>
-			</Form> */}
 
 			<StylizedModal
 				show={!!modalType}

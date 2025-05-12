@@ -1,5 +1,6 @@
 import { runAPI } from "./apiRunner";
 import { getSettings } from "./_AdminApiModules";
+import { getReportTexts } from "../../utils/getTime";
 
 export async function adminReportAPI({
 	selectedModules,
@@ -20,9 +21,14 @@ export async function adminReportAPI({
 		networkCode
 	);
 	const results = {};
+
 	for (const [name, mod] of selectedModules) {
 		try {
-			updateProgress(`Running ${name.replace(/_/g, " ")}_current`);
+			updateProgress(
+				`Running ${name.replace(/_/g, " - ")} ${
+					getReportTexts(startDate, endDate).dateRange
+				} `
+			);
 
 			const current = await runAPI(
 				{ startDate, endDate, report_id: mod.id },
@@ -31,7 +37,11 @@ export async function adminReportAPI({
 				networkCode
 			);
 			results[`${name}_current`] = current;
-			updateProgress(`Running ${name.replace(/_/g, " ")}_previous`);
+			updateProgress(
+				`Running ${name.replace(/_/g, " - ")}${
+					getReportTexts(previousStartDate, previousEndDate).dateRange
+				}`
+			);
 
 			const previous = await runAPI(
 				{

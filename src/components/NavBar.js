@@ -20,9 +20,13 @@ const getSettings = () => {
 		return {};
 	}
 };
+const storageSettings =
+	JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
+const showDev = storageSettings.showDev;
+const visiblePages = _PageDirectory.filter((page) => !page.devOnly || showDev);
 
 const AppNavbar = () => {
-	const [settings, setSettings] = useState(getSettings());
+	const settings = getSettings();
 	const [modalOpen, setModalOpen] = useState(false);
 	return (
 		<Navbar bg="primary" variant="dark" expand="lg" fixed="top">
@@ -34,7 +38,7 @@ const AppNavbar = () => {
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="me-auto">
 						<NavDropdown title="Tools" id="tools-dropdown">
-							{_PageDirectory.map((page, index) => (
+							{visiblePages.map((page, index) => (
 								<NavDropdown.Item
 									as={Link}
 									to={page.route}

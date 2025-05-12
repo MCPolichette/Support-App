@@ -1,78 +1,101 @@
 import React from "react";
-import ColumnMapTable from "./ColumnMapTable"; // uses the version we just built
+import { Row, Col, Container } from "react-bootstrap";
+import ColumnMapTable from "../../components/tables/columnMapTable";
+import { PerfSummaryTableMap } from "./performanceSummaryMap";
+import { AttributeDelta } from "./productSoldMaps";
 
-const ReportTableBuilder = ({ reports }) => {
-	const PSC = reports["Performance_Summary_current"]?.[0];
-	const PSP = reports["Performance_Summary_previous"]?.[0];
-
-	const PerfSummaryTableMap = [
-		{ label: "Year", value: "Current", type: "text" },
-		{ label: "Sales", value: PSC?.["Sales"], type: "dollar" },
-		{ label: "Clicks", value: PSC?.["Click Throughs"], type: "int" },
-		{ label: "# of Sales", value: PSC?.["# of Sales"], type: "int" },
-		{
-			label: "Avg Order Amount",
-			value: PSC?.["Average Sale Amount"],
-			type: "dollar",
-		},
-		{
-			label: "Conversion Rate",
-			value: PSC?.["Conversion Rate"],
-			type: "percent",
-		},
-		{
-			label: "New Customer %",
-			value: PSC?.["New Customer %"],
-			type: "percent",
-		},
-		{
-			label: "Mobile Sales",
-			value: PSC?.["Mobile Sales"],
-			type: "dollar",
-			className: "bg-light border-start border-2 border-dark",
-		},
+function ProductAttributeDeltaTables({
+	data,
+	reports,
+	currentDates,
+	previousDates,
+}) {
+	const safeData = Array.isArray(data) ? data : [data];
+	const fieldsToCheck = [
+		"Department",
+		"Category",
+		"Sub Category",
+		"Brand Name",
 	];
-
-	const PerfSummaryTableMapPrev = [
-		{ label: "Year", value: "Previous", type: "text" },
-		{ label: "Sales", value: PSP?.["Sales"], type: "dollar" },
-		{ label: "Clicks", value: PSP?.["Click Throughs"], type: "int" },
-		{ label: "# of Sales", value: PSP?.["# of Sales"], type: "int" },
-		{
-			label: "Avg Order Amount",
-			value: PSP?.["Average Sale Amount"],
-			type: "dollar",
-		},
-		{
-			label: "Conversion Rate",
-			value: PSP?.["Conversion Rate"],
-			type: "percent",
-		},
-		{
-			label: "New Customer %",
-			value: PSP?.["New Customer %"],
-			type: "percent",
-		},
-		{
-			label: "Mobile Sales",
-			value: PSP?.["Mobile Sales"],
-			type: "dollar",
-			className: "bg-light border-start border-2 border-dark",
-		},
-	];
+	const getReport = (text) => reports[text] ?? [];
+	const productTables = fieldsToCheck
+		.filter((field) =>
+			safeData.some(
+				(row) => row[field] && row[field].toString().trim() !== ""
+			)
+		)
+		.map((field) =>
+			AttributeDelta(
+				[field],
+				getReport("Product_Sold_current"),
+				currentDates,
+				getReport("Product_Sold_previous"),
+				previousDates
+			)
+		);
 
 	return (
-		<div className="container mt-4">
-			<h3>Performance Summary Report</h3>
-			<ColumnMapTable
-				title="Performance Summary - Current"
-				tableMap={PerfSummaryTableMap}
-			/>
-			<ColumnMapTable
-				title="Performance Summary - Previous"
-				tableMap={PerfSummaryTableMapPrev}
-			/>
-		</div>
+		<>
+			{productTables.map((field) => (
+				<Col key={field.name} xs={12} className="mb-4">
+					<ColumnMapTable
+						tableMap={field.tableMap}
+						table={field.deltaReport}
+						limit={10}
+					/>
+				</Col>
+			))}
+		</>
+	);
+}
+
+const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
+	const getReport = (text) => {
+		return reports[text]?.[0];
+	};
+	const reportTitle = (text, dates) => {
+		return text + " " + dates;
+	};
+	const performanceSummaryCurr = PerfSummaryTableMap(
+		getReport("Performance_Summary_current"),
+		currentDates
+	).tableDisplay;
+	const performanceSummaryPrev = PerfSummaryTableMap(
+		getReport("Performance_Summary_previous"),
+		currentDates
+	).tableDisplay;
+
+	return (
+		<Container className="container mt-4">
+			<Row>
+				<ColumnMapTable
+					topperText={reportTitle(
+						"Performance Summary",
+						currentDates.dateRange
+					)}
+					id={mid}
+					tableMap={performanceSummaryCurr.headers}
+					table={[performanceSummaryCurr.data]}
+					limit={1}
+				/>
+				<ColumnMapTable
+					title={previousDates.dateRange}
+					tableMap={performanceSummaryPrev.headers}
+					table={[performanceSummaryPrev.data]}
+					limit={1}
+				/>
+			</Row>
+			<Row>
+				<h4>Product data for {currentDates.dateRange}</h4>
+				<ProductAttributeDeltaTables
+					data={getReport("Product_Sold_current")}
+					reports={reports}
+					currentDates={currentDates}
+					previousDates={previousDates}
+					limit={10}
+				/>
+			</Row>
+		</Container>
 	);
 };
 
