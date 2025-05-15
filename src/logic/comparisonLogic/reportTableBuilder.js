@@ -3,7 +3,7 @@ import { Row, Col, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { PerfSummary, ProductSummary } from "./SingleReportSummaryMaps";
 import { ProductAttributeDeltaTables } from "./productSoldMaps";
-// import { Aff_And_Website_Map } from "./AffAndWebsiteperfomanceMap";
+import { Aff_And_Website_Map } from "./AffAndWebsiteComparisonMap";
 const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 	console.log(reports);
 	const getReport = (text) => {
@@ -68,6 +68,12 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 			</Row>
 			<hr />
 			<Row>
+				<Aff_And_Website_Map
+					reports={reports}
+					currentDates={currentDates}
+					previousDates={previousDates}
+				/>
+
 				{/* 
 	
 				data={getReport("Performance_Summary_By_Affiliate_current")}

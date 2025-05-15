@@ -57,7 +57,8 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 								<li key={i}>
 									<b>{field.valueTitle} </b>
 									as:
-									<code> {field.fieldName}</code>
+									<code> {field.fieldName}</code> :
+									{field.valueType}
 								</li>
 							))}
 						</ul>
