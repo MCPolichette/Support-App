@@ -10,7 +10,7 @@
 	{
 		"fieldName": "strAttribute1",
 		"required": false,
-		"valueTitle": "Product Parent Id",
+		"valueTitle": "Parent Id",
 		"valueType": "string",
 		"matches": [
 			"parentid",
@@ -152,7 +152,7 @@
 	{
 		"fieldName": "txtShortDescription",
 		"required": false,
-		"matches": ["shortdescription"],
+		"matches": ["shortdescription", "briefdescription"],
 		"valueTitle": "Short Description",
 		"variant": "",
 		"valueType": "text"

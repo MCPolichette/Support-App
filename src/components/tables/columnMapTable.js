@@ -46,10 +46,8 @@ const ColumnMapTable = ({
 }) => {
 	const safeLimit = limit == null ? 20 : limit;
 	const displayedRows = table.slice(0, safeLimit);
-	console.log(topperText);
-
 	return (
-		<div className="mb-5">
+		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}
 			{title && <h5>{title}</h5>}
 			<Table striped bordered hover size="sm">
@@ -58,13 +56,17 @@ const ColumnMapTable = ({
 						{tableMap.map((col, idx) => (
 							<th
 								key={idx}
-								className={`${getAlignmentClass(col.type)} ${
-									col.className || ""
-								}`}
+								className="border border-primary text-center align-middle"
 							>
-								{Array.isArray(col.label)
-									? col.label.join(" ")
-									: col.label || `Col ${idx}`}
+								{Array.isArray(col.label) ? (
+									<>
+										{col.label.map((line, i) => (
+											<div key={i}>{line}</div>
+										))}
+									</>
+								) : (
+									col.label || `Col ${idx}`
+								)}
 							</th>
 						))}
 					</tr>

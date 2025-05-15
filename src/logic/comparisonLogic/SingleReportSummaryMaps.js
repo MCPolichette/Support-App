@@ -1,21 +1,20 @@
-export const PerfSummaryTableMap = (report, dates) => {
-	console.log(report, dates);
+export const PerfSummary = (report, dates) => {
 	const tableDisplay = {
 		headers: [
 			{
 				label: "Year",
 				type: "text",
-				className: "bg-light border-start border-2 border-dark",
+				className: "border-primary border-right",
 			},
 			{ label: "Sales", type: "dollar" },
 			{ label: "Clicks", type: "int" },
 			{ label: "# of Sales", type: "int" },
 			{
-				label: "Avg Order Amount",
+				label: ["Avg Order", " Amount"],
 				type: "dollar",
 			},
 			{
-				label: "Conversion Rate",
+				label: ["Conversion", " Rate"],
 				type: "percent",
 			},
 			{
@@ -39,6 +38,28 @@ export const PerfSummaryTableMap = (report, dates) => {
 			report?.["Mobile Sales"],
 		],
 	};
+	return {
+		tableDisplay,
+	};
+};
+export const ProductSummary = (report, dates) => {
+	const tableDisplay = {
+		headers: [
+			{
+				label: "Product",
+				type: "string",
+				className: "w-25 border-primary border-right",
+			},
+			{ label: "Units " + dates.year, type: "int" },
+			{ label: "Sales " + dates.year, type: "dollar" },
+		],
+		data: [
+			report?.["Product Name"],
+			report?.["Total Product Sale Quantity"],
+			report?.["Total Product Sale Amount"],
+		],
+	};
+	console.log(tableDisplay);
 	return {
 		tableDisplay,
 	};

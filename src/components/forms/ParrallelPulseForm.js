@@ -7,6 +7,9 @@ import {
 	Col,
 	Stack,
 	Image,
+	Badge,
+	Tabs,
+	Tab,
 } from "react-bootstrap";
 import DateRangePicker from "./DateRangePicker";
 import ReportSettings from "./ReportSettingsPanel";
@@ -14,11 +17,13 @@ import {
 	getDefaultStartDate,
 	getDefaultEndDate,
 	getLastYearSameWeek,
+	getMonthRange,
 } from "../../utils/getTime";
 import {
 	_adminApiModules,
 	getSettings,
 } from "../../utils/API/_AdminApiModules";
+import MonthYearSelector from "./MonthYearPicker";
 
 const getMerchantLogo = (id) =>
 	id === "23437"
@@ -27,7 +32,6 @@ const getMerchantLogo = (id) =>
 
 const ParrallelPulseForm = ({
 	setDates,
-
 	handleRunReport,
 	loading,
 	openSettings,
@@ -49,7 +53,9 @@ const ParrallelPulseForm = ({
 			return { id: null, network: "US", reportMap: _adminApiModules };
 		}
 	}
-	const [startDate, setStartDate] = useState(getDefaultStartDate());
+	const [startDate, setStartDate] = useState(
+		getDefaultStartDate("last7days")
+	);
 	const [endDate, setEndDate] = useState(getDefaultEndDate());
 	const [previousPeriodStart, setPreviousPeriodStart] = useState(
 		getLastYearSameWeek(startDate, endDate).start
@@ -57,35 +63,52 @@ const ParrallelPulseForm = ({
 	const [previousPeriodEnd, setPreviousPeriodEnd] = useState(
 		getLastYearSameWeek(startDate, endDate).end
 	);
+	const [disabledButton, setDisabledButton] = useState("disabled");
 	const [formSelections, setFormSelections] = useState(
 		settings.commonMerchants[0].reportmap || _adminApiModules
 	);
 	const [selectedMerchant, setSelectedMerchant] = useState(
 		settings.commonMerchants[0].id || null
 	);
+	const [activeTab, setActiveTab] = useState("dates");
+	const [monthlyDateCs, setMonthlyDateCs] = useState(
+		getMonthRange(getDefaultStartDate("first-of-last-month"))
+	);
+	const [monthlyDatePs, setMonthlyDatePs] = useState(
+		getLastYearSameWeek(monthlyDateCs.start, monthlyDateCs.end)
+	);
 	const [selectedNetwork, setSelectedNetwork] = useState(
 		settings.commonMerchants[0].network || null
 	);
-
 	const saveMerchantSettings = () => {
 		console.log("THIS ISNT WORKING YET");
 	};
-
 	const updateSettingsRunReport = () => {
-		// setModules(formSelections);
-
-		handleRunReport(
-			{
-				startDate: startDate,
-				endDate: endDate,
-				previousPeriodStart: previousPeriodStart,
-				previousPeriodEnd: previousPeriodEnd,
-			},
-			selectedMerchant,
-			selectedNetwork
-		);
-
-		// TODO: I should just use the handleRunReport, and pass in these variables... and not have to set the state on the page.
+		console.log(monthlyDateCs, monthlyDatePs);
+		if (activeTab === "months") {
+			handleRunReport(
+				{
+					startDate: monthlyDateCs.start,
+					endDate: monthlyDateCs.end,
+					previousPeriodStart: monthlyDatePs.start,
+					previousPeriodEnd: monthlyDatePs.end,
+				},
+				selectedMerchant,
+				selectedNetwork
+			);
+		} else {
+			console.log(endDate);
+			handleRunReport(
+				{
+					startDate: startDate,
+					endDate: endDate,
+					previousPeriodStart: previousPeriodStart,
+					previousPeriodEnd: previousPeriodEnd,
+				},
+				selectedMerchant,
+				selectedNetwork
+			);
+		}
 	};
 
 	return (
@@ -200,30 +223,110 @@ const ParrallelPulseForm = ({
 					</div>
 				</Col>
 				<Col md={6}>
-					<Row>
-						<Col md={6} className="pe-3 border-end">
-							<h5>
-								<strong>Primary Week </strong>
-							</h5>
-							<DateRangePicker
-								startDate={startDate}
-								endDate={endDate}
-								onStartChange={setStartDate}
-								onEndChange={setEndDate}
-							/>
-						</Col>
+					<Row className="border border border-primary">
+						<Tabs
+							activeKey={activeTab}
+							onSelect={(k) => setActiveTab(k)}
+							className="mb-3 "
+						>
+							<Tab
+								className="bg-light-subtle"
+								eventKey="dates"
+								title="Compare Selected Dates"
+							>
+								<Row>
+									<Col md={6} className="pe-3 border-end">
+										<h5>
+											<strong>Primary Week </strong>
+										</h5>
+										<DateRangePicker
+											startDate={startDate}
+											endDate={endDate}
+											onStartChange={setStartDate}
+											onEndChange={setEndDate}
+											otherFunction={() =>
+												setDisabledButton(false)
+											}
+										/>
+										<Button
+											variant="info"
+											size="sm"
+											className={"mt-1 "}
+											hidden={disabledButton}
+											onClick={() => {
+												const newDates =
+													getLastYearSameWeek(
+														startDate,
+														endDate
+													);
+												setPreviousPeriodStart(
+													newDates.start
+												);
+												setPreviousPeriodEnd(
+													newDates.end
+												);
+												setDisabledButton(true);
+											}}
+										>
+											Set Comparison Dates to match YoY
+										</Button>
+									</Col>
 
-						<Col md={6}>
-							<h5>
-								<strong>Comparison Week </strong>
-							</h5>
-							<DateRangePicker
-								startDate={previousPeriodStart}
-								endDate={previousPeriodEnd}
-								onStartChange={setPreviousPeriodStart}
-								onEndChange={setPreviousPeriodEnd}
-							/>
-						</Col>
+									<Col md={6}>
+										<h5>
+											<strong>Comparison Week </strong>
+										</h5>
+										<DateRangePicker
+											startDate={previousPeriodStart}
+											endDate={previousPeriodEnd}
+											onStartChange={
+												setPreviousPeriodStart
+											}
+											onEndChange={setPreviousPeriodEnd}
+										/>
+										{disabledButton === false && (
+											<Badge
+												pill
+												bg="warning"
+												text="dark"
+											>
+												Dates may not Match YOY
+											</Badge>
+										)}
+									</Col>
+								</Row>
+							</Tab>
+							<Tab
+								eventKey="months"
+								title="Compare Month over Month"
+							>
+								<Row>
+									<Col lg={6} className="pe-3 border-end">
+										<h5>
+											<strong>Primary Month</strong>
+										</h5>
+										<MonthYearSelector
+											date={monthlyDateCs}
+											onChange={(m) => {
+												setMonthlyDateCs(m);
+											}}
+										/>
+									</Col>
+
+									<Col lg={6}>
+										<h5>
+											<strong>Comparison Month</strong>
+										</h5>
+										<MonthYearSelector
+											date={monthlyDatePs}
+											onChange={(m) => {
+												setMonthlyDatePs(m);
+											}}
+										/>
+									</Col>
+								</Row>
+							</Tab>
+						</Tabs>
 					</Row>
 				</Col>
 			</Row>
