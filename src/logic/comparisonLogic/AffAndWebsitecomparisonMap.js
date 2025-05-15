@@ -1,6 +1,50 @@
 import { Col } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 
+function summarizeTransactions(data) {
+	const refundTypes = ["RETURN", "CANCELED", "FRAUD", "REFUND"];
+
+	const initializeSummary = () => ({
+		saleAmount: 0,
+		refundAmount: 0,
+		totalCommission: 0,
+	});
+
+	const byWebsite = {};
+	const byAffiliate = {};
+
+	for (const row of data) {
+		const websiteId = row["Website Id"];
+		const affiliateId = row["Affiliate Id"];
+		const type = row["Transaction Type"];
+		const amount = parseFloat(row["Transaction Amount"]) || 0;
+		const totalCommission = parseFloat(row["Total Commission"]) || 0;
+		const networkCommission = parseFloat(row["Network Commission"]) || 0;
+
+		if (!byWebsite[websiteId]) byWebsite[websiteId] = initializeSummary();
+		if (!byAffiliate[affiliateId])
+			byAffiliate[affiliateId] = initializeSummary();
+
+		const isSale = type === "SALE";
+		const isRefund = refundTypes.includes(type);
+
+		if (isSale) {
+			byWebsite[websiteId].saleAmount += amount;
+			byAffiliate[affiliateId].saleAmount += amount;
+		} else if (isRefund) {
+			byWebsite[websiteId].refundAmount += amount;
+			byAffiliate[affiliateId].refundAmount += amount;
+		}
+
+		byWebsite[websiteId].totalCommission +=
+			totalCommission + networkCommission;
+		byAffiliate[affiliateId].totalCommission +=
+			totalCommission + networkCommission;
+	}
+
+	return { byWebsite, byAffiliate };
+}
+
 export function getTotals(data, groupKey, totalFields) {
 	if (!Array.isArray(data)) {
 		console.error("getTotals expected an array, received:", data);
@@ -32,22 +76,28 @@ export const AttributeDelta = (
 	datesC,
 	reportP,
 	datesP,
-	totalsArr
+	totalsArr,
+	SCDc,
+	SCDp
 ) => {
 	const attr = attribute;
 	const name = attr[0];
+
 	const totalsC = getTotals(reportC, attr, totalsArr);
+
 	const totalsP = getTotals(reportP, attr, totalsArr);
 	let deltaReport = [];
 	const tableData = () => {
 		let arr = [];
 		Object.entries(totalsC).forEach(([category, curr]) => {
 			const match = totalsP[category] || {};
+
 			const prevAmount = match["Total Product Sale Amount"] || 0;
 			const currAmount = curr["Total Product Sale Amount"] || 0;
 
 			const prevQty = match["Total Product Sale Quantity"] || 0;
 			const currQty = curr["Total Product Sale Quantity"] || 0;
+
 			arr.push([
 				category,
 				currQty,
@@ -61,7 +111,7 @@ export const AttributeDelta = (
 			]);
 		});
 
-		return arr.sort((a, b) => b[1] - a[1]);
+		return arr.sort((a, b) => b[1] - a[1]); // sort by currQty (index 1)
 	};
 
 	const percentChange = (curr, prev) => {
@@ -77,7 +127,7 @@ export const AttributeDelta = (
 		{
 			label: attr[0],
 			type: "text",
-			className: "w-25 border-right  border-dark",
+			className: " border-right  border-dark",
 		},
 		{
 			label: "Units " + datesC.year,
@@ -90,12 +140,12 @@ export const AttributeDelta = (
 			type: "int",
 		},
 		{
-			label: [datesC.year + " vs " + datesP.year, " % Change"],
+			label: datesC.year + " vs " + datesP.year + " % Change",
 
 			type: "percent",
 		},
 		{
-			label: [datesC.year + " vs " + datesP.year, " Demand Change"],
+			label: datesC.year + " vs " + datesP.year + " Demand Change",
 
 			type: "int",
 			className: " border-right  border-dark",
@@ -111,34 +161,36 @@ export const AttributeDelta = (
 			type: "dollar",
 		},
 		{
-			label: [datesC.year + " vs " + datesP.year, " % Change"],
+			label: datesC.year + " vs " + datesP.year + " % Change",
 
 			type: "percent",
 		},
 		{
-			label: [datesC.year + " vs " + datesP.year, " Change"],
+			label: datesC.year + " vs " + datesP.year + " Change",
 
 			type: "dollar",
 		},
 	];
 	return { name, tableMap, deltaReport };
 };
-export function ProductAttributeDeltaTables({
+export function Aff_And_Website_Map({
 	data,
 	reports,
 	currentDates,
 	previousDates,
-	totalsArr,
-	limit,
 }) {
 	const safeData = Array.isArray(data) ? data : [data];
-	const fieldsToCheck = [
-		"Department",
-		"Category",
-		"Sub Category",
-		"Brand Name",
-	];
+	const fieldsToCheck = ["", ""];
 	const getReport = (text) => reports[text] ?? [];
+	const totalsSCDc = summarizeTransactions(
+		getreport("Sales_Commissions_Detail_current")
+	);
+	const totalsSCDp = summarizeTransactions(
+		getreport("Sales_Commissions_Detail_previous")
+	);
+	const standardReportC = "";
+	const standardReportP = "";
+
 	const productTables = fieldsToCheck
 		.filter((field) =>
 			safeData.some(
@@ -151,19 +203,23 @@ export function ProductAttributeDeltaTables({
 				getReport("Product_Sold_current"),
 				currentDates,
 				getReport("Product_Sold_previous"),
-				previousDates,
-				totalsArr
+				previousDates
 			)
 		);
 
 	return (
 		<>
 			{productTables.map((field) => (
-				<Col key={field.name} xs={12} className="mb-4">
+				<Col key={field.name} xs={12} className="mb-1">
 					<ColumnMapTable
 						tableMap={field.tableMap}
 						table={field.deltaReport}
-						limit={limit}
+						limit={10}
+					/>
+					<ColumnMapTable
+						tableMap={field.tableMap}
+						table={field.deltaReport}
+						limit={10}
 					/>
 				</Col>
 			))}

@@ -1,9 +1,20 @@
 import { format, isSameMonth, isSameYear, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
 
-export function getDefaultStartDate() {
+export function getDefaultStartDate(option = "last7days") {
 	const date = new Date();
-	date.setDate(date.getDate() - 7);
+
+	switch (option) {
+		case "first-of-last-month":
+			date.setMonth(date.getMonth() - 0);
+			date.setDate(1);
+			break;
+		case "last7days":
+		default:
+			date.setDate(date.getDate() - 7);
+			break;
+	}
+
 	return date.toISOString().split("T")[0];
 }
 
@@ -11,6 +22,10 @@ export function getDefaultEndDate() {
 	const date = new Date();
 	date.setDate(date.getDate() - 1);
 	return date.toISOString().split("T")[0];
+}
+export function extractMonthYear(dateStr) {
+	const [year, month, day] = dateStr.split("-");
+	return { month, year };
 }
 
 export function getLastYearSameWeek(start, end) {
@@ -24,16 +39,20 @@ export function getLastYearSameWeek(start, end) {
 		end: e.toISOString().split("T")[0],
 	};
 }
-///TESTING
-export function getReportTexts(startInput, endInput) {
-	const start =
-		typeof startInput === "string"
-			? parseISO(startInput)
-			: new Date(startInput);
-	const end =
-		typeof endInput === "string" ? parseISO(endInput) : new Date(endInput);
 
-	if (isNaN(start) || isNaN(end)) {
+export function getReportTexts(startInput, endInput) {
+	const parse = (input) => {
+		if (typeof input === "string") {
+			const [y, m, d] = input.split("-").map(Number);
+			return new Date(y, m - 1, d); // local time
+		}
+		return new Date(input);
+	};
+
+	const start = parse(startInput);
+	const end = parse(endInput);
+
+	if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
 		throw new RangeError("Invalid date(s) passed to getReportTexts");
 	}
 
@@ -41,14 +60,12 @@ export function getReportTexts(startInput, endInput) {
 	const sameMonth = isSameMonth(start, end);
 
 	const startDay = format(start, "EEEE, MMMM do", { locale: enUS });
-	let endDay;
 
+	let endDay;
 	if (sameMonth && sameYear) {
-		endDay = format(end, "do yyyy", { locale: enUS }); // e.g. "5th 2024"
-	} else if (!sameMonth && sameYear) {
-		endDay = format(end, "MMMM do yyyy", { locale: enUS }); // e.g. "May 2nd 2024"
+		endDay = format(end, "do yyyy", { locale: enUS });
 	} else {
-		endDay = format(end, "MMMM do yyyy", { locale: enUS }); // e.g. "January 3rd 2025"
+		endDay = format(end, "MMMM do yyyy", { locale: enUS });
 	}
 
 	const dateRange = `${startDay} - ${endDay}`;
@@ -59,6 +76,7 @@ export function getReportTexts(startInput, endInput) {
 
 	const startMonth = format(start, "MMMM", { locale: enUS });
 	const endMonth = format(end, "MMMM", { locale: enUS });
+
 	const month = sameMonth
 		? startMonth
 		: sameYear
@@ -70,4 +88,24 @@ export function getReportTexts(startInput, endInput) {
 		year,
 		month,
 	};
+}
+export function getMonthRange(dateStr) {
+	const inputDate = new Date(dateStr);
+	if (isNaN(inputDate)) {
+		throw new Error("Invalid date format. Expected yyyy-mm-dd.");
+	}
+
+	const year = inputDate.getFullYear();
+	const month = inputDate.getMonth(); // 0-indexed
+
+	// Start of the month
+	const start = `${year}-${String(month + 1).padStart(2, "0")}-01`;
+
+	// End of the month
+	const endDate = new Date(year, month + 1, 0); // 0th day of next month = last day of this month
+	const end = `${year}-${String(month + 1).padStart(2, "0")}-${String(
+		endDate.getDate()
+	).padStart(2, "0")}`;
+
+	return { start, end };
 }

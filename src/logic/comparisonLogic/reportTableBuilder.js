@@ -1,73 +1,33 @@
 import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
-import { PerfSummaryTableMap } from "./performanceSummaryMap";
-import { AttributeDelta } from "./productSoldMaps";
-
-function ProductAttributeDeltaTables({
-	data,
-	reports,
-	currentDates,
-	previousDates,
-}) {
-	const safeData = Array.isArray(data) ? data : [data];
-	const fieldsToCheck = [
-		"Department",
-		"Category",
-		"Sub Category",
-		"Brand Name",
-	];
-	const getReport = (text) => reports[text] ?? [];
-	const productTables = fieldsToCheck
-		.filter((field) =>
-			safeData.some(
-				(row) => row[field] && row[field].toString().trim() !== ""
-			)
-		)
-		.map((field) =>
-			AttributeDelta(
-				[field],
-				getReport("Product_Sold_current"),
-				currentDates,
-				getReport("Product_Sold_previous"),
-				previousDates
-			)
-		);
-
-	return (
-		<>
-			{productTables.map((field) => (
-				<Col key={field.name} xs={12} className="mb-4">
-					<ColumnMapTable
-						tableMap={field.tableMap}
-						table={field.deltaReport}
-						limit={10}
-					/>
-				</Col>
-			))}
-		</>
-	);
-}
-
+import { PerfSummary, ProductSummary } from "./SingleReportSummaryMaps";
+import { ProductAttributeDeltaTables } from "./productSoldMaps";
+// import { Aff_And_Website_Map } from "./AffAndWebsiteperfomanceMap";
 const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
+	console.log(reports);
 	const getReport = (text) => {
 		return reports[text]?.[0];
 	};
 	const reportTitle = (text, dates) => {
 		return text + " " + dates;
 	};
-	const performanceSummaryCurr = PerfSummaryTableMap(
+	const performanceSummaryCurr = PerfSummary(
 		getReport("Performance_Summary_current"),
 		currentDates
 	).tableDisplay;
-	const performanceSummaryPrev = PerfSummaryTableMap(
+	const performanceSummaryPrev = PerfSummary(
 		getReport("Performance_Summary_previous"),
+		previousDates
+	).tableDisplay;
+	const productSummaryTable = ProductSummary(
+		getReport("Product_Sold_current"),
 		currentDates
 	).tableDisplay;
 
 	return (
 		<Container className="container mt-4">
-			<Row>
+			<Row className="mb-5">
 				<ColumnMapTable
 					topperText={reportTitle(
 						"Performance Summary",
@@ -85,15 +45,49 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					limit={1}
 				/>
 			</Row>
-			<Row>
+			<hr />
+			<Row className="mb-5">
 				<h4>Product data for {currentDates.dateRange}</h4>
 				<ProductAttributeDeltaTables
 					data={getReport("Product_Sold_current")}
 					reports={reports}
 					currentDates={currentDates}
 					previousDates={previousDates}
+					totalsArr={[
+						"Sale Count ",
+						"Total Product Sale Quantity",
+						"Total Product Sale Amount",
+					]}
 					limit={10}
 				/>
+				<ColumnMapTable
+					tableMap={productSummaryTable.headers}
+					table={[productSummaryTable.data]}
+					limit={10}
+				/>
+			</Row>
+			<hr />
+			<Row>
+				{/* 
+	
+				data={getReport("Performance_Summary_By_Affiliate_current")}
+					reports={reports}
+					currentDates={currentDates}
+					previousDates={previousDates}
+					totalsArr={
+					[					
+					Click Throughs,
+					Sales,
+					[GROSS SALES],
+					# of Sales,
+					# of Adjustments,
+					Conversion Rate,
+					[AOV],
+					[TOTAL SPEND],
+					[ROAS],
+					[NC%],
+					]
+					 */}
 			</Row>
 		</Container>
 	);

@@ -6,6 +6,7 @@ const DateRangePicker = ({
 	endDate,
 	onStartChange,
 	onEndChange,
+	otherFunction,
 }) => {
 	return (
 		<fieldset>
@@ -16,7 +17,10 @@ const DateRangePicker = ({
 						<Form.Control
 							type="date"
 							value={startDate}
-							onChange={(e) => onStartChange(e.target.value)}
+							onChange={(e) => {
+								onStartChange(e.target.value);
+								otherFunction();
+							}}
 						/>
 					</Form.Group>
 				</Col>
@@ -26,7 +30,10 @@ const DateRangePicker = ({
 						<Form.Control
 							type="date"
 							value={endDate}
-							onChange={(e) => onEndChange(e.target.value)}
+							onChange={(e) => {
+								onEndChange(e.target.value);
+								otherFunction();
+							}}
 						/>
 					</Form.Group>
 				</Col>

@@ -31,6 +31,7 @@ const ParrallelPulseReport = () => {
 	const [merchantReference, setmerchantReference] = useState("");
 
 	const handleRunReport = async (dates, merchantId, network) => {
+		console.log(dates);
 		setCurrentDates(getReportTexts(dates.startDate, dates.endDate));
 		setPreviousDates(
 			getReportTexts(dates.previousPeriodStart, dates.previousPeriodEnd)
@@ -62,7 +63,6 @@ const ParrallelPulseReport = () => {
 					}
 				},
 			});
-			console.log(results);
 			setReportResults(results);
 		} catch (err) {
 			console.error("Report run failed", err);

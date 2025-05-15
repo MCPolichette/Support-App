@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, InputGroup, Row, Col, Alert } from "react-bootstrap";
 
+//TODO: Filters for ampersands and other characters that may adversly affect the link parameters.  (encoding may be optional)
 const UTMBuilder = () => {
 	const [utm, setUtm] = useState({
 		utm_campaign: "",
