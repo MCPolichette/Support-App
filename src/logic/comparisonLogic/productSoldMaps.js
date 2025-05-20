@@ -159,7 +159,7 @@ export function ProductAttributeDeltaTables({
 	return (
 		<>
 			{productTables.map((field) => (
-				<Col key={field.name} xs={12} className="mb-4">
+				<Col key={field.name} md={6} className="mb-4">
 					<ColumnMapTable
 						tableMap={field.tableMap}
 						table={field.deltaReport}

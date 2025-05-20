@@ -19,13 +19,7 @@ const _PageDirectory = [
 		route: "/link-detector",
 		devOnly: true,
 	},
-	{
-		title: "FISH USA custom report",
-		description:
-			"For Anthony, and Fish USA produces a 7 day report.  And concept construction for future report building.",
-		route: "/fish_usa",
-		devOnly: false,
-	},
+
 	{
 		title: "Parrallel Pulse Report",
 		description:

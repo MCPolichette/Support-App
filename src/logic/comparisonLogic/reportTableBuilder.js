@@ -21,7 +21,7 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 		previousDates
 	).tableDisplay;
 	const productSummaryTable = ProductSummary(
-		getReport("Product_Sold_current"),
+		reports["Product_Sold_current"],
 		currentDates
 	).tableDisplay;
 
@@ -34,20 +34,31 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 						currentDates.dateRange
 					)}
 					id={mid}
+					title={previousDates.dateRange}
 					tableMap={performanceSummaryCurr.headers}
 					table={[performanceSummaryCurr.data]}
 					limit={1}
 				/>
-				<ColumnMapTable
-					title={previousDates.dateRange}
-					tableMap={performanceSummaryPrev.headers}
-					table={[performanceSummaryPrev.data]}
-					limit={1}
-				/>
+				<Col md={6}>
+					<ColumnMapTable
+						title={previousDates.dateRange}
+						tableMap={performanceSummaryPrev.headers}
+						table={[performanceSummaryPrev.data]}
+						limit={1}
+					/>
+				</Col>
+				<Col md={6}>
+					<ColumnMapTable
+						title={["Most Sold Products ", previousDates.dateRange]}
+						tableMap={productSummaryTable.headers}
+						table={productSummaryTable.data}
+						limit={2}
+					/>
+				</Col>
 			</Row>
 			<hr />
 			<Row className="mb-5">
-				<h4>Product data for {currentDates.dateRange}</h4>
+				<h4>Product Reports for {currentDates.dateRange}</h4>
 				<ProductAttributeDeltaTables
 					data={getReport("Product_Sold_current")}
 					reports={reports}
@@ -60,40 +71,15 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					]}
 					limit={10}
 				/>
-				<ColumnMapTable
-					tableMap={productSummaryTable.headers}
-					table={[productSummaryTable.data]}
-					limit={10}
-				/>
 			</Row>
 			<hr />
 			<Row>
 				<Aff_And_Website_Map
+					size="sm"
 					reports={reports}
 					currentDates={currentDates}
 					previousDates={previousDates}
 				/>
-
-				{/* 
-	
-				data={getReport("Performance_Summary_By_Affiliate_current")}
-					reports={reports}
-					currentDates={currentDates}
-					previousDates={previousDates}
-					totalsArr={
-					[					
-					Click Throughs,
-					Sales,
-					[GROSS SALES],
-					# of Sales,
-					# of Adjustments,
-					Conversion Rate,
-					[AOV],
-					[TOTAL SPEND],
-					[ROAS],
-					[NC%],
-					]
-					 */}
 			</Row>
 		</Container>
 	);

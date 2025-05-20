@@ -43,6 +43,16 @@ export const PerfSummary = (report, dates) => {
 	};
 };
 export const ProductSummary = (report, dates) => {
+	const data = [];
+
+	report.forEach((product) => {
+		data.push([
+			product["Product Name"],
+			product["Total Product Sale Quantity"],
+			product["Total Product Sale Amount"],
+		]);
+	});
+
 	const tableDisplay = {
 		headers: [
 			{
@@ -53,13 +63,9 @@ export const ProductSummary = (report, dates) => {
 			{ label: "Units " + dates.year, type: "int" },
 			{ label: "Sales " + dates.year, type: "dollar" },
 		],
-		data: [
-			report?.["Product Name"],
-			report?.["Total Product Sale Quantity"],
-			report?.["Total Product Sale Amount"],
-		],
+		data: data,
 	};
-	console.log(tableDisplay);
+
 	return {
 		tableDisplay,
 	};

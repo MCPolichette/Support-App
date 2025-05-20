@@ -30,7 +30,7 @@ export const TableTopper = ({ id, text }) => (
 			{text}
 		</div>
 		<img
-			src="/style/avantlink.png"
+			src="/style/Avantlink_fullcolor.png"
 			alt="Left Banner"
 			style={{ height: "80px" }}
 		/>

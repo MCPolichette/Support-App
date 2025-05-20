@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table } from "react-bootstrap";
 import { TableTopper } from "./tableExtras";
-
+import "./smallFontStyle.css";
+import LimitTableRows from "../dropdowns/LimitTableRows";
 const formatValue = (value, type) => {
 	if (value == null || value === "") return "";
 
@@ -35,6 +36,15 @@ const getAlignmentClass = (type) => {
 			return "text-start";
 	}
 };
+const setRows = (limit, table) => {
+	let safeLimit = 20;
+	if (limit && limit < table.length) {
+		safeLimit = limit;
+	} else {
+		safeLimit = table.length;
+	}
+	return safeLimit;
+};
 
 const ColumnMapTable = ({
 	title,
@@ -44,12 +54,19 @@ const ColumnMapTable = ({
 	topperText,
 	id,
 }) => {
-	const safeLimit = limit == null ? 20 : limit;
-	const displayedRows = table.slice(0, safeLimit);
+	const [displayedRows, setDisplayedRows] = useState(
+		table.slice(0, setRows(limit, table))
+	);
+
 	return (
 		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}
 			{title && <h5>{title}</h5>}
+			<LimitTableRows
+				displayedRows={displayedRows}
+				setDisplayedRows={setDisplayedRows}
+				maxRows={table.length}
+			/>
 			<Table striped bordered hover size="sm">
 				<thead>
 					<tr>
