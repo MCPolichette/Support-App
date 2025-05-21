@@ -9,6 +9,7 @@ import ReportTableBuilder from "../logic/comparisonLogic/reportTableBuilder";
 import { adminReportAPI } from "../utils/API/reportEngine";
 import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
 import { getReportTexts } from "../utils/getTime";
+import { generatePDF } from "../utils/exportPDF";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
@@ -194,7 +195,8 @@ const ParrallelPulseReport = () => {
 			</div>
 			{pageDisplay === "Tables" && (
 				<Container>
-					<Row>
+					<Button onClick={() => generatePDF("test")}>TEST</Button>
+					<Row id="report_pdf">
 						<ReportTableBuilder
 							mid={merchantReference}
 							reports={reportResults}

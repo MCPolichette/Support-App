@@ -25,7 +25,7 @@ const _PageDirectory = [
 		description:
 			"A comprehensive and modular report designed for parallel metrics analysis and historical comparison",
 		route: "/ParrallelPulse",
-		devOnly: true,
+		devOnly: false,
 	},
 ];
 

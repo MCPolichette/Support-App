@@ -2,3 +2,6 @@
 Table {
 	font-size: 8pt;
 }
+Table tr:last-of-type td {
+	border-bottom: 1px solid black;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown, ButtonGroup, Badge, CloseButton } from "react-bootstrap";
+import { Dropdown, ButtonGroup, Badge } from "react-bootstrap";
 
 const LimitTableRows = ({
 	displayTable,
@@ -21,8 +21,6 @@ const LimitTableRows = ({
 		return filtered;
 	};
 	const dropDownOptions = dropdownarray(table.length);
-	console.log(displayTable);
-
 	return (
 		<div className="position-relative d-print-none">
 			{displayTable ? (

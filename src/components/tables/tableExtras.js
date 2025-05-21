@@ -20,6 +20,7 @@ export const TableTopper = ({ id, text }) => (
 			style={{ height: "80px", margin: "0 10px" }}
 		/>
 		<div
+			className="mb-3"
 			style={{
 				flex: 1,
 				textAlign: "center",

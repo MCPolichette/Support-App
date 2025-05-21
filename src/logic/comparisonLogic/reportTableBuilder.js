@@ -51,23 +51,20 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 						limit={1}
 					/>
 				</Col>
-				{productSummaryTable.length >= 1 && (
-					<Col>
-						<ColumnMapTable
-							md={6}
-							title={[
-								"Most Sold Products ",
-								previousDates.dateRange,
-							]}
-							tableMap={productSummaryTable.headers}
-							table={productSummaryTable.data}
-							limit={10}
-						/>
-					</Col>
-				)}
+
+				<Col md={6}>
+					<ColumnMapTable
+						title={["Most Sold Products ", previousDates.dateRange]}
+						tableMap={productSummaryTable.headers}
+						table={productSummaryTable.data}
+						limit={10}
+					/>
+				</Col>
 			</Row>
 
-			<Row className="mb-5">
+			<div className="force-page-break"></div>
+
+			<Row className="mb-5 ">
 				<ProductAttributeDeltaTables
 					data={getReport("Product_Sold_current")}
 					reports={reports}

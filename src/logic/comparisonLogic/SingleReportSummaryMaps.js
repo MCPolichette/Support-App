@@ -58,7 +58,7 @@ export const ProductSummary = (report, dates) => {
 			{
 				label: "Product",
 				type: "string",
-				className: "w-25 border-primary border-right",
+				className: "w-75 border-primary border-right",
 			},
 			{ label: "Units " + dates.year, type: "int" },
 			{ label: "Sales " + dates.year, type: "dollar" },
