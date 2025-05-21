@@ -45,7 +45,11 @@ const setRows = (limit, table) => {
 	}
 	return safeLimit;
 };
-
+const checkforData = (data) => {
+	if (data.length) {
+		return true;
+	}
+};
 const ColumnMapTable = ({
 	title,
 	tableMap,
@@ -57,57 +61,71 @@ const ColumnMapTable = ({
 	const [displayedRows, setDisplayedRows] = useState(
 		table.slice(0, setRows(limit, table))
 	);
+	const [displayTable, setDisplayTable] = useState(checkforData(table));
 
 	return (
 		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}
-			{title && <h5>{title}</h5>}
+
 			<LimitTableRows
+				displayTable={displayTable}
+				setDisplayTable={setDisplayTable}
 				displayedRows={displayedRows}
+				table={table}
 				setDisplayedRows={setDisplayedRows}
-				maxRows={table.length}
+				title={title}
 			/>
-			<Table striped bordered hover size="sm">
-				<thead>
-					<tr>
-						{tableMap.map((col, idx) => (
-							<th
-								key={idx}
-								className="border border-primary text-center align-middle"
-							>
-								{Array.isArray(col.label) ? (
-									<>
-										{col.label.map((line, i) => (
-											<div key={i}>{line}</div>
-										))}
-									</>
-								) : (
-									col.label || `Col ${idx}`
-								)}
-							</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{displayedRows.map((row, rowIdx) => (
-						<tr key={rowIdx}>
-							{row.map((cell, colIdx) => {
-								const colMeta = tableMap[colIdx] || {};
-								return (
-									<td
-										key={colIdx}
-										className={`${getAlignmentClass(
-											colMeta.type
-										)} ${colMeta.className || ""}`}
+			{displayTable ? (
+				<div>
+					{title && <h5>{title}</h5>}
+					<Table striped bordered hover size="sm">
+						<thead>
+							<tr>
+								{tableMap.map((col, idx) => (
+									<th
+										key={idx}
+										className="border border-primary text-center align-middle"
 									>
-										{formatValue(cell, colMeta.type)}
-									</td>
-								);
-							})}
-						</tr>
-					))}
-				</tbody>
-			</Table>
+										{Array.isArray(col.label) ? (
+											<>
+												{col.label.map((line, i) => (
+													<div key={i}>{line}</div>
+												))}
+											</>
+										) : (
+											col.label || `Col ${idx}`
+										)}
+									</th>
+								))}
+							</tr>
+						</thead>
+						<tbody>
+							{displayedRows.map((row, rowIdx) => (
+								<tr key={rowIdx}>
+									{row.map((cell, colIdx) => {
+										const colMeta = tableMap[colIdx] || {};
+										return (
+											<td
+												key={colIdx}
+												className={`${getAlignmentClass(
+													colMeta.type
+												)} ${colMeta.className || ""}`}
+											>
+												{formatValue(
+													cell,
+													colMeta.type
+												)}
+											</td>
+										);
+									})}
+								</tr>
+							))}
+						</tbody>
+					</Table>
+				</div>
+			) : (
+				<div />
+			)}
 		</div>
 	);
 };
