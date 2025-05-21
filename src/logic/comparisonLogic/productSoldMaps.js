@@ -131,42 +131,46 @@ export function ProductAttributeDeltaTables({
 	totalsArr,
 	limit,
 }) {
-	const safeData = Array.isArray(data) ? data : [data];
-	const fieldsToCheck = [
-		"Department",
-		"Category",
-		"Sub Category",
-		"Brand Name",
-	];
-	const getReport = (text) => reports[text] ?? [];
-	const productTables = fieldsToCheck
-		.filter((field) =>
-			safeData.some(
-				(row) => row[field] && row[field].toString().trim() !== ""
-			)
-		)
-		.map((field) =>
-			AttributeDelta(
-				[field],
-				getReport("Product_Sold_current"),
-				currentDates,
-				getReport("Product_Sold_previous"),
-				previousDates,
-				totalsArr
-			)
-		);
+	console.log(data);
+	if (data) {
+		const safeData = Array.isArray(data) ? data : [data];
+		const fieldsToCheck = [
+			"Department",
+			"Category",
+			"Sub Category",
+			"Brand Name",
+		];
 
-	return (
-		<>
-			{productTables.map((field) => (
-				<Col key={field.name} xs={12} className="mb-4">
-					<ColumnMapTable
-						tableMap={field.tableMap}
-						table={field.deltaReport}
-						limit={limit}
-					/>
-				</Col>
-			))}
-		</>
-	);
+		const getReport = (text) => reports[text] ?? [];
+		const productTables = fieldsToCheck
+			.filter((field) =>
+				safeData.some(
+					(row) => row[field] && row[field].toString().trim() !== ""
+				)
+			)
+			.map((field) =>
+				AttributeDelta(
+					[field],
+					getReport("Product_Sold_current"),
+					currentDates,
+					getReport("Product_Sold_previous"),
+					previousDates,
+					totalsArr
+				)
+			);
+		return (
+			<>
+				<h4>Product Reports for {currentDates.dateRange}</h4>
+				{productTables.map((field) => (
+					<Col key={field.name} md={6} className="mb-4">
+						<ColumnMapTable
+							tableMap={field.tableMap}
+							table={field.deltaReport}
+							limit={limit}
+						/>
+					</Col>
+				))}
+			</>
+		);
+	}
 }

@@ -1,5 +1,6 @@
 import { Col } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
+import "../../components/tables/smallFontStyle.css";
 
 function summarizeTransactions(data) {
 	const refundTypes = ["RETURN", "CANCELED", "FRAUD", "REFUND"];
@@ -9,7 +10,6 @@ function summarizeTransactions(data) {
 		refundAmount: 0,
 		totalCommission: 0,
 	});
-
 	const byWebsite = {};
 	const byAffiliate = {};
 	for (const row of data) {
@@ -40,7 +40,7 @@ function summarizeTransactions(data) {
 		byAffiliate[affiliateId].totalCommission +=
 			totalCommission + networkCommission;
 	}
-	console.log(byWebsite);
+
 	return { byWebsite, byAffiliate };
 }
 
@@ -69,52 +69,99 @@ export function getTotals(data, groupKey, totalFields) {
 	});
 	return resultMap;
 }
-export const AttributeDelta = (
-	attribute,
+export const AffDelta = (
+	aff_or_web,
 	reportC,
 	datesC,
 	reportP,
 	datesP,
-	totalsArr,
 	SCDc,
 	SCDp
 ) => {
-	const attr = attribute;
-	const name = attr[0];
-	const fieldsToCheck = [
-		"Department",
-		"Category",
-		"Sub Category",
-		"Brand Name",
-	];
-	const totalsC = getTotals(reportC, attr, totalsArr);
-	const totalsP = getTotals(reportP, attr, totalsArr);
 	let deltaReport = [];
 	const tableData = () => {
 		let arr = [];
-		Object.entries(totalsC).forEach(([category, curr]) => {
-			const match = totalsP[category] || {};
+		Object.entries(reportC).forEach(([i, curr]) => {
+			// FORMULA FOR EACH DETERMINED FIELD  / GROSS AOV SPEND ROA
+			const identifier = `${aff_or_web} Id`; // e.g., "Affiliate Id"
+			const reportType = "by" + aff_or_web; // e.g., "byAffiliate"
+			const determineKey = (term) => {
+				if (term === "Affiliate") {
+					return "Affiliate Name";
+				} else {
+					if (term === "Website") {
+						return "Affiliate Website";
+					}
+				}
+			};
 
-			const prevAmount = match["Total Product Sale Amount"] || 0;
-			const currAmount = curr["Total Product Sale Amount"] || 0;
-
-			const prevQty = match["Total Product Sale Quantity"] || 0;
-			const currQty = curr["Total Product Sale Quantity"] || 0;
+			const salesDetailsData = (SDCReport) => {
+				const perfId = curr[identifier];
+				const y = SDCReport[reportType];
+				const grossSales = y[perfId]?.saleAmount ?? 0;
+				const totalSpend = y[perfId]?.totalCommission ?? 0;
+				return { grossSales, totalSpend };
+			};
+			const perfDetailsC = salesDetailsData(SCDc);
+			const perfDetailsP = salesDetailsData(SCDp);
+			const match = reportP[i] || {};
+			const pName = determineKey(aff_or_web);
 
 			arr.push([
-				category,
-				currQty,
-				prevQty,
-				percentChange(currQty, prevQty),
-				demandChange(currQty, prevQty),
-				currAmount,
-				prevAmount,
-				percentChange(currAmount, prevAmount),
-				demandChange(currAmount, prevAmount),
+				curr[pName],
+				curr["Click Throughs"],
+				match["Click Throughs"],
+				match["Click Throughs"] / curr["Click Throughs"],
+				curr["Click Throughs"] - match["Click Throughs"],
+				curr["Sales"],
+				match["Sales"],
+				match["Sales"] / curr["Sales"],
+				curr["Sales"] - match["Sales"],
+				perfDetailsC.grossSales,
+				perfDetailsP.grossSales,
+				perfDetailsP.grossSales / perfDetailsP.grossSales,
+				(perfDetailsP.grossSales, -perfDetailsP.grossSales),
+				curr["# of Sales"],
+				match["# of Sales"],
+				percentChange(curr["# of Sales"], match["# of Sales"]),
+				demandChange(curr["# of Sales"], match["# of Sales"]),
+				curr[pName],
+				// curr["# of Adjustments"],
+				// match["# of Adjustments"],
+				// match["# of Adjustments"] / curr["# of Adjustments"],
+				// curr["# of Adjustments"] - match["# of Adjustments"],
+				curr["Conversion Rate"] * 0.01,
+				match["Conversion Rate"] * 0.01,
+				match["Conversion Rate"] / curr["Conversion Rate"],
+				curr["Conversion Rate"] - match["Conversion Rate"],
+				curr["Sales"] / curr["# of Sales"],
+				match["Sales"] / match["# of Sales"],
+				match["Sales"] /
+					match["# of Sales"] /
+					curr["Sales"] /
+					curr["# of Sales"],
+				curr["Sales"] / curr["# of Sales"] -
+					match["Sales"] / match["# of Sales"],
+				perfDetailsC.totalSpend,
+				perfDetailsP.totalSpend,
+				perfDetailsP.totalSpend / perfDetailsP.totalSpend,
+				(perfDetailsP.totalSpend, -perfDetailsP.totalSpend),
+				perfDetailsC.totalSpend / curr["Sales"],
+				perfDetailsP.totalSpend / match["Sales"],
+				perfDetailsP.totalSpend /
+					match["Sales"] /
+					perfDetailsC.totalSpend /
+					curr["Sales"],
+				perfDetailsC.totalSpend / curr["Sales"] -
+					perfDetailsP.totalSpend / match["Sales"],
+				curr["New Customer %"] * 0.01,
+				match["New Customer %"] * 0.01,
+				match["New Customer %"] / curr["New Customer %"],
+				curr["New Customer %"] - match["New Customer %"],
 			]);
 		});
 
-		return arr.sort((a, b) => b[1] - a[1]); // sort by currQty (index 1)
+		return arr.sort((a, b) => b[5] - a[5]); // sort by currQty (index 1)
 	};
 
 	const percentChange = (curr, prev) => {
@@ -128,24 +175,24 @@ export const AttributeDelta = (
 	deltaReport = tableData();
 	const tableMap = [
 		{
-			label: attr[0],
+			label: aff_or_web,
 			type: "text",
-			className: " border-right  border-dark",
+			className: " border-right  border-dark text-truncate",
 		},
 		{
-			label: "Units " + datesC.year,
+			label: "Clicks Throughs " + datesC.year,
 			type: "int",
 		},
 		{
-			label: "Units " + datesP.year,
+			label: "Clicks Throughs " + datesP.year,
 			type: "int",
 		},
 		{
-			label: datesC.year + " vs " + datesP.year + " % Change",
+			label: datesC.year + " vs " + datesP.year + " % Change ",
 			type: "percent",
 		},
 		{
-			label: datesC.year + " vs " + datesP.year + " Demand Change",
+			label: datesC.year + " vs " + datesP.year + " Change",
 			type: "int",
 			className: " border-right  border-dark",
 		},
@@ -157,6 +204,24 @@ export const AttributeDelta = (
 			label: "Sales " + datesP.year,
 			type: "dollar",
 		},
+
+		{
+			label: datesC.year + " vs " + datesP.year + " % Change ",
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " Change",
+			type: "dollar",
+			className: " border-right  border-dark table-sm-text",
+		},
+		{
+			label: "Gross Sales " + datesC.year,
+			type: "dollar",
+		},
+		{
+			label: "Gross Sales " + datesP.year,
+			type: "dollar",
+		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
 			type: "percent",
@@ -164,9 +229,117 @@ export const AttributeDelta = (
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
 			type: "dollar",
+			className: " border-right  border-dark",
+		},
+		{
+			label: "# of Sales " + datesC.year,
+			type: "int",
+		},
+		{
+			label: "# of Sales " + datesP.year,
+			type: "int",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " % Change",
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + "Change",
+			type: "int",
+			className: " border-right  border-dark",
+		},
+		{
+			label: aff_or_web,
+			type: "text",
+			className: " border-right  border-dark text-truncate",
+		},
+		// {
+		// 	label: "Adjustments " + datesC.year,
+		// 	type: "int",
+		// },
+		// {
+		// 	label: "Adjustments " + datesP.year,
+		// 	type: "int",
+		// },
+		// {
+		// 	label: datesC.year + " vs " + datesP.year + " % Change",
+		// 	type: "percent",
+		// },
+		// {
+		// 	label: datesC.year + " vs " + datesP.year + " Change",
+		// 	type: "int",
+		// 	className: " border-right  border-dark",
+		// },
+		{
+			label: "Conversion Rate " + datesC.year,
+			type: "percent",
+		},
+		{
+			label: "Conversion Rate " + datesP.year,
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " % Change",
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " Change",
+			type: "percent",
+			className: " border-right  border-dark",
+		},
+		{
+			label: "Total Spend " + datesC.year,
+			type: "dollar",
+		},
+		{
+			label: "Total Spend " + datesP.year,
+			type: "dollar",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " % Change",
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " Change",
+			type: "dollar",
+			className: " border-right  border-dark",
+		},
+		{
+			label: "AOV " + datesC.year,
+			type: "dollar",
+		},
+		{
+			label: "AOV " + datesP.year,
+			type: "dollar",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " % Change",
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " Change",
+			type: "dollar",
+			className: " border-right  border-dark",
+		},
+		{
+			label: "New Customer % " + datesC.year,
+			type: "percent",
+		},
+		{
+			label: "New Customer % " + datesP.year,
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " % Change",
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " Change",
+			type: "percent",
+			className: " border-right  border-dark",
 		},
 	];
-	return { name, tableMap, deltaReport };
+	return { tableMap, deltaReport };
 };
 export const Aff_And_Website_Map = ({
 	reports,
@@ -174,57 +347,70 @@ export const Aff_And_Website_Map = ({
 	previousDates,
 }) => {
 	const getReport = (text) => {
-		console.log(reports);
 		return reports[text]?.[0];
 	};
 	const data = getReport("Performance_Summary_By_Affiliate_current");
 	const safeData = Array.isArray(data) ? data : [data];
 	const fieldsToCheck = ["", ""];
-
 	const totalsSCDc = summarizeTransactions(
 		reports["Sales_Commissions_Detail_current"]
 	);
 	const totalsSCDp = summarizeTransactions(
 		reports["Sales_Commissions_Detail_previous"]
 	);
-	console.log(totalsSCDc, currentDates);
-	console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+	const perfByWebsiteC =
+		reports["Performance_Summary_By_Affiliate_Website_current"];
+	const perfByWebsiteP =
+		reports["Performance_Summary_By_Affiliate_Website_previous"];
+	const perfByAffC = reports["Performance_Summary_By_Affiliate_current"];
+	const perfByAffP = reports["Performance_Summary_By_Affiliate_previous"];
+	const affiliateReport = AffDelta(
+		"Affiliate",
+		perfByAffC,
+		currentDates,
+		perfByAffP,
+		previousDates,
+		totalsSCDc,
+		totalsSCDp
+	);
+	const websiteReport = AffDelta(
+		"Website",
+		perfByWebsiteC,
+		currentDates,
+		perfByWebsiteP,
+		previousDates,
+		totalsSCDc,
+		totalsSCDp
+	);
 
-	const standardReportC = "";
-	const standardReportP = "";
-	return <div>x</div>;
-	// const productTables = fieldsToCheck
-	// 	.filter((field) =>
-	// 		safeData.some(
-	// 			(row) => row[field] && row[field].toString().trim() !== ""
-	// 		)
-	// 	)
-	// 	.map((field) =>
-	// 		AttributeDelta(
-	// 			[field],
-	// 			getReport("Product_Sold_current"),
-	// 			currentDates,
-	// 			getReport("Product_Sold_previous"),
-	// 			previousDates
-	// 		)
-	// 	);
-
-	// return (
-	// 	<>
-	// 		{productTables.map((field) => (
-	// 			<Col key={field.name} xs={12} className="mb-1">
-	// 				<ColumnMapTable
-	// 					tableMap={field.tableMap}
-	// 					table={field.deltaReport}
-	// 					limit={10}
-	// 				/>
-	// 				<ColumnMapTable
-	// 					tableMap={field.tableMap}
-	// 					table={field.deltaReport}
-	// 					limit={10}
-	// 				/>
-	// 			</Col>
-	// 		))}
-	// 	</>
-	// );
+	return (
+		<>
+			<ColumnMapTable
+				tableMap={affiliateReport.tableMap.slice(0, 17)}
+				table={affiliateReport.deltaReport.map((row) =>
+					row.slice(0, 17)
+				)}
+				limit={10}
+			/>
+			<ColumnMapTable
+				tableMap={affiliateReport.tableMap.slice(17, 34)}
+				table={affiliateReport.deltaReport.map((row) =>
+					row.slice(17, 34)
+				)}
+				limit={10}
+			/>
+			<ColumnMapTable
+				tableMap={websiteReport.tableMap.slice(0, 17)}
+				table={websiteReport.deltaReport.map((row) => row.slice(0, 17))}
+				limit={10}
+			/>
+			<ColumnMapTable
+				tableMap={websiteReport.tableMap.slice(17, 34)}
+				table={websiteReport.deltaReport.map((row) =>
+					row.slice(17, 34)
+				)}
+				limit={10}
+			/>
+		</>
+	);
 };

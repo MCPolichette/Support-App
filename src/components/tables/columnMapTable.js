@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table } from "react-bootstrap";
 import { TableTopper } from "./tableExtras";
-
+import "./smallFontStyle.css";
+import LimitTableRows from "../dropdowns/LimitTableRows";
 const formatValue = (value, type) => {
 	if (value == null || value === "") return "";
 
@@ -35,7 +36,20 @@ const getAlignmentClass = (type) => {
 			return "text-start";
 	}
 };
-
+const setRows = (limit, table) => {
+	let safeLimit = 20;
+	if (limit && limit < table.length) {
+		safeLimit = limit;
+	} else {
+		safeLimit = table.length;
+	}
+	return safeLimit;
+};
+const checkforData = (data) => {
+	if (data.length) {
+		return true;
+	}
+};
 const ColumnMapTable = ({
 	title,
 	tableMap,
@@ -44,53 +58,74 @@ const ColumnMapTable = ({
 	topperText,
 	id,
 }) => {
-	const safeLimit = limit == null ? 20 : limit;
-	const displayedRows = table.slice(0, safeLimit);
+	const [displayedRows, setDisplayedRows] = useState(
+		table.slice(0, setRows(limit, table))
+	);
+	const [displayTable, setDisplayTable] = useState(checkforData(table));
+
 	return (
 		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}
-			{title && <h5>{title}</h5>}
-			<Table striped bordered hover size="sm">
-				<thead>
-					<tr>
-						{tableMap.map((col, idx) => (
-							<th
-								key={idx}
-								className="border border-primary text-center align-middle"
-							>
-								{Array.isArray(col.label) ? (
-									<>
-										{col.label.map((line, i) => (
-											<div key={i}>{line}</div>
-										))}
-									</>
-								) : (
-									col.label || `Col ${idx}`
-								)}
-							</th>
-						))}
-					</tr>
-				</thead>
-				<tbody>
-					{displayedRows.map((row, rowIdx) => (
-						<tr key={rowIdx}>
-							{row.map((cell, colIdx) => {
-								const colMeta = tableMap[colIdx] || {};
-								return (
-									<td
-										key={colIdx}
-										className={`${getAlignmentClass(
-											colMeta.type
-										)} ${colMeta.className || ""}`}
+
+			<LimitTableRows
+				displayTable={displayTable}
+				setDisplayTable={setDisplayTable}
+				displayedRows={displayedRows}
+				table={table}
+				setDisplayedRows={setDisplayedRows}
+				title={title}
+			/>
+			{displayTable ? (
+				<div>
+					{title && <h5>{title}</h5>}
+					<Table striped bordered hover size="sm">
+						<thead>
+							<tr>
+								{tableMap.map((col, idx) => (
+									<th
+										key={idx}
+										className="border border-primary text-center align-middle"
 									>
-										{formatValue(cell, colMeta.type)}
-									</td>
-								);
-							})}
-						</tr>
-					))}
-				</tbody>
-			</Table>
+										{Array.isArray(col.label) ? (
+											<>
+												{col.label.map((line, i) => (
+													<div key={i}>{line}</div>
+												))}
+											</>
+										) : (
+											col.label || `Col ${idx}`
+										)}
+									</th>
+								))}
+							</tr>
+						</thead>
+						<tbody>
+							{displayedRows.map((row, rowIdx) => (
+								<tr key={rowIdx}>
+									{row.map((cell, colIdx) => {
+										const colMeta = tableMap[colIdx] || {};
+										return (
+											<td
+												key={colIdx}
+												className={`${getAlignmentClass(
+													colMeta.type
+												)} ${colMeta.className || ""}`}
+											>
+												{formatValue(
+													cell,
+													colMeta.type
+												)}
+											</td>
+										);
+									})}
+								</tr>
+							))}
+						</tbody>
+					</Table>
+				</div>
+			) : (
+				<div />
+			)}
 		</div>
 	);
 };

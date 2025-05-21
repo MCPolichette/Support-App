@@ -20,6 +20,7 @@ export const TableTopper = ({ id, text }) => (
 			style={{ height: "80px", margin: "0 10px" }}
 		/>
 		<div
+			className="mb-3"
 			style={{
 				flex: 1,
 				textAlign: "center",
@@ -30,7 +31,7 @@ export const TableTopper = ({ id, text }) => (
 			{text}
 		</div>
 		<img
-			src="/style/avantlink.png"
+			src="/style/Avantlink_fullcolor.png"
 			alt="Left Banner"
 			style={{ height: "80px" }}
 		/>
