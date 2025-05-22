@@ -1,4 +1,5 @@
 body {
+	background-color: rgb(117, 117, 117);
 	background-image: url(../style/avantlink-ribbon.svg);
 	height: 100vh;
 	background-position: right;
@@ -7,6 +8,7 @@ body {
 	background-attachment: fixed;
 	font-family: Roboto;
 }
+
 h5 {
 	font-weight: bolder;
 }
