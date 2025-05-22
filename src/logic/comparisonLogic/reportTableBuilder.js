@@ -3,8 +3,10 @@ import { Row, Col, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { PerfSummary, ProductSummary } from "./SingleReportSummaryMaps";
 import { ProductAttributeDeltaTables } from "./productSoldMaps";
-import { Aff_And_Website_Map } from "./AffAndWebsiteComparisonMap";
+import { Aff_And_Website_Map } from "./AffAndWebsitecomparisonMap";
 import { TableTopper } from "../../components/tables/tableExtras";
+import { PageBreaker } from "../../components/PDFelements";
+import YoySalesConversionChart from "../../components/graphs/YoySalesConversionChart";
 const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 	const getReport = (text) => {
 		return reports[text]?.[0];
@@ -24,6 +26,11 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 		reports["Product_Sold_current"],
 		currentDates
 	).tableDisplay;
+	const dayGraphData = {
+		current: reports["Performance_Summary_By_Day_current"],
+		previous: reports["Performance_Summary_By_Day_previous"],
+	};
+	console.log(reports);
 
 	return (
 		<Container className="container mt-4">
@@ -43,7 +50,7 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 						table={[performanceSummaryCurr.data]}
 						limit={1}
 					/>
-
+					<br></br>
 					<ColumnMapTable
 						title={previousDates.dateRange}
 						tableMap={performanceSummaryPrev.headers}
@@ -61,10 +68,18 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					/>
 				</Col>
 			</Row>
-
-			<div className="force-page-break"></div>
+			<YoySalesConversionChart
+				data={dayGraphData}
+				title="Sales vs Conversion Rate"
+				hAxisTitle="Day"
+			/>
+			<PageBreaker />
 
 			<Row className="mb-5 ">
+				<TableTopper
+					topperText={"Product Performance Reports"}
+					id={mid}
+				/>
 				<ProductAttributeDeltaTables
 					data={getReport("Product_Sold_current")}
 					reports={reports}
@@ -78,9 +93,11 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					limit={10}
 				/>
 			</Row>
-			<hr />
+			<PageBreaker />
+
 			<Row>
 				<Aff_And_Website_Map
+					mid={mid}
 					size="sm"
 					reports={reports}
 					currentDates={currentDates}

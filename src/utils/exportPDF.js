@@ -13,7 +13,7 @@ export async function generatePDF(fileName) {
 
 	// Capture the canvas
 	const canvas = await html2canvas(element, {
-		scale: 1,
+		scale: 3,
 		useCORS: true,
 	});
 
@@ -69,7 +69,7 @@ export async function generatePDF(fileName) {
 		const scaledHeight = sliceHeight * scale;
 
 		if (i > 0) pdf.addPage();
-		pdf.addImage(imgData, "PNG", 0, 0, pageWidth, scaledHeight);
+		pdf.addImage(imgData, "PNG", 20, 0, pageWidth, scaledHeight);
 	}
 
 	pdf.save(fileName);
