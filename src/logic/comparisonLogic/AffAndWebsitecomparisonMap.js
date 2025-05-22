@@ -1,5 +1,6 @@
 import { Col } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
+import { PageBreaker } from "../../components/PDFelements";
 import "../../components/tables/smallFontStyle.css";
 
 function summarizeTransactions(data) {
@@ -345,10 +346,12 @@ export const Aff_And_Website_Map = ({
 	reports,
 	currentDates,
 	previousDates,
+	mid,
 }) => {
 	const getReport = (text) => {
 		return reports[text]?.[0];
 	};
+	const reportDates = currentDates.dateRange;
 	const data = getReport("Performance_Summary_By_Affiliate_current");
 	const safeData = Array.isArray(data) ? data : [data];
 	const fieldsToCheck = ["", ""];
@@ -386,6 +389,9 @@ export const Aff_And_Website_Map = ({
 	return (
 		<>
 			<ColumnMapTable
+				id={mid}
+				topperText={"Affiliate Top Performance Report"}
+				title={"Affiliate Top Performers " + reportDates}
 				tableMap={affiliateReport.tableMap.slice(0, 17)}
 				table={affiliateReport.deltaReport.map((row) =>
 					row.slice(0, 17)
@@ -393,18 +399,23 @@ export const Aff_And_Website_Map = ({
 				limit={10}
 			/>
 			<ColumnMapTable
+				title={" - Affiliate Top Performers (continued)"}
 				tableMap={affiliateReport.tableMap.slice(17, 34)}
 				table={affiliateReport.deltaReport.map((row) =>
 					row.slice(17, 34)
 				)}
 				limit={10}
 			/>
+			<PageBreaker />
 			<ColumnMapTable
+				topperText={"Website Top Performance Report"}
+				title={"Website Top Performers " + reportDates}
 				tableMap={websiteReport.tableMap.slice(0, 17)}
 				table={websiteReport.deltaReport.map((row) => row.slice(0, 17))}
 				limit={10}
 			/>
 			<ColumnMapTable
+				title={" - Website Top Performers (continued)"}
 				tableMap={websiteReport.tableMap.slice(17, 34)}
 				table={websiteReport.deltaReport.map((row) =>
 					row.slice(17, 34)

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Stack, Button, Row, Col, Container } from "react-bootstrap";
 import AvantLinkApiTester from "../components/modals/adminAPItester";
-
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
 import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
@@ -10,6 +9,8 @@ import { adminReportAPI } from "../utils/API/reportEngine";
 import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
 import { getReportTexts } from "../utils/getTime";
 import { generatePDF } from "../utils/exportPDF";
+import { FloatingCenterButton } from "../components/PDFelements";
+import Loading from "../components/loadingWithSteps";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
@@ -116,6 +117,12 @@ const ParrallelPulseReport = () => {
 					</div>
 				)}
 				{loading && (
+					// <Loading
+					// 	modules={modules}
+					// 	completedModules={completedModules}
+					// 	loadingStage={loadingStage}
+					// 	continueButton={tableButton}
+					// />
 					<Row>
 						<div
 							className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
@@ -195,7 +202,11 @@ const ParrallelPulseReport = () => {
 			</div>
 			{pageDisplay === "Tables" && (
 				<Container>
-					<Button onClick={() => generatePDF("test")}>TEST</Button>
+					<FloatingCenterButton
+						label="test"
+						onClick={() => generatePDF("NEW PDF")}
+					/>
+
 					<Row id="report_pdf">
 						<ReportTableBuilder
 							mid={merchantReference}
@@ -204,6 +215,11 @@ const ParrallelPulseReport = () => {
 							previousDates={previousDates}
 						/>
 					</Row>
+					<hr
+						style={{
+							height: "10em",
+						}}
+					/>
 				</Container>
 			)}
 

@@ -109,3 +109,8 @@ export function getMonthRange(dateStr) {
 
 	return { start, end };
 }
+export function formatDateShort(dateStr) {
+	console.log(dateStr);
+	const [year, month, day] = dateStr.split("-");
+	return `${parseInt(month)}/${parseInt(day)}`;
+}
