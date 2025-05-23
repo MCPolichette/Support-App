@@ -1,8 +1,30 @@
 import React, { useState } from "react";
-import { Alert, Row, Col, Button, Badge, CloseButton } from "react-bootstrap";
+import {
+	Alert,
+	Row,
+	Col,
+	Stack,
+	Button,
+	Badge,
+	CloseButton,
+} from "react-bootstrap";
 
 export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 	const [showNotes, setShowNotes] = useState(true);
+	const [showMenus, setShowMenus] = useState(true);
+	const toggleMenus = () => {
+		const element = document.getElementById("report_pdf");
+		if (!element) return console.error("Missing #report_pdf element");
+		const hiddenEls = element.querySelectorAll(".d-print-none");
+		if (showMenus === true) {
+			hiddenEls.forEach((el) => (el.hidden = true));
+			setShowMenus(false);
+		} else {
+			hiddenEls.forEach((el) => (el.hidden = true));
+			setShowMenus(true);
+		}
+	};
+
 	return (
 		<Alert
 			variant="warning"
@@ -34,9 +56,19 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 					</Col>
 				)}
 				<Col>
-					<Button size="lg" variant="warning" onClick={onClick}>
-						Click Here To Print this Report
-					</Button>
+					<Stack>
+						<Button size="lg" variant="warning" onClick={onClick}>
+							Click Here To Print this Report
+						</Button>
+						<Button
+							variant="Warning"
+							onClick={() => {
+								toggleMenus();
+							}}
+						>
+							Hide tags and dropdowns
+						</Button>
+					</Stack>
 				</Col>
 			</Row>
 		</Alert>

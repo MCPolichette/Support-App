@@ -3,6 +3,7 @@ import { Form, Button, Alert, Badge, InputGroup, Image } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import "./SettingsModal.css";
 import { Link } from "react-router-dom";
+import ServerIndicator from "../Elements/ServerIndicator";
 
 const SETTINGS_KEY = "ChettiToolsSettings";
 
@@ -238,6 +239,7 @@ const SettingsModal = (keyRequired) => {
 			<h6 className="mt-4">Common Merchants</h6>
 			{renderMerchantList()}
 			<hr />
+			<ServerIndicator />
 			<Form.Group className="mb-4">
 				<Form.Check
 					type="switch"

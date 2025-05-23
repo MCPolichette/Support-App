@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { startCrawl } from "../logic/domainCrawler";
-import useServerStatus from "../utils/useServerStatus";
+// import useServerStatus from "../utils/OGuseServerStatus";
 
 const CrawlerPage = () => {
 	const [url, setUrl] = useState("https://example.com");
@@ -17,7 +17,7 @@ const CrawlerPage = () => {
 		elapsed: "0 sec",
 	});
 
-	const serverOnline = useServerStatus();
+	const serverOnline = true;
 
 	const handleStart = () => {
 		startCrawl(
