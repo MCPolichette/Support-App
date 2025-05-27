@@ -95,7 +95,7 @@ const SettingsModal = (keyRequired) => {
 						<div
 							key={m.id}
 							className={`merchant-card ${
-								isPrimary ? "primary" : ""
+								isPrimary ? "primary" : "secondary"
 							}`}
 							onClick={() => {
 								const newList = [

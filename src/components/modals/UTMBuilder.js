@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, InputGroup, Row, Col, Alert } from "react-bootstrap";
+import CopyToClipboard from "../buttons_and_dropdowns/CopyToClipboard";
 
 //TODO: Filters for ampersands and other characters that may adversly affect the link parameters.  (encoding may be optional)
 const UTMBuilder = () => {
@@ -135,9 +136,13 @@ const UTMBuilder = () => {
 
 					{output && (
 						<Alert variant="success" className="mt-4">
-							<code>{output}</code>
+							<code id="utmString">{output}</code>
 						</Alert>
 					)}
+					<CopyToClipboard
+						divId="utmString"
+						text="Copy String to clipboard"
+					/>
 				</Col>
 				<Col md={5}>
 					<h6 className="mt-2">AvantLink Dynamic Variables</h6>

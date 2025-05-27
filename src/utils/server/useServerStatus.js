@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useServerStatus = (url = "http://your-pi-ip:4000/api/ping") => {
+const useServerStatus = (url = "http://192.168.86.35:4000/api/ping") => {
 	const [online, setOnline] = useState(false);
 
 	useEffect(() => {

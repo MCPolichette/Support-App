@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button, Row, Col, Toast, ToastContainer } from "react-bootstrap";
 import SecondaryFileTab from "../ALTools/tabs/SecondaryFileTab";
+import CopyToClipboard from "../buttons_and_dropdowns/CopyToClipboard";
 
 const MapModal = ({ mapping = [], type, delimiter }) => {
 	const getAttributeFields = (arr) => {
@@ -99,16 +100,11 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 							{mappedStr || "No fields mapped yet."}
 						</pre>
 					</div>
+					<CopyToClipboard
+						divId="primaryPipeMap"
+						text="Copy Primary Map"
+					/>
 
-					<Button
-						style={{ width: "100%", marginTop: "-20px" }}
-						className="btn-lg btn-block"
-						variant="outline-primary"
-						onClick={() => copyToClipboard("primaryPipeMap")}
-						disabled={!mappedStr}
-					>
-						Copy Primary Map
-					</Button>
 					{type && (
 						<div style={{ width: "100%", marginTop: "15%" }}>
 							<h6>Secondary Feed</h6>
@@ -121,35 +117,14 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 									{mappedVarStr || "No fields mapped yet."}
 								</pre>
 							</div>
-
-							<Button
-								style={{ width: "100%", marginTop: "-20px" }}
-								className="btn-lg btn-block"
-								variant="outline-primary"
-								onClick={() =>
-									copyToClipboard("secondaryPipeMap")
-								}
-								disabled={!mappedVarStr}
-							>
-								Copy Secondary Map
-							</Button>
+							<CopyToClipboard
+								divId="secondaryPipeMap"
+								text="Copy Secondary Map"
+							/>
 						</div>
 					)}
 				</Col>
-				{/* Transient Copied Notification */}
-				<ToastContainer position="bottom-center" className="p-3">
-					<Toast
-						show={copied}
-						onClose={() => setCopied(false)}
-						delay={1200}
-						autohide
-						bg="success"
-					>
-						<Toast.Body className="text-white text-center">
-							Copied to clipboard!
-						</Toast.Body>
-					</Toast>
-				</ToastContainer>
+
 				<hr></hr>
 			</Row>
 

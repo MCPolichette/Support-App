@@ -9,6 +9,7 @@ import {
 	Tabs,
 	Container,
 } from "react-bootstrap";
+import CopyToClipboard from "../buttons_and_dropdowns/CopyToClipboard";
 
 const FTPshorthand = () => {
 	const [username, setUsername] = useState("");
@@ -167,20 +168,31 @@ const FTPshorthand = () => {
 						</Form>
 
 						{parsed && (
-							<Alert variant="light" className="mt-4">
-								<strong>
-									Here is the current file URL that our system
-									is importing from:
-								</strong>
-								<br />
-								Batch Server: <code>{parsed.batchServer}</code>
-								<br />
-								User Name: <code>{parsed.username}</code>
-								<br />
-								Password: <code>{parsed.password}</code>
-								<br />
-								Filename: <code>{parsed.filename}</code>
-							</Alert>
+							<div>
+								<Alert
+									id="ftpBreakdown"
+									variant="light"
+									className="mt-4"
+								>
+									<strong>
+										Here is the current file URL that our
+										system is importing from:
+									</strong>
+									<br />
+									Batch Server:{" "}
+									<code>{parsed.batchServer}</code>
+									<br />
+									User Name: <code>{parsed.username}</code>
+									<br />
+									Password: <code>{parsed.password}</code>
+									<br />
+									Filename: <code>{parsed.filename}</code>
+								</Alert>
+								<CopyToClipboard
+									divId="ftpBreakdown"
+									text="Copy Text to Clipboard"
+								/>
+							</div>
 						)}
 					</Tab>
 				</Tabs>

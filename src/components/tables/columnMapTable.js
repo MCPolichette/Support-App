@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Table } from "react-bootstrap";
 import { TableTopper } from "./tableExtras";
 import "./smallFontStyle.css";
-import LimitTableRows from "../dropdowns/LimitTableRows";
+import LimitTableRows from "../buttons_and_dropdowns/LimitTableRows";
 const formatValue = (value, type) => {
 	if (value == null || value === "") return "";
 

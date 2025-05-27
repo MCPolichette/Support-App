@@ -18,8 +18,16 @@
 }
 
 .merchant-card.primary {
+	padding-right: 2%;
+	padding-left: 2%;
 	border: 2px solid #0d6efd;
 	box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+.merchant-card.secondary {
+	padding-right: 2%;
+	padding-left: 2%;
+	border: 1px solid #495567;
+	box-shadow: 0 0 1px rgba(0, 123, 255, 0.5);
 }
 
 /* When clicking to move left/right, this helps simulate z-index movement if you want more animation later */
