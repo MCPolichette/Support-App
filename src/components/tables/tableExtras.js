@@ -6,7 +6,7 @@ const getMerchantLogo = (id) =>
 export const TableTopper = ({ id, text }) => (
 	<div
 		style={{
-			height: "100px",
+			height: "65px",
 			display: "flex",
 			alignItems: "center",
 			justifyContent: "space-between",
@@ -17,7 +17,7 @@ export const TableTopper = ({ id, text }) => (
 		<img
 			src={getMerchantLogo(id)}
 			alt="Left"
-			style={{ height: "80px", margin: "0 10px" }}
+			style={{ height: "65px", margin: "0 10px" }}
 		/>
 		<div
 			className="mb-3"
@@ -33,7 +33,7 @@ export const TableTopper = ({ id, text }) => (
 		<img
 			src="/style/Avantlink_fullcolor.png"
 			alt="Left Banner"
-			style={{ height: "80px" }}
+			style={{ height: "65px" }}
 		/>
 	</div>
 );

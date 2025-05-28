@@ -1,6 +1,10 @@
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
+function waitForRender(ms = 300) {
+	return new Promise((res) => setTimeout(res, ms));
+}
+
 export async function generatePDF(fileName) {
 	const element = document.getElementById("report_pdf");
 	if (!element) return console.error("Missing #report_pdf element");
@@ -10,10 +14,10 @@ export async function generatePDF(fileName) {
 	hiddenEls.forEach((el) => (el.hidden = true));
 
 	await new Promise((res) => setTimeout(res, 50));
-
+	await waitForRender(800);
 	// Capture the canvas
 	const canvas = await html2canvas(element, {
-		scale: 3,
+		scale: 1,
 		useCORS: true,
 	});
 
@@ -47,7 +51,7 @@ export async function generatePDF(fileName) {
 		const startY = breakPoints[i];
 		const endY = breakPoints[i + 1];
 		const sliceHeight = endY - startY;
-
+		console.log(startY, "startY", endY, "endY", sliceHeight, "sliceHeight");
 		const sliceCanvas = document.createElement("canvas");
 		sliceCanvas.width = canvas.width;
 		sliceCanvas.height = sliceHeight;
@@ -69,7 +73,7 @@ export async function generatePDF(fileName) {
 		const scaledHeight = sliceHeight * scale;
 
 		if (i > 0) pdf.addPage();
-		pdf.addImage(imgData, "PNG", 20, 0, pageWidth, scaledHeight);
+		pdf.addImage(imgData, "PNG", 0, 0, pageWidth, scaledHeight);
 	}
 
 	pdf.save(fileName);
