@@ -3,11 +3,7 @@ import { Card } from "react-bootstrap";
 import { Chart } from "react-google-charts";
 import { formatDateShort } from "../../utils/getTime";
 
-const YoySalesConversionChart = ({
-	data,
-	title = "YoY Sales vs CR",
-	hAxisTitle = "Month",
-}) => {
+const YoySalesConversionChart = ({ data, title = "YoY Sales vs CR" }) => {
 	console.log(data);
 	if (!data || !data.current || !data.previous) return null;
 
@@ -29,13 +25,14 @@ const YoySalesConversionChart = ({
 	];
 
 	const options = {
+		fontSize: 10,
 		title,
-		width: "100%",
-		height: 300,
+		width: "80%",
+		height: "90%",
 		hAxis: {
-			title: hAxisTitle,
+			title: "Performance By Day",
 			textStyle: {
-				fontSize: 10,
+				fontSize: 8,
 				color: "#333",
 			},
 			slantedText: true,
@@ -51,11 +48,11 @@ const YoySalesConversionChart = ({
 			2: { type: "bars", targetAxisIndex: 0, color: "#f45850" },
 			3: { type: "line", targetAxisIndex: 1, color: "#f45850" },
 		},
-		legend: { position: "bottom" },
+		legend: { position: "in" },
 	};
 
 	return (
-		<Card className="">
+		<Card className="pdfGraphCard">
 			<Card.Body>
 				<Chart
 					chartType="ComboChart"

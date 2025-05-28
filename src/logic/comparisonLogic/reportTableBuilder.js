@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { PerfSummary, ProductSummary } from "./SingleReportSummaryMaps";
@@ -14,6 +14,7 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 	const reportTitle = (text, dates) => {
 		return text + " " + dates;
 	};
+	// const [graphHeight, setGraphHeight] = useState(800);
 	const performanceSummaryCurr = PerfSummary(
 		getReport("Performance_Summary_current"),
 		currentDates
@@ -68,18 +69,28 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					/>
 				</Col>
 			</Row>
-			<YoySalesConversionChart
-				data={dayGraphData}
-				title="Sales vs Conversion Rate"
-				hAxisTitle="Day"
-			/>
-			<PageBreaker />
+			<Row
+				className="justify-content-md-center"
+				style={{
+					height: "550px",
+					marginTop: "-3em",
+				}}
+			>
+				<YoySalesConversionChart
+					data={dayGraphData}
+					title="Sales vs Conversion Rate"
+					hAxisTitle="Day"
+					// height={300}
+				/>
+			</Row>
 
-			<Row className="mb-5 ">
+			<Row className="mb-5 mt-5">
+				<PageBreaker />
 				<TableTopper
 					topperText={"Product Performance Reports"}
 					id={mid}
 				/>
+
 				<ProductAttributeDeltaTables
 					data={getReport("Product_Sold_current")}
 					reports={reports}

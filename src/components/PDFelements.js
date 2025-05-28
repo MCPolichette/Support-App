@@ -51,13 +51,15 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 				)}
 				{showNotes && (
 					<Col lg={6}>
-						All Green and Yellow Elements will be auto-removed upon
-						clicking the print button
+						<p>
+							All Green and Yellow Elements will be auto-removed
+							upon clicking the print button
+						</p>
 					</Col>
 				)}
 				<Col>
 					<Stack>
-						<Button size="lg" variant="warning" onClick={onClick}>
+						<Button size="md" variant="warning" onClick={onClick}>
 							Click Here To Print this Report
 						</Button>
 						<Button
@@ -76,16 +78,19 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 };
 export const PageBreaker = () => {
 	return (
-		<div className="position-relative d-print-none force-page-break">
+		<div
+			className="position-relative   force-page-break"
+			style={{ height: "2em" }}
+		>
 			<Badge
 				size="sm"
 				pill
 				bg="success"
 				text="light"
-				className="position-absolute  "
+				className="d-print-none"
 				style={{
-					top: "1em",
-					left: "-11em",
+					top: "0em",
+					left: "-25em",
 					zIndex: 10,
 					opacity: 0.8,
 				}}

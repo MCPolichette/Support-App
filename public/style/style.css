@@ -66,6 +66,15 @@ h6 {
 	height: 350px;
 	color: white;
 }
+#report_pdf.pdf-mode {
+	width: 1120px;
+	max-width: unset;
+	zoom: 1;
+}
+
+.chart-container canvas {
+	max-width: 100% !important;
+}
 
 @media print {
 	.keyBox {
