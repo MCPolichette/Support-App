@@ -204,7 +204,16 @@ const ParrallelPulseReport = () => {
 				<Container>
 					<FloatingCenterButton
 						label="test"
-						onClick={() => generatePDF("NEW PDF")}
+						onClick={() =>
+							generatePDF(
+								"ParrallelPulse_" +
+									merchantReference +
+									"_" +
+									currentDates.startDate +
+									"-" +
+									currentDates.endDate
+							)
+						}
 					/>
 
 					<Row id="report_pdf">
