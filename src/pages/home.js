@@ -6,9 +6,11 @@ const Home = () => {
 	const settings =
 		JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
 	const showDev = settings.showDev;
+	const showApiTools = settings.validKey;
+	console.log(showApiTools);
 
 	const visiblePages = _PageDirectory.filter(
-		(page) => !page.devOnly || showDev
+		(page) => !page.keyRequired || showApiTools
 	);
 
 	return (

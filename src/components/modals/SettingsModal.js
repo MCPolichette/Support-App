@@ -4,6 +4,7 @@ import { Trash } from "react-bootstrap-icons";
 import "./SettingsModal.css";
 import { Link } from "react-router-dom";
 import ServerIndicator from "../Elements/ServerIndicator";
+import { runAPI } from "../../utils/API/apiRunner";
 
 const SETTINGS_KEY = "ChettiToolsSettings";
 
@@ -44,16 +45,40 @@ const SettingsModal = (keyRequired) => {
 		setTimeout(() => setSuccess(false), 800);
 	};
 
-	const handleSaveUUID = () => {
+	const handleSaveUUID = async () => {
 		if (uuid.length !== 32) {
 			setError("UUID must be exactly 32 characters long.");
 			setValidKey(false);
 			return;
 		}
-		setValidKey(true);
-		updateSettings({ key: uuid, validKey: true });
-		setEditKey(false);
-		setError("");
+		try {
+			const test = await runAPI(
+				{ report_id: 1, affiliate_id: 101, date_range: "today" },
+				uuid,
+				10048
+			);
+
+			const errorMessage =
+				"Invalid authentication key supplied for admin/private login-specific request.";
+
+			if (
+				Array.isArray(test) &&
+				test.length === 1 &&
+				test[0] === errorMessage
+			) {
+				setError(errorMessage);
+				setValidKey(false);
+			} else {
+				console.log("success");
+				setValidKey(true);
+				updateSettings({ key: uuid, validKey: true });
+				setEditKey(false);
+			}
+		} catch (err) {
+			console.error("API call failed:", err);
+			setError("Unexpected error during key validation.");
+			setValidKey(false);
+		}
 	};
 
 	const handleAddMerchant = () => {
