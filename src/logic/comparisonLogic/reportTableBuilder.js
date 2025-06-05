@@ -34,7 +34,7 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 	console.log(reports);
 
 	return (
-		<Container className="container mt-4">
+		<Container className="container pt-0">
 			<Row className="mb-5">
 				<TableTopper
 					text={reportTitle(
@@ -70,17 +70,17 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 				</Col>
 			</Row>
 			<Row
-				className="justify-content-md-center"
+				className="justify-content-md-center pt=0"
 				style={{
 					height: "550px",
 					marginTop: "-3em",
+					zIndex: -1,
 				}}
 			>
 				<YoySalesConversionChart
 					data={dayGraphData}
 					title="Sales vs Conversion Rate"
 					hAxisTitle="Day"
-					// height={300}
 				/>
 			</Row>
 
