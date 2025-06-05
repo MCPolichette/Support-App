@@ -8,6 +8,10 @@ body {
 	background-attachment: fixed;
 	font-family: Roboto;
 }
+button.nav-link {
+	color: black;
+	font-weight: bold;
+}
 
 h5 {
 	font-weight: bolder;
@@ -70,6 +74,10 @@ h6 {
 	width: 1120px;
 	max-width: unset;
 	zoom: 1;
+}
+.container {
+	border-radius: 25px;
+	padding: 25px;
 }
 
 .chart-container canvas {
