@@ -2,9 +2,7 @@ import React from "react";
 import useServerStatus from "../../utils/server/useServerStatus";
 
 const ServerIndicator = () => {
-	const serverIsUp = useServerStatus(
-		"http://raspberrypi.local:4000/api/ping"
-	);
+	const serverIsUp = useServerStatus("http://136.60.219.176:3001/ping");
 
 	return (
 		<div>

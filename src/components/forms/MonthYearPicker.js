@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import { extractMonthYear } from "../../utils/getTime";
+import { extractMonthYear, getMonthRange } from "../../utils/getTime";
 
 const MonthYearSelector = ({ date, onChange }) => {
 	const months = [
@@ -17,21 +17,15 @@ const MonthYearSelector = ({ date, onChange }) => {
 		{ value: "11", name: "November" },
 		{ value: "12", name: "December" },
 	];
-	const selectedDate = extractMonthYear(date.start);
 	const currentYear = new Date().getFullYear();
 	const yearRange = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
-	const [month, setMonth] = useState(selectedDate.month);
-	const [year, setYear] = useState(selectedDate.year);
-
 	const handleMonthChange = (e) => {
-		setMonth(e.target.value);
-		onChange?.(e.target.value, year);
+		onChange({ ...date, month: e.target.value });
 	};
 
 	const handleYearChange = (e) => {
-		setYear(e.target.value);
-		onChange?.(month, e.target.value);
+		onChange({ ...date, year: e.target.value });
 	};
 
 	return (
@@ -41,7 +35,10 @@ const MonthYearSelector = ({ date, onChange }) => {
 					<Form.Label>Select Month & Year</Form.Label>
 				</Col>
 				<Col md={6}>
-					<Form.Select value={month} onChange={handleMonthChange}>
+					<Form.Select
+						value={date.month}
+						onChange={handleMonthChange}
+					>
 						{months.map((m) => (
 							<option key={m.value} value={m.value}>
 								{m.name}
@@ -50,7 +47,7 @@ const MonthYearSelector = ({ date, onChange }) => {
 					</Form.Select>
 				</Col>
 				<Col md={6}>
-					<Form.Select value={year} onChange={handleYearChange}>
+					<Form.Select value={date.year} onChange={handleYearChange}>
 						{yearRange.map((y) => (
 							<option key={y} value={y}>
 								{y}

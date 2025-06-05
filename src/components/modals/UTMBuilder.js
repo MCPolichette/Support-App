@@ -137,12 +137,12 @@ const UTMBuilder = () => {
 					{output && (
 						<Alert variant="success" className="mt-4">
 							<code id="utmString">{output}</code>
+							<CopyToClipboard
+								divId="utmString"
+								text="Copy String to clipboard"
+							/>
 						</Alert>
 					)}
-					<CopyToClipboard
-						divId="utmString"
-						text="Copy String to clipboard"
-					/>
 				</Col>
 				<Col md={5}>
 					<h6 className="mt-2">AvantLink Dynamic Variables</h6>

@@ -29,42 +29,44 @@ const AppNavbar = () => {
 	const settings = getSettings();
 	const [modalOpen, setModalOpen] = useState(false);
 	return (
-		<Navbar bg="primary" variant="dark" expand="lg" fixed="top">
-			<Container>
-				<Navbar.Brand as={Link} to="/">
-					<b>Chetti.Tools Support App</b>
-				</Navbar.Brand>
-				<Navbar.Toggle aria-controls="basic-navbar-nav" />
-				<Navbar.Collapse id="basic-navbar-nav">
-					<Nav className="me-auto">
-						<NavDropdown title="Tools" id="tools-dropdown">
-							{visiblePages.map((page, index) => (
-								<NavDropdown.Item
-									as={Link}
-									to={page.route}
-									key={index}
-								>
-									{page.title}
-								</NavDropdown.Item>
-							))}
-							<NavDropdown.Divider />
+		<Navbar
+			bg="primary"
+			variant="dark"
+			expand="lg"
+			fixed="top"
+			className="px-3"
+		>
+			<Navbar.Brand as={Link} to="/">
+				<b>Chetti.Tools Support App</b>
+			</Navbar.Brand>
+			<Navbar.Toggle aria-controls="basic-navbar-nav" />
+			<Navbar.Collapse id="basic-navbar-nav">
+				<Nav className="me-auto">
+					<NavDropdown title="Tools" id="tools-dropdown">
+						{visiblePages.map((page, index) => (
 							<NavDropdown.Item
-								onClick={() => setModalOpen(true)}
+								as={Link}
+								to={page.route}
+								key={index}
 							>
-								Update Settings
+								{page.title}
 							</NavDropdown.Item>
-						</NavDropdown>
-					</Nav>
-				</Navbar.Collapse>
-				{settings.admin && (
-					<Alert variant="info">
-						<Badge bg="success" className="me-2">
-							Verified Admin Key
-						</Badge>
-						You have admin privileges.
-					</Alert>
-				)}
-			</Container>
+						))}
+						<NavDropdown.Divider />
+						<NavDropdown.Item onClick={() => setModalOpen(true)}>
+							Update Settings
+						</NavDropdown.Item>
+					</NavDropdown>
+				</Nav>
+			</Navbar.Collapse>
+			{settings.admin && (
+				<Alert variant="info">
+					<Badge bg="success" className="me-2">
+						Verified Admin Key
+					</Badge>
+					You have admin privileges.
+				</Alert>
+			)}
 
 			<StylizedModal
 				show={modalOpen}

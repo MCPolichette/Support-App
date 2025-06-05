@@ -2,6 +2,7 @@ import React from "react";
 import FTPshorthand from "../components/modals/FTPshorthand";
 import REIDateConverter from "../components/modals/REIDateConverter";
 import UTMBuilder from "../components/modals/UTMBuilder";
+import DownloadXMLTool from "../components/modals/DownloadXMLTool";
 
 import LinkCard from "../components/cards/LinkCard";
 
@@ -25,11 +26,17 @@ const QuickTools = () => {
 				"A quick CopyPaste for creating the SQL snippet Cristina's Dates in her REI reports.  ",
 			modal: <REIDateConverter />,
 		},
+		{
+			title: "Force Download XML",
+			description:
+				"For those Awful XML docs that cannot download or display in the browser. this should force the download to your downloads folder.",
+			modal: <DownloadXMLTool />,
+		},
 	];
 
 	return (
-		<div className="container container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center">
-			<div className="container mt-4 shadow callout-info bg-white">
+		<div className="container container-fluid  d-flex flex-column min-vh-50 justify-content-center align-items-center">
+			<div className="container mt-4 shadow callout-info bg-light">
 				<div classname="row">
 					<h1 className="mb-4">
 						<b>Chetti.Tools Dashboard</b>
