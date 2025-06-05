@@ -106,7 +106,7 @@ const Automapper = () => {
 	};
 
 	return (
-		<div className="container container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center">
+		<div className="container container-fluid d-flex flex-column justify-content-center align-items-center">
 			<div className="row flex-column text-center">
 				<h2>Datafeed Automapper 2.0</h2>
 

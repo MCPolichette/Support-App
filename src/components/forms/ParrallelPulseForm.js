@@ -18,12 +18,14 @@ import {
 	getDefaultEndDate,
 	getLastYearSameWeek,
 	getMonthRange,
+	getPreviousYearMonthRange,
 } from "../../utils/getTime";
 import {
 	_adminApiModules,
 	getSettings,
 } from "../../utils/API/_AdminApiModules";
 import MonthYearSelector from "./MonthYearPicker";
+import CompareDatesPicker from "./CompareDatesPicker";
 
 const getMerchantLogo = (id) =>
 	id === "23437"
@@ -31,12 +33,10 @@ const getMerchantLogo = (id) =>
 		: `https://static.avantlink.com/merchant-logos/${id}.png`;
 
 const ParrallelPulseForm = ({
-	setDates,
 	handleRunReport,
 	loading,
 	openSettings,
 	commonMerchants,
-	setModules,
 }) => {
 	const settings = getSettings();
 	commonMerchants = settings.commonMerchants || [];
@@ -70,13 +70,9 @@ const ParrallelPulseForm = ({
 	const [selectedMerchant, setSelectedMerchant] = useState(
 		settings.commonMerchants[0].id || null
 	);
+
 	const [activeTab, setActiveTab] = useState("dates");
-	const [monthlyDateCs, setMonthlyDateCs] = useState(
-		getMonthRange(getDefaultStartDate("first-of-last-month"))
-	);
-	const [monthlyDatePs, setMonthlyDatePs] = useState(
-		getLastYearSameWeek(monthlyDateCs.start, monthlyDateCs.end)
-	);
+
 	const [selectedNetwork, setSelectedNetwork] = useState(
 		settings.commonMerchants[0].network || null
 	);
@@ -84,31 +80,16 @@ const ParrallelPulseForm = ({
 		console.log("THIS ISNT WORKING YET");
 	};
 	const updateSettingsRunReport = () => {
-		console.log(monthlyDateCs, monthlyDatePs);
-		if (activeTab === "months") {
-			handleRunReport(
-				{
-					startDate: monthlyDateCs.start,
-					endDate: monthlyDateCs.end,
-					previousPeriodStart: monthlyDatePs.start,
-					previousPeriodEnd: monthlyDatePs.end,
-				},
-				selectedMerchant,
-				selectedNetwork
-			);
-		} else {
-			console.log(endDate);
-			handleRunReport(
-				{
-					startDate: startDate,
-					endDate: endDate,
-					previousPeriodStart: previousPeriodStart,
-					previousPeriodEnd: previousPeriodEnd,
-				},
-				selectedMerchant,
-				selectedNetwork
-			);
-		}
+		handleRunReport(
+			{
+				startDate: startDate,
+				endDate: endDate,
+				previousPeriodStart: previousPeriodStart,
+				previousPeriodEnd: previousPeriodEnd,
+			},
+			selectedMerchant,
+			selectedNetwork
+		);
 	};
 
 	return (
@@ -182,7 +163,7 @@ const ParrallelPulseForm = ({
 			</Row>
 			<Row>
 				<hr />
-				<Col md={6}>
+				<Col md={5}>
 					<Form.Text className="text-muted">
 						Select from below or manually enter an ID
 					</Form.Text>
@@ -222,112 +203,17 @@ const ParrallelPulseForm = ({
 						</Button>
 					</div>
 				</Col>
-				<Col md={6}>
-					<Row className="border border border-primary">
-						<Tabs
-							activeKey={activeTab}
-							onSelect={(k) => setActiveTab(k)}
-							className="mb-3 "
-						>
-							<Tab
-								className="bg-light-subtle"
-								eventKey="dates"
-								title="Compare Selected Dates"
-							>
-								<Row>
-									<Col md={6} className="pe-3 border-end">
-										<h5>
-											<strong>Primary Week </strong>
-										</h5>
-										<DateRangePicker
-											startDate={startDate}
-											endDate={endDate}
-											onStartChange={setStartDate}
-											onEndChange={setEndDate}
-											otherFunction={() =>
-												setDisabledButton(false)
-											}
-										/>
-										<Button
-											variant="info"
-											size="sm"
-											className={"mt-1 "}
-											hidden={disabledButton}
-											onClick={() => {
-												const newDates =
-													getLastYearSameWeek(
-														startDate,
-														endDate
-													);
-												setPreviousPeriodStart(
-													newDates.start
-												);
-												setPreviousPeriodEnd(
-													newDates.end
-												);
-												setDisabledButton(true);
-											}}
-										>
-											Set Comparison Dates to match YoY
-										</Button>
-									</Col>
-
-									<Col md={6}>
-										<h5>
-											<strong>Comparison Week </strong>
-										</h5>
-										<DateRangePicker
-											startDate={previousPeriodStart}
-											endDate={previousPeriodEnd}
-											onStartChange={
-												setPreviousPeriodStart
-											}
-											onEndChange={setPreviousPeriodEnd}
-										/>
-										{disabledButton === false && (
-											<Badge
-												pill
-												bg="warning"
-												text="dark"
-											>
-												Dates may not Match YOY
-											</Badge>
-										)}
-									</Col>
-								</Row>
-							</Tab>
-							<Tab
-								eventKey="months"
-								title="Compare Month over Month"
-							>
-								<Row>
-									<Col lg={6} className="pe-3 border-end">
-										<h5>
-											<strong>Primary Month</strong>
-										</h5>
-										<MonthYearSelector
-											date={monthlyDateCs}
-											onChange={(m) => {
-												setMonthlyDateCs(m);
-											}}
-										/>
-									</Col>
-
-									<Col lg={6}>
-										<h5>
-											<strong>Comparison Month</strong>
-										</h5>
-										<MonthYearSelector
-											date={monthlyDatePs}
-											onChange={(m) => {
-												setMonthlyDatePs(m);
-											}}
-										/>
-									</Col>
-								</Row>
-							</Tab>
-						</Tabs>
-					</Row>
+				<Col md={7}>
+					<CompareDatesPicker
+						startDate={startDate}
+						setStartDate={setStartDate}
+						endDate={endDate}
+						setEndDate={setEndDate}
+						previousPeriodStart={previousPeriodStart}
+						setPreviousPeriodStart={setPreviousPeriodStart}
+						previousPeriodEnd={previousPeriodEnd}
+						setPreviousPeriodEnd={setPreviousPeriodEnd}
+					/>
 				</Col>
 			</Row>
 

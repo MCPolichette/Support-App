@@ -109,19 +109,24 @@ export const AffDelta = (
 			const pName = determineKey(aff_or_web);
 
 			arr.push([
+				//Title
 				curr[pName],
+				//Clicks
 				curr["Click Throughs"],
 				match["Click Throughs"],
 				match["Click Throughs"] / curr["Click Throughs"],
 				curr["Click Throughs"] - match["Click Throughs"],
+				//Sales
 				curr["Sales"],
 				match["Sales"],
 				match["Sales"] / curr["Sales"],
 				curr["Sales"] - match["Sales"],
+				//Gross Sales
 				perfDetailsC.grossSales,
 				perfDetailsP.grossSales,
 				perfDetailsP.grossSales / perfDetailsP.grossSales,
 				(perfDetailsP.grossSales, -perfDetailsP.grossSales),
+				//Number of Sales
 				curr["# of Sales"],
 				match["# of Sales"],
 				percentChange(curr["# of Sales"], match["# of Sales"]),
@@ -131,10 +136,13 @@ export const AffDelta = (
 				// match["# of Adjustments"],
 				// match["# of Adjustments"] / curr["# of Adjustments"],
 				// curr["# of Adjustments"] - match["# of Adjustments"],
+				//===================
+				//Conversion Rate
 				curr["Conversion Rate"] * 0.01,
 				match["Conversion Rate"] * 0.01,
 				match["Conversion Rate"] / curr["Conversion Rate"],
 				curr["Conversion Rate"] - match["Conversion Rate"],
+				// AOV
 				curr["Sales"] / curr["# of Sales"],
 				match["Sales"] / match["# of Sales"],
 				match["Sales"] /
@@ -143,12 +151,23 @@ export const AffDelta = (
 					curr["# of Sales"],
 				curr["Sales"] / curr["# of Sales"] -
 					match["Sales"] / match["# of Sales"],
+				//Total Spend
 				perfDetailsC.totalSpend,
 				perfDetailsP.totalSpend,
-				perfDetailsP.totalSpend / perfDetailsP.totalSpend,
-				(perfDetailsP.totalSpend, -perfDetailsP.totalSpend),
-				perfDetailsC.totalSpend / curr["Sales"],
-				perfDetailsP.totalSpend / match["Sales"],
+				perfDetailsC.totalSpend / perfDetailsP.totalSpend,
+				(perfDetailsC.totalSpend, -perfDetailsP.totalSpend),
+				//ROA  Sales
+				curr["Sales"] / perfDetailsC.totalSpend,
+				match["Sales"] / perfDetailsP.totalSpend,
+				curr["Sales"] /
+					perfDetailsC.totalSpend /
+					match["Sales"] /
+					perfDetailsP.totalSpend,
+				(curr["Sales"] / perfDetailsC.totalSpend,
+				-match["Sales"] / perfDetailsP.totalSpend),
+				//AOV
+				curr["Sales"] / curr["# of Sales"],
+				match["Sales"] / match["# of Sales"],
 				perfDetailsP.totalSpend /
 					match["Sales"] /
 					perfDetailsC.totalSpend /
@@ -289,6 +308,23 @@ export const AffDelta = (
 			className: " border-right  border-dark",
 		},
 		{
+			label: "AOV " + datesC.year,
+			type: "dollar",
+		},
+		{
+			label: "AOV " + datesP.year,
+			type: "dollar",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " % Change",
+			type: "percent",
+		},
+		{
+			label: datesC.year + " vs " + datesP.year + " Change",
+			type: "dollar",
+			className: " border-right  border-dark",
+		},
+		{
 			label: "Total Spend " + datesC.year,
 			type: "dollar",
 		},
@@ -306,22 +342,23 @@ export const AffDelta = (
 			className: " border-right  border-dark",
 		},
 		{
-			label: "AOV " + datesC.year,
+			label: "ROA " + datesC.year,
 			type: "dollar",
 		},
 		{
-			label: "AOV " + datesP.year,
+			label: "ROA " + datesP.year,
 			type: "dollar",
 		},
 		{
-			label: datesC.year + " vs " + datesP.year + " % Change",
+			label: datesC.year + " vs " + datesP.year + " ROA % Change",
 			type: "percent",
 		},
 		{
-			label: datesC.year + " vs " + datesP.year + " Change",
+			label: datesC.year + " vs " + datesP.year + " ROA Change",
 			type: "dollar",
 			className: " border-right  border-dark",
 		},
+
 		{
 			label: "New Customer % " + datesC.year,
 			type: "percent",

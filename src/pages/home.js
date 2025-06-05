@@ -12,8 +12,8 @@ const Home = () => {
 	);
 
 	return (
-		<div className="container container-fluid d-flex flex-column min-vh-100 justify-content-center align-items-center">
-			<div className="container mt-4 shadow bg-light-subtle my-card transition-shadow callout-info bg-white">
+		<div className="container container-fluid d-flex flex-column min-vh-50 justify-content-center align-items-center">
+			<div className="container mt-4 shadow my-card transition-shadow callout-info bg-light">
 				<div className="row">
 					<h1 className="mb-4">
 						<b>Chetti.Tools Dashboard</b>

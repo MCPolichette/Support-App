@@ -3,7 +3,6 @@ import { enUS } from "date-fns/locale";
 
 export function getDefaultStartDate(option = "last7days") {
 	const date = new Date();
-
 	switch (option) {
 		case "first-of-last-month":
 			date.setMonth(date.getMonth() - 0);
@@ -26,6 +25,27 @@ export function getDefaultEndDate() {
 export function extractMonthYear(dateStr) {
 	const [year, month, day] = dateStr.split("-");
 	return { month, year };
+}
+export function getPreviousYearMonthRange(currentStartDateStr) {
+	const currentDate = new Date(currentStartDateStr);
+	const startDate = new Date(
+		currentDate.getFullYear() - 1,
+		currentDate.getMonth() + 1
+	);
+	console.log(startDate);
+	const endDate = new Date(
+		currentDate.getFullYear() - 1,
+		currentDate.getMonth() + 1,
+		0
+	); // last day of the month
+
+	const format = (date) => date.toISOString().split("T")[0]; // format YYYY-MM-DD
+	const start = format(startDate);
+	const end = format(endDate);
+	return {
+		start,
+		end,
+	};
 }
 
 export function getLastYearSameWeek(start, end) {
@@ -89,28 +109,24 @@ export function getReportTexts(startInput, endInput) {
 		month,
 	};
 }
-export function getMonthRange(dateStr) {
-	const inputDate = new Date(dateStr);
-	if (isNaN(inputDate)) {
-		throw new Error("Invalid date format. Expected yyyy-mm-dd.");
-	}
-
-	const year = inputDate.getFullYear();
-	const month = inputDate.getMonth(); // 0-indexed
-
-	// Start of the month
-	const start = `${year}-${String(month + 1).padStart(2, "0")}-01`;
-
+export function getMonthRange(x) {
+	const firstDay = x.year + "-" + x.month + "-01";
 	// End of the month
-	const endDate = new Date(year, month + 1, 0); // 0th day of next month = last day of this month
-	const end = `${year}-${String(month + 1).padStart(2, "0")}-${String(
-		endDate.getDate()
-	).padStart(2, "0")}`;
-
-	return { start, end };
+	const endDay = getLastDayOfMonth(x.year, x.month);
+	return { firstDay, endDay };
 }
 export function formatDateShort(dateStr) {
 	console.log(dateStr);
 	const [year, month, day] = dateStr.split("-");
 	return `${parseInt(month)}/${parseInt(day)}`;
+}
+
+function getLastDayOfMonth(year, month) {
+	// JavaScript months are 0-based, so month needs to be passed as 1-based
+	// but we calculate the 0th day of the next month to get the last day of the given month
+	const date = new Date(year, month, 0);
+	const yyyy = date.getFullYear();
+	const mm = String(date.getMonth() + 1).padStart(2, "0"); // getMonth is 0-based
+	const dd = String(date.getDate()).padStart(2, "0");
+	return `${yyyy}-${mm}-${dd}`;
 }

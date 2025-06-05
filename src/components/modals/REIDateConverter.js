@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import ParrallelPulseForm from "../forms/ParrallelPulseForm";
 
 const REIDateConverter = () => {
 	const [rangeInput, setRangeInput] = useState("");
@@ -31,7 +32,8 @@ const REIDateConverter = () => {
 
 	return (
 		<>
-			<Form.Group>
+			<ParrallelPulseForm />
+			{/* <Form.Group>
 				<Form.Label>
 					Enter Date Range (MM/DD/YYYY – MM/DD/YYYY)
 				</Form.Label>
@@ -49,7 +51,7 @@ const REIDateConverter = () => {
 				<div className="mt-3">
 					<strong>Converted:</strong> <code>{convertedRange}</code>
 				</div>
-			)}
+			)} */}
 		</>
 	);
 };
