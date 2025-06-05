@@ -28,7 +28,7 @@ const YoySalesConversionChart = ({ data, title = "YoY Sales vs CR" }) => {
 		fontSize: 10,
 		title,
 		width: "80%",
-		height: "90%",
+		height: "100%",
 		hAxis: {
 			title: "Performance By Day",
 			textStyle: {
