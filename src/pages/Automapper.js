@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { file_reader } from "../logic/file_reader.js";
 import { feedfile } from "../logic/automapperLogic/feedFile.js";
 import MapDisplay from "../components/tables/MapDisplay.js";
+import { Container, Row, Col } from "react-bootstrap";
 //logic
 import { autoMapperWarningHandler } from "../logic/automapperLogic/automapperWarningHandler.js";
 import autoMapHeaders from "../logic/automapperLogic/mappingEngine.js";
@@ -106,8 +107,8 @@ const Automapper = () => {
 	};
 
 	return (
-		<div className="container container-fluid d-flex flex-column justify-content-center align-items-center">
-			<div className="row flex-column text-center">
+		<Container className="container container-fluid d-flex flex-column justify-content-center align-items-center">
+			<Row>
 				<h2>Datafeed Automapper 2.0</h2>
 
 				{showRefresh ? (
@@ -192,7 +193,7 @@ const Automapper = () => {
 						</div>
 					</div>
 				)}
-			</div>
+			</Row>
 			<StylizedModal
 				show={!!modalType}
 				onHide={closeModal}
@@ -217,7 +218,7 @@ const Automapper = () => {
 					/>
 				)}
 			</StylizedModal>
-		</div>
+		</Container>
 	);
 };
 
