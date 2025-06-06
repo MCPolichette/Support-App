@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import FTPshorthand from "../components/modals/FTPshorthand";
-import REIDateConverter from "../components/modals/REIDateConverter";
-import UTMBuilder from "../components/modals/UTMBuilder";
-import DownloadXMLTool from "../components/modals/DownloadXMLTool";
+import FTPshorthand from "../components/modals/quickTools/FTPshorthand";
+import IBCVerification from "../components/modals/quickTools/IBCVerification";
+import UTMBuilder from "../components/modals/quickTools/UTMBuilder";
+import DownloadXMLTool from "../components/modals/quickTools/DownloadXMLTool";
 
 import LinkCard from "../components/cards/LinkCard";
 
@@ -28,11 +28,11 @@ const QuickTools = () => {
 			apiRequired: false,
 		},
 		{
-			title: "REI Date Converter",
+			title: "IBC verification",
 			description:
-				"A quick CopyPaste for creating the SQL snippet Cristina's Dates in her REI reports.  ",
-			modal: <REIDateConverter />,
-			apiRequired: false,
+				"A quick API that returns product sold report over the last 30days   If the report is entirely populated with product names, and departments, IBC can be turned on.  Failure responses available.  ",
+			modal: <IBCVerification />,
+			apiRequired: true,
 		},
 		{
 			title: "Force Download XML",

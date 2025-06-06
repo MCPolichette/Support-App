@@ -14,7 +14,7 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 	const reportTitle = (text, dates) => {
 		return text + " " + dates;
 	};
-	// const [graphHeight, setGraphHeight] = useState(800);
+	const [graphHeight, setGraphHeight] = useState(700);
 	const performanceSummaryCurr = PerfSummary(
 		getReport("Performance_Summary_current"),
 		currentDates
@@ -44,44 +44,40 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					id={mid}
 				/>
 				<Col md={6}>
-					<ColumnMapTable
-						id={mid}
-						title={previousDates.dateRange}
-						tableMap={performanceSummaryCurr.headers}
-						table={[performanceSummaryCurr.data]}
-						limit={1}
-					/>
-					<br></br>
-					<ColumnMapTable
-						title={previousDates.dateRange}
-						tableMap={performanceSummaryPrev.headers}
-						table={[performanceSummaryPrev.data]}
-						limit={1}
-					/>
+					<div>
+						<ColumnMapTable
+							id={mid}
+							title={currentDates.dateRange}
+							tableMap={performanceSummaryCurr.headers}
+							table={[performanceSummaryCurr.data]}
+							limit={1}
+						/>
+						<br></br>
+						<ColumnMapTable
+							title={previousDates.dateRange}
+							tableMap={performanceSummaryPrev.headers}
+							table={[performanceSummaryPrev.data]}
+							limit={1}
+						/>
+					</div>
+					<div style={{ height: { graphHeight } }}>
+						<YoySalesConversionChart
+							data={dayGraphData}
+							title="Sales vs Conversion Rate"
+							hAxisTitle="Day"
+							size={graphHeight}
+						/>
+					</div>
 				</Col>
 
 				<Col md={6}>
 					<ColumnMapTable
-						title={["Most Sold Products ", previousDates.dateRange]}
+						title={["Most Sold Products ", currentDates.dateRange]}
 						tableMap={productSummaryTable.headers}
 						table={productSummaryTable.data}
-						limit={10}
+						limit={25}
 					/>
 				</Col>
-			</Row>
-			<Row
-				className="justify-content-md-center pt=0"
-				style={{
-					height: "550px",
-					marginTop: "-3em",
-					zIndex: -1,
-				}}
-			>
-				<YoySalesConversionChart
-					data={dayGraphData}
-					title="Sales vs Conversion Rate"
-					hAxisTitle="Day"
-				/>
 			</Row>
 
 			<Row className="mb-5 mt-5">

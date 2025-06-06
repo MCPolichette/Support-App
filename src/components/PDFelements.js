@@ -29,10 +29,11 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 		<Alert
 			variant="warning"
 			style={{
+				fontSize: 10,
 				position: "fixed",
 				bottom: "1em",
-				right: "10%",
-				width: "25%",
+				right: "1%",
+				width: "10%",
 				zIndex: 9998,
 			}}
 		>
@@ -50,16 +51,14 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 					/>
 				)}
 				{showNotes && (
-					<Col lg={6}>
-						<p>
-							All Green and Yellow Elements will be auto-removed
-							upon clicking the print button
-						</p>
-					</Col>
+					<p>
+						All Green and Yellow Elements will be auto-removed upon
+						clicking the print button
+					</p>
 				)}
 				<Col>
 					<Stack>
-						<Button size="md" variant="warning" onClick={onClick}>
+						<Button size="sm" variant="warning" onClick={onClick}>
 							Click Here To Print this Report
 						</Button>
 						<Button

@@ -9,7 +9,7 @@ import {
 	Tabs,
 	Container,
 } from "react-bootstrap";
-import CopyToClipboard from "../buttons_and_dropdowns/CopyToClipboard";
+import CopyToClipboard from "../../buttons_and_dropdowns/CopyToClipboard";
 
 const FTPshorthand = () => {
 	const [username, setUsername] = useState("");

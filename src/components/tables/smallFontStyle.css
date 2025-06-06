@@ -1,7 +1,60 @@
 /* styles/TableStyles.css */
 Table {
-	font-size: 8pt;
+	font-size: 7pt;
 }
+.table th {
+	border-top: 2px solid #000;
+}
+.table td {
+	vertical-align: top;
+	padding-bottom: 1em;
+}
+
+.table tbody tr:first-child td {
+	border-top: 2px solid #000;
+}
+
 Table tr:last-of-type td {
-	border-bottom: 1px solid black;
+	border-bottom: 2px solid rgb(23, 22, 22);
+}
+.table td:first-child,
+.table th:first-child {
+	border-left: 2px solid rgb(23, 22, 22);
+}
+
+.table td:last-child,
+.table th:last-child {
+	border-right: 2px solid rgb(23, 22, 22);
+}
+.nowrap-col {
+	white-space: nowrap;
+	max-width: 20%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+th {
+	text-align: center;
+	vertical-align: middle;
+}
+
+th.small-cell {
+	max-width: 15px;
+	overflow: hidden;
+}
+td.small-cell {
+	max-width: 15px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+th.name-cell {
+	max-width: 80px;
+	overflow: hidden;
+}
+td.name-cell {
+	max-width: 80px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }

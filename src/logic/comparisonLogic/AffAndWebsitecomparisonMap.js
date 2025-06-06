@@ -197,184 +197,196 @@ export const AffDelta = (
 		{
 			label: aff_or_web,
 			type: "text",
-			className: " border-right  border-dark text-truncate",
+			className: " border-right  border-dark text-truncate name-cell",
 		},
 		{
 			label: "Clicks Throughs " + datesC.year,
+			className: "small-cell",
 			type: "int",
 		},
 		{
 			label: "Clicks Throughs " + datesP.year,
+			className: "small-cell",
 			type: "int",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change ",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
+			className: "small-cell border-right  border-dark",
 			type: "int",
-			className: " border-right  border-dark",
 		},
 		{
 			label: "Sales " + datesC.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: "Sales " + datesP.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change ",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
+			className: "small-cell border-right  border-dark table-sm-text",
 			type: "dollar",
-			className: " border-right  border-dark table-sm-text",
 		},
 		{
 			label: "Gross Sales " + datesC.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: "Gross Sales " + datesP.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
+			className: "small-cell border-right  border-dark",
 			type: "dollar",
-			className: " border-right  border-dark",
 		},
 		{
 			label: "# of Sales " + datesC.year,
+			className: "small-cell",
 			type: "int",
 		},
 		{
 			label: "# of Sales " + datesP.year,
+			className: "small-cell",
 			type: "int",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + "Change",
+			className: "small-cell border-right  border-dark",
 			type: "int",
-			className: " border-right  border-dark",
 		},
 		{
 			label: aff_or_web,
+			className:
+				"name-cell border-right border-left border-dark text-truncate",
 			type: "text",
-			className: " border-right  border-dark text-truncate",
 		},
-		// {
-		// 	label: "Adjustments " + datesC.year,
-		// 	type: "int",
-		// },
-		// {
-		// 	label: "Adjustments " + datesP.year,
-		// 	type: "int",
-		// },
-		// {
-		// 	label: datesC.year + " vs " + datesP.year + " % Change",
-		// 	type: "percent",
-		// },
-		// {
-		// 	label: datesC.year + " vs " + datesP.year + " Change",
-		// 	type: "int",
-		// 	className: " border-right  border-dark",
-		// },
+
 		{
 			label: "Conversion Rate " + datesC.year,
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: "Conversion Rate " + datesP.year,
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
+			className: "border-right  border-dark small-cell",
 			type: "percent",
-			className: " border-right  border-dark",
 		},
 		{
 			label: "AOV " + datesC.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: "AOV " + datesP.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
+			className: "border-right  border-dark small-cell",
 			type: "dollar",
-			className: " border-right  border-dark",
 		},
 		{
 			label: "Total Spend " + datesC.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: "Total Spend " + datesP.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
+			className: "border-right  border-dark small-cell",
 			type: "dollar",
-			className: " border-right  border-dark",
 		},
 		{
 			label: "ROA " + datesC.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: "ROA " + datesP.year,
+			className: "small-cell",
 			type: "dollar",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " ROA % Change",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " ROA Change",
+			className: "border-right  border-dark small-cell",
 			type: "dollar",
-			className: " border-right  border-dark",
 		},
 
 		{
 			label: "New Customer % " + datesC.year,
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: "New Customer % " + datesP.year,
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " % Change",
+			className: "small-cell",
 			type: "percent",
 		},
 		{
 			label: datesC.year + " vs " + datesP.year + " Change",
+			className: "border-right  border-dark small-cell",
 			type: "percent",
-			className: " border-right  border-dark",
 		},
 	];
 	return { tableMap, deltaReport };

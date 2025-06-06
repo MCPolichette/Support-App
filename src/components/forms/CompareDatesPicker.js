@@ -49,7 +49,6 @@ const CompareDatesPicker = ({
 	const [monthlyDatePs, setMonthlyDatePs] = useState(
 		oneYearPrior(monthlyDateCs)
 	);
-	console.log(monthlyDatePs);
 	const [activeTab, setActiveTab] = useState("dates");
 	const setDates = (cOrP, date) => {
 		if (cOrP === "current") {

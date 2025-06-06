@@ -80,12 +80,9 @@ const ColumnMapTable = ({
 					{title && <h5>{title}</h5>}
 					<Table striped bordered hover size="sm">
 						<thead>
-							<tr>
+							<tr className="blacktop">
 								{tableMap.map((col, idx) => (
-									<th
-										key={idx}
-										className="border border-primary text-center align-middle"
-									>
+									<th key={idx} ca className={col.className}>
 										{Array.isArray(col.label) ? (
 											<>
 												{col.label.map((line, i) => (

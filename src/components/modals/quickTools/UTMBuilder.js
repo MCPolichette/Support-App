@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Button, InputGroup, Row, Col, Alert } from "react-bootstrap";
-import CopyToClipboard from "../buttons_and_dropdowns/CopyToClipboard";
+import CopyToClipboard from "../../buttons_and_dropdowns/CopyToClipboard";
 
 //TODO: Filters for ampersands and other characters that may adversly affect the link parameters.  (encoding may be optional)
 const UTMBuilder = () => {

@@ -77,48 +77,55 @@ export const AttributeDelta = (
 		{
 			label: attr[0],
 			type: "text",
-			className: "w-25 border-right  border-dark",
+			classsName: "w-25 border-right  border-dark standard",
 		},
 		{
 			label: "Units " + datesC.year,
 
 			type: "int",
+			classsName: "standard",
 		},
 		{
 			label: "Units " + datesP.year,
 
 			type: "int",
+			classsName: "standard",
 		},
 		{
 			label: [datesC.year + " vs " + datesP.year, " % Change"],
 
 			type: "percent",
+			classsName: "standard",
 		},
 		{
 			label: [datesC.year + " vs " + datesP.year, " Demand Change"],
 
 			type: "int",
-			className: " border-right  border-dark",
+			classsName: "standard border-right  border-dark",
 		},
 		{
 			label: "Sales " + datesC.year,
 
 			type: "dollar",
+			classsName: "standard",
 		},
 		{
 			label: "Sales " + datesP.year,
 
 			type: "dollar",
+			classsName: "standard",
 		},
 		{
 			label: [datesC.year + " vs " + datesP.year, " % Change"],
 
 			type: "percent",
+			classsName: "standard",
 		},
 		{
 			label: [datesC.year + " vs " + datesP.year, " Change"],
 
 			type: "dollar",
+			classsName: "standard",
 		},
 	];
 	return { name, tableMap, deltaReport };

@@ -4,25 +4,28 @@ export const PerfSummary = (report, dates) => {
 			{
 				label: "Year",
 				type: "text",
-				className: "border-primary border-right",
+				className: "standard border-right",
 			},
-			{ label: "Sales", type: "dollar" },
-			{ label: "Clicks", type: "int" },
-			{ label: "# of Sales", type: "int" },
+			{ className: "standard", label: "Sales", type: "dollar" },
+			{ className: "standard", label: "Clicks", type: "int" },
+			{ className: "standard", label: "# of Sales", type: "int" },
 			{
+				className: "standard",
 				label: ["Avg Order", " Amount"],
 				type: "dollar",
 			},
 			{
+				className: "standard",
 				label: ["Conversion", " Rate"],
 				type: "percent",
 			},
 			{
+				className: "standard text-right",
 				label: "New Customer %",
 				type: "end",
-				className: "text-right",
 			},
 			{
+				className: "standard",
 				label: "Mobile Sales",
 				type: "dollar",
 			},
@@ -47,21 +50,36 @@ export const ProductSummary = (report, dates) => {
 
 	report.forEach((product) => {
 		data.push([
+			product["Product SKU"],
 			product["Product Name"],
 			product["Total Product Sale Quantity"],
 			product["Total Product Sale Amount"],
 		]);
 	});
+	//TODO NOWRAP COLUMNS?
 
 	const tableDisplay = {
 		headers: [
 			{
-				label: "Product",
+				label: "Product SKU",
 				type: "string",
-				className: "w-75 border-primary border-right",
+				className: "w-75  border-right nowrap-col standard",
 			},
-			{ label: "Units " + dates.year, type: "int" },
-			{ label: "Sales " + dates.year, type: "dollar" },
+			{
+				label: "Product Name",
+				type: "string",
+				className: "w-75 name-cell border-right nowrap-col",
+			},
+			{
+				label: "Units " + dates.year,
+				type: "int",
+				className: "w-75 standard",
+			},
+			{
+				label: "Sales " + dates.year,
+				type: "dollar",
+				className: "w-75 standard",
+			},
 		],
 		data: data,
 	};
