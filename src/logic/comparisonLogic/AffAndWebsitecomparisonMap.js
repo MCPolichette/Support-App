@@ -132,10 +132,7 @@ export const AffDelta = (
 				percentChange(curr["# of Sales"], match["# of Sales"]),
 				demandChange(curr["# of Sales"], match["# of Sales"]),
 				curr[pName],
-				// curr["# of Adjustments"],
-				// match["# of Adjustments"],
-				// match["# of Adjustments"] / curr["# of Adjustments"],
-				// curr["# of Adjustments"] - match["# of Adjustments"],
+
 				//===================
 				//Conversion Rate
 				curr["Conversion Rate"] * 0.01,
@@ -397,6 +394,7 @@ export const Aff_And_Website_Map = ({
 	previousDates,
 	mid,
 }) => {
+	console.log(reports);
 	const getReport = (text) => {
 		return reports[text]?.[0];
 	};

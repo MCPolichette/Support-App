@@ -32,10 +32,10 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 				fontSize: 10,
 				position: "fixed",
 				bottom: "1em",
-				right: "1%",
-				width: "10%",
-				zIndex: 9998,
+				right: "1.8em",
+				width: "200px",
 			}}
+			className="p-3 rounded transition-shadow my-card"
 		>
 			<Row>
 				{showNotes && (
