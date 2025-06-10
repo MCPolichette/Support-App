@@ -48,6 +48,8 @@ const setRows = (limit, table) => {
 const checkforData = (data) => {
 	if (data.length) {
 		return true;
+	} else {
+		console.log("DATA has no length, error");
 	}
 };
 const ColumnMapTable = ({
@@ -57,17 +59,29 @@ const ColumnMapTable = ({
 	limit,
 	topperText,
 	id,
+	showTools,
 }) => {
 	const [displayedRows, setDisplayedRows] = useState(
 		table.slice(0, setRows(limit, table))
 	);
 	const [displayTable, setDisplayTable] = useState(checkforData(table));
+	const [visibleCols, setVisibleCols] = useState(tableMap.map(() => true));
+	if ((showTools = true)) {
+		LimitTableRows.hidden = true;
+	}
+
+	const hideColumn = (index) => {
+		const updatedCols = [...visibleCols];
+		updatedCols[index] = false;
+		setVisibleCols(updatedCols);
+	};
 
 	return (
 		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}
 
 			<LimitTableRows
+				hidden
 				displayTable={displayTable}
 				setDisplayTable={setDisplayTable}
 				displayedRows={displayedRows}
@@ -81,25 +95,44 @@ const ColumnMapTable = ({
 					<Table striped bordered hover size="sm">
 						<thead>
 							<tr className="blacktop">
-								{tableMap.map((col, idx) => (
-									<th key={idx} ca className={col.className}>
-										{Array.isArray(col.label) ? (
-											<>
-												{col.label.map((line, i) => (
-													<div key={i}>{line}</div>
-												))}
-											</>
-										) : (
-											col.label || `Col ${idx}`
-										)}
-									</th>
-								))}
+								{tableMap.map((col, idx) =>
+									visibleCols[idx] ? (
+										<th
+											key={idx}
+											className={col.className}
+											style={{ position: "relative" }}
+										>
+											<span
+												style={{
+													position: "absolute",
+													top: 0,
+													right: 4,
+													cursor: "pointer",
+													color: "red",
+													fontWeight: "bold",
+												}}
+												onClick={() => hideColumn(idx)}
+												title="Hide column"
+											>
+												×
+											</span>
+											{Array.isArray(col.label)
+												? col.label.map((line, i) => (
+														<div key={i}>
+															{line}
+														</div>
+												  ))
+												: col.label || `Col ${idx}`}
+										</th>
+									) : null
+								)}
 							</tr>
 						</thead>
 						<tbody>
 							{displayedRows.map((row, rowIdx) => (
 								<tr key={rowIdx}>
 									{row.map((cell, colIdx) => {
+										if (!visibleCols[colIdx]) return null;
 										const colMeta = tableMap[colIdx] || {};
 										return (
 											<td

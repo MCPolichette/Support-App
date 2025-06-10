@@ -67,6 +67,9 @@ h6 {
 	height: 350px;
 	color: white;
 }
+.modal-header.bg-dark .btn-close {
+	filter: invert(1);
+}
 #report_pdf.pdf-mode {
 	width: 1120px;
 	max-width: unset;

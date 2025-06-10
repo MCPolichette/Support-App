@@ -6,22 +6,27 @@ import MerchantAndNetworkInput from "../../forms/MerchantAndNetworkInput";
 import { getDefaultStartDate, getDefaultEndDate } from "../../../utils/getTime";
 import ColumnMapTable from "../../tables/columnMapTable";
 import { ProductSummary } from "../../../logic/comparisonLogic/SingleReportSummaryMaps";
+import { setSeconds } from "date-fns";
 
 const IBCVerification = () => {
 	const settings = getSettings();
 	console.log(settings);
 	const [merchantId, setMerchantId] = useState("");
 	const [network, setNetwork] = useState("US");
-	const [report, setReport] = useState({});
+	const [report, setReport] = useState({ headers: [], data: [] });
+	const [stage, setStage] = useState("input");
 	const startDate = getDefaultStartDate("first-of-last-month");
 	const endDate = getDefaultEndDate();
 	const checkProducts = async () => {
 		try {
+			setStage("loading");
 			const productSoldReport = await runAPI(
 				{ report_id: 18, startDate: startDate, endDate: endDate },
 				settings.key,
 				merchantId
 			);
+			console.log(productSoldReport);
+
 			const errorMessage =
 				"Invalid authentication key supplied for admin/private login-specific request.";
 			if (
@@ -31,18 +36,22 @@ const IBCVerification = () => {
 			) {
 				// TODO: Should Put in a Alert here.. explaining the Error Message
 			} else {
-				console.log(productSoldReport);
-				console.log("success");
-				const productSummaryTable =
-					ProductSummary(productSoldReport).tableDisplay;
+				console.log("the right part is working");
+				const productSummaryTable = ProductSummary(productSoldReport, {
+					year: "recently",
+				}).tableDisplay;
 				setReport({
-					data: productSummaryTable.headers,
+					headers: productSummaryTable.headers,
 					data: productSummaryTable.data,
 				});
+				console.log(productSummaryTable);
+				setStage("results");
 			}
-		} catch (err) {}
+		} catch (err) {
+			setStage("error", err);
+		}
 	};
-
+	console.log(stage);
 	return (
 		<Container className="mt-4">
 			<Row>
@@ -63,14 +72,18 @@ const IBCVerification = () => {
 				</Col>
 				<hr />
 			</Row>
-
+			{stage === "loading" && <h1>LOADING</h1>}
 			<Row>
-				<ColumnMapTable
-					title={["Most Sold Products ", startDate + "to" + endDate]}
-					tableMap={report.map}
-					table={report.data}
-					limit={10}
-				/>
+				{stage === "results" && (
+					<ColumnMapTable
+						title={"Reports Shows results below:"}
+						tableMap={report.headers}
+						table={report.data}
+						limit={10}
+						id={merchantId}
+						showTools={false}
+					/>
+				)}
 			</Row>
 
 			<Row>
