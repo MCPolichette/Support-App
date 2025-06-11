@@ -6,7 +6,11 @@ import SettingsModal from "../components/modals/SettingsModal";
 import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
 import ReportTableBuilder from "../logic/comparisonLogic/reportTableBuilder";
 import { adminReportAPI } from "../utils/API/reportEngine";
-import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
+import {
+	_adminApiModules,
+	getSettings,
+	defaultReportArray,
+} from "../utils/API/_AdminApiModules";
 import { getReportTexts } from "../utils/getTime";
 import { generatePDF } from "../utils/exportPDF";
 import { FloatingCenterButton } from "../components/PDFelements";
@@ -23,6 +27,7 @@ const ParrallelPulseReport = () => {
 	const [completedModules, setCompletedModules] = useState([]);
 	const [reportResults, setReportResults] = useState({});
 	// Report params
+	const [reportList, setReportList] = useState(defaultReportArray);
 	// Display states
 	const [showComparisonTable, setShowComparisonTable] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -87,8 +92,8 @@ const ParrallelPulseReport = () => {
 	const openSettings = () => setModalType("noKey");
 
 	return (
-		<div className="container mt-5 ">
-			<div className="position-relative ">
+		<div className="container ">
+			<div className="position-relative card-drop-in ">
 				{pageDisplay === "NoKey" && (
 					<Stack gap={3} className="text-center">
 						<Button

@@ -21,7 +21,7 @@ const LimitTableRows = ({
 
 		return filtered;
 	};
-	if ((hidden = true)) {
+	if (hidden == true) {
 		return "";
 	} else {
 		const dropDownOptions = dropdownarray(table.length);
@@ -34,7 +34,7 @@ const LimitTableRows = ({
 						style={{
 							top: "-1em",
 							left: "-2.5em",
-							zIndex: 10,
+							zIndex: 8,
 							opacity: 0.8,
 						}}
 						pill
@@ -63,7 +63,7 @@ const LimitTableRows = ({
 						style={{
 							top: "-2em",
 							right: "-25px",
-							zIndex: 10,
+							zIndex: 8,
 							opacity: 0.8,
 						}}
 						variant="warning"

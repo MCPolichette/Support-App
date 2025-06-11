@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Container } from "react-bootstrap";
 import FTPshorthand from "../components/modals/quickTools/FTPshorthand";
 import IBCVerification from "../components/modals/quickTools/IBCVerification";
 import UTMBuilder from "../components/modals/quickTools/UTMBuilder";
@@ -47,11 +48,14 @@ const QuickTools = () => {
 	);
 
 	return (
-		<div className="container container-fluid  d-flex flex-column min-vh-50 justify-content-center align-items-center">
-			<div className="container mt-4 shadow callout-info bg-light">
+		<div className=" container container-fluid  d-flex flex-column min-vh-50 justify-content-center align-items-center">
+			<Container
+				className="container mt-4 shadow callout-info card-drop-in "
+				style={{ backgroundColor: "lightgrey", padding: "2rem" }}
+			>
 				<div classname="row">
 					<h1 className="mb-4">
-						<b>Chetti.Tools Dashboard</b>
+						<b>Quick Tools!</b>
 					</h1>
 				</div>
 				<div className="row">
@@ -61,10 +65,11 @@ const QuickTools = () => {
 							title={tool.title}
 							text={tool.description}
 							modal={tool.modal}
+							index={index}
 						/>
 					))}
 				</div>
-			</div>
+			</Container>{" "}
 		</div>
 	);
 };

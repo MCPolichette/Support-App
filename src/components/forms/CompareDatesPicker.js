@@ -25,7 +25,6 @@ import {
 	getSettings,
 } from "../../utils/API/_AdminApiModules";
 import MonthYearSelector from "./MonthYearPicker";
-
 const CompareDatesPicker = ({
 	startDate,
 	setStartDate,
@@ -79,11 +78,16 @@ const CompareDatesPicker = ({
 				fill
 				activeKey={activeTab}
 				onSelect={(k) => setActiveTab(k)}
-				className="mb-3 text-bg-secondary"
+				className="mb-3  "
+				style={{ backgroundColor: "lightgrey" }}
 			>
-				<Tab eventKey="dates" title="Compare Selected Dates">
+				<Tab
+					eventKey="dates"
+					title="Compare Selected Dates"
+					style={{ minHeight: "150px" }}
+				>
 					<Row>
-						<Col md={6} className="pe-3 border-end">
+						<Col md={6} className="pe-3 border-end ">
 							<h5>
 								<strong>Primary Week </strong>
 							</h5>
@@ -136,6 +140,7 @@ const CompareDatesPicker = ({
 					eventKey="months"
 					title="Compare Month over Month"
 					className="text-dark"
+					style={{ minHeight: "150px" }}
 				>
 					<Row>
 						<Col lg={6} className="pe-3 border-end">

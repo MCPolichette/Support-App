@@ -276,7 +276,7 @@ const IBCVerification = () => {
 							table={report.data}
 							limit={10}
 							id={merchantId}
-							showTools={false}
+							hideTools={true}
 						/>
 					</Row>
 				</>

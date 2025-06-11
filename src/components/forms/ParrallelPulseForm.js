@@ -22,11 +22,13 @@ import {
 } from "../../utils/getTime";
 import {
 	_adminApiModules,
+	defaultReportArray,
 	getSettings,
 } from "../../utils/API/_AdminApiModules";
 import MonthYearSelector from "./MonthYearPicker";
 import CompareDatesPicker from "./CompareDatesPicker";
 import MerchantAndNetworkInupt from "./MerchantAndNetworkInput";
+import ReportSelection from "./ReportSelection";
 
 const getMerchantLogo = (id) =>
 	id === "23437"
@@ -94,7 +96,7 @@ const ParrallelPulseForm = ({
 	};
 
 	return (
-		<Form className="shadow-sm p-4 bg-white border rounded mb-4">
+		<Form className="shadow-sm p-4 bg-white border rounded ">
 			<MerchantAndNetworkInupt
 				selectedMerchant={selectedMerchant}
 				selectedNetwork={selectedNetwork}
@@ -157,6 +159,10 @@ const ParrallelPulseForm = ({
 				</Col>
 			</Row>
 
+			<Row>
+				<hr />
+				<ReportSelection reportsData={defaultReportArray} />
+			</Row>
 			<hr />
 			{/* TODO  
 			-Move these COMMENTED ROWS / settings into a MODAL, where the details can be edited..   

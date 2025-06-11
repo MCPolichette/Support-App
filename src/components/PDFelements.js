@@ -44,7 +44,7 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 							position: "fixed",
 							top: "-1em",
 
-							zIndex: 9999,
+							zIndex: 20,
 						}}
 						onClick={() => setShowNotes(false)}
 						className="position-relative d-print-none force-page-break"
@@ -90,7 +90,7 @@ export const PageBreaker = () => {
 				style={{
 					top: "0em",
 					left: "-25em",
-					zIndex: 10,
+					zIndex: 20,
 					opacity: 0.8,
 				}}
 			>

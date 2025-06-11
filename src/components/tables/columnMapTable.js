@@ -59,29 +59,26 @@ const ColumnMapTable = ({
 	limit,
 	topperText,
 	id,
-	showTools,
+	hideTools,
 }) => {
 	const [displayedRows, setDisplayedRows] = useState(
 		table.slice(0, setRows(limit, table))
 	);
 	const [displayTable, setDisplayTable] = useState(checkforData(table));
 	const [visibleCols, setVisibleCols] = useState(tableMap.map(() => true));
-	if ((showTools = true)) {
-		LimitTableRows.hidden = true;
-	}
-
 	const hideColumn = (index) => {
 		const updatedCols = [...visibleCols];
 		updatedCols[index] = false;
 		setVisibleCols(updatedCols);
 	};
+	console.log(hideTools);
 
 	return (
 		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}
 
 			<LimitTableRows
-				hidden
+				hidden={hideTools}
 				displayTable={displayTable}
 				setDisplayTable={setDisplayTable}
 				displayedRows={displayedRows}

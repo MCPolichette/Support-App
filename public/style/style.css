@@ -34,6 +34,35 @@ h6 {
 #noteInputSection {
 	background-color: rgb(238, 209, 45);
 }
+@keyframes dropIn {
+	from {
+		opacity: 1;
+		transform: translateY(-500px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes dropOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(550px);
+	}
+}
+
+.card-drop-in {
+	opacity: 0;
+	animation: dropIn 0.8s ease-out forwards;
+}
+.card-drop-out {
+	animation: dropOut 0.4s ease-in forwards;
+}
+
 #report_pdf {
 	background-color: white;
 	@page {
