@@ -47,7 +47,6 @@ export const PerfSummary = (report, dates) => {
 };
 export const ProductSummary = (report, dates) => {
 	const data = [];
-
 	report.forEach((product) => {
 		data.push([
 			product["Product SKU"],
@@ -57,7 +56,6 @@ export const ProductSummary = (report, dates) => {
 		]);
 	});
 	//TODO NOWRAP COLUMNS?
-
 	const tableDisplay = {
 		headers: [
 			{
@@ -83,7 +81,6 @@ export const ProductSummary = (report, dates) => {
 		],
 		data: data,
 	};
-
 	return {
 		tableDisplay,
 	};
