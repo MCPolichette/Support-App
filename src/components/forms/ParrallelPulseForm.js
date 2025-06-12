@@ -20,9 +20,9 @@ import {
 	getMonthRange,
 	getPreviousYearMonthRange,
 } from "../../utils/getTime";
+import { DefaultReportArray } from "../../logic/comparisonLogic/defaultReports";
 import {
 	_adminApiModules,
-	defaultReportArray,
 	getSettings,
 } from "../../utils/API/_AdminApiModules";
 import MonthYearSelector from "./MonthYearPicker";
@@ -104,13 +104,12 @@ const ParrallelPulseForm = ({
 				setSelectedNetwork={setSelectedNetwork}
 			/>
 			<Row>
-				<hr />
 				<Col md={5}>
 					<Form.Text className="text-muted">
 						Select from below or manually enter an ID
 					</Form.Text>
 
-					<div className="d-flex flex-wrap mt-2">
+					<div className="d-flex flex-wrap ">
 						{commonMerchants.map((m) => (
 							<Button
 								key={m.id}
@@ -161,7 +160,7 @@ const ParrallelPulseForm = ({
 
 			<Row>
 				<hr />
-				<ReportSelection reportsData={defaultReportArray} />
+				<ReportSelection reportsData={DefaultReportArray} />
 			</Row>
 			<hr />
 			{/* TODO  
@@ -179,29 +178,6 @@ const ParrallelPulseForm = ({
 
 			<div className="d-flex justify-content-end">
 				<Stack>
-					{/* <Button
-						variant="info "
-						onClick={saveMerchantSettings()}
-						disabled
-					>
-						{loading ? (
-							"Saving..."
-						) : (
-							<h6>
-								Save All Settings to
-								<Image
-									src={getMerchantLogo(selectedMerchant)}
-									style={{
-										maxHeight: "36px",
-										background: "#fff",
-										border: "1px solid #ccc",
-										borderRadius: "4px",
-									}}
-									className="me-2"
-								/>
-							</h6>
-						)}
-					</Button> */}
 					<Button
 						variant="success"
 						onClick={updateSettingsRunReport}
@@ -211,6 +187,7 @@ const ParrallelPulseForm = ({
 					</Button>
 				</Stack>
 			</div>
+			<hr />
 		</Form>
 	);
 };

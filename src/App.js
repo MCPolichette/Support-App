@@ -18,7 +18,7 @@ function App() {
 	return (
 		<Router>
 			<Navbar />
-			<div className="container text-white bg-opacity-75">
+			<div className=" text-white bg-opacity-75">
 				<h1>NAVBAR GOES HERE!</h1>
 				{/* This is a Stupid simple solution for padding.  YES I know there are better ways to do this. but this was my way.  and who else will ever read this? */}
 			</div>

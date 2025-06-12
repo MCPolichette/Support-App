@@ -13,7 +13,7 @@ const ReportSelection = ({ reportsData }) => {
 
 	return (
 		<div className="row">
-			<Stack direction="horizontal" className="mb-1">
+			<Stack direction="horizontal" className="mb-0">
 				<h5> Selected Reports:</h5>
 				<Button
 					className="p-2 ms-auto"
@@ -33,14 +33,14 @@ const ReportSelection = ({ reportsData }) => {
 
 				return (
 					<div
-						className="col-md-3 d-flex flex-column col-sm-6 mb-3"
+						className="col-md-3 d-flex flex-column col-sm-6 "
 						key={reportName}
 					>
-						<Card className="h-100 small shadow-sm d-flex flex-column">
+						<Card className="h-100 small shadow-sm d-flex flex-column mb-2">
 							<Card.Body className="d-flex flex-column ">
 								<Card.Title
 									style={{ fontSize: ".8em" }}
-									className="mb-2 text-muted text-truncate "
+									className=" text-muted text-truncate "
 									title={reportName}
 								>
 									{reportName.replaceAll("_", " ")}
@@ -69,7 +69,7 @@ const ReportSelection = ({ reportsData }) => {
 								<Collapse in={isOpen}>
 									<div
 										id={`collapse-${reportName}`}
-										className="mt-2"
+										className=""
 									>
 										<ul className="mb-0 ps-3">
 											{headersArray.map(

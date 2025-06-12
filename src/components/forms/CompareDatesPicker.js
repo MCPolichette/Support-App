@@ -84,7 +84,7 @@ const CompareDatesPicker = ({
 				<Tab
 					eventKey="dates"
 					title="Compare Selected Dates"
-					style={{ minHeight: "150px" }}
+					style={{ minHeight: "100px" }}
 				>
 					<Row>
 						<Col md={6} className="pe-3 border-end ">
@@ -118,7 +118,7 @@ const CompareDatesPicker = ({
 						</Col>
 
 						<Col md={6}>
-							<h5>
+							<h5 className="text-truncate">
 								<strong>Comparison Week </strong>
 							</h5>
 							<DateRangePicker
@@ -140,7 +140,7 @@ const CompareDatesPicker = ({
 					eventKey="months"
 					title="Compare Month over Month"
 					className="text-dark"
-					style={{ minHeight: "150px" }}
+					style={{ minHeight: "100px" }}
 				>
 					<Row>
 						<Col lg={6} className="pe-3 border-end">
@@ -156,7 +156,7 @@ const CompareDatesPicker = ({
 						</Col>
 
 						<Col lg={6}>
-							<h5>
+							<h5 className="text-truncate">
 								<strong>Comparison Month</strong>
 							</h5>
 							<MonthYearSelector
