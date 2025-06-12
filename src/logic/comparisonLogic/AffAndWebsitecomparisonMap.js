@@ -394,7 +394,6 @@ export const Aff_And_Website_Map = ({
 	previousDates,
 	mid,
 }) => {
-	console.log(reports);
 	const getReport = (text) => {
 		return reports[text]?.[0];
 	};

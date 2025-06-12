@@ -163,18 +163,6 @@ const ParrallelPulseForm = ({
 				<ReportSelection reportsData={DefaultReportArray} />
 			</Row>
 			<hr />
-			{/* TODO  
-			-Move these COMMENTED ROWS / settings into a MODAL, where the details can be edited..   
-			-Have a standard report. and an option to SELECT a custom report.. (made in the modal, and mapped in the same way that the above merchant details are displayed.   (with a single modal that opens up and allows one to edit, and SAVE on click. e.g LOAD STATE > SAVE STATE 
-			-But the overall document should rely on defaults.. I'm working way to fucking hard on making this part adjustable now, and I need/want a working product sooner.. THIS can be fined tuned once I HAVE REAL REPORTS GOING))
-			 */}
-			{/* <Row>
-				<ReportSettings
-					modules={formSelections}
-					setModules={setFormSelections}
-					merchantId={selectedMerchant.id}
-				/>
-			</Row> */}
 
 			<div className="d-flex justify-content-end">
 				<Stack>

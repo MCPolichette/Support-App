@@ -138,7 +138,6 @@ export function ProductAttributeDeltaTables({
 	totalsArr,
 	limit,
 }) {
-	console.log(data);
 	if (data) {
 		const safeData = Array.isArray(data) ? data : [data];
 		const fieldsToCheck = [

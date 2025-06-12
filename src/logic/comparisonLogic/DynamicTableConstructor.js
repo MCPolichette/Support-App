@@ -24,6 +24,7 @@ export function difference(curr, prev, format = "int") {
 
 // Main Table Component
 export const CustomCompTable = ({
+	reportType,
 	topperText,
 	title,
 	limit,
@@ -34,13 +35,31 @@ export const CustomCompTable = ({
 	prevLabel,
 	reports,
 }) => {
+	let grossSalesCurr = 0;
+	const determineSCDValues = () => {
+		if (reports["Sales_Commissions_Detail_current"]) {
+			const SCD = reports["Sales_Commissions_Detail_current"];
+			console.log(SCD);
+			SCD.forEach((row) => {
+				if (row["Transaction Type"] === "SALE") {
+					grossSalesCurr =
+						grossSalesCurr + Number(row["Transaction Amount"]);
+				} else {
+					return;
+				}
+			});
+		} else return;
+	};
+	determineSCDValues();
+
 	let totalColumns = 0;
 	const headersArr = [];
 	const dataArr = [];
-
-	const reportC = reports["Performance_Summary_By_Affiliate_current"];
-	const reportP = reports["Performance_Summary_By_Affiliate_previous"];
-
+	//TODO  THIS IS HOW WE MAKE DYNAMIC SHIT WORK!!!!!
+	console.log(reports);
+	const reportC = reports[array.compReports.curr];
+	const reportP = reports[array.compReports.prev];
+	console.log(array.compReports.curr, reportP);
 	function addComparativeHeaders(element) {
 		const endBorder = element.addClass + " border-right border-dark ";
 		headersArr.push({
@@ -66,10 +85,10 @@ export const CustomCompTable = ({
 		totalColumns += 4;
 	}
 
-	function buildHeaders() {
-		if (!array) return;
-		array.forEach((element) => {
-			if (element.comp) {
+	function buildHeaders(array) {
+		if (!array.headers) return;
+		array.headers.forEach((element) => {
+			if (element.comp === true) {
 				addComparativeHeaders(element);
 			} else {
 				headersArr.push({
@@ -82,11 +101,10 @@ export const CustomCompTable = ({
 		});
 	}
 
-	function buildData() {
+	function buildHorizontalComp() {
 		const sortedArray = Object.values(reportC).sort((a, b) => {
 			return parseFloat(b["Sales"]) - parseFloat(a["Sales"]);
 		});
-		console.log(sortedArray);
 
 		Object.entries(sortedArray).forEach(([i, curr]) => {
 			if (!curr || typeof curr !== "object") return;
@@ -109,7 +127,7 @@ export const CustomCompTable = ({
 			curr["ROA"] = curr["Sales"] / curr["Total Spend"];
 			match["ROA"] = match["Sales"] / match["Total Spend"];
 
-			array.forEach((element) => {
+			array.headers.forEach((element) => {
 				const valCurr = curr[element.value];
 				const valPrev = match[element.value];
 				if (element.comp) {
@@ -125,59 +143,119 @@ export const CustomCompTable = ({
 			dataArr.push(row);
 		});
 	}
-
-	buildHeaders();
-
-	buildData();
-
-	if (array.length <= 4) {
-		return (
-			<ColumnMapTable
-				id={merchantId}
-				topperText={topperText}
-				title={title}
-				tableMap={headersArr}
-				table={dataArr}
-				limit={limit}
-			/>
-		);
-	} else {
-		console.log(array.length);
-		const midpoint = Math.round((array.length - 1) * 0.5) * 4 + 1;
-		const firstGraphMap = headersArr.slice(0, midpoint);
-		const secondGraphMap = headersArr.slice(midpoint);
-		secondGraphMap.unshift(headersArr[0]);
-		const firstGraph = dataArr.map((row) => row.slice(0, midpoint));
-		const secondGraph = dataArr.map((row) => {
-			const x = row[0];
-			const sliced = row.slice(midpoint);
-			sliced.unshift(x);
-			return sliced;
-		});
-
-		return (
-			<Row>
-				<Col>
+	switch (reportType) {
+		case "verticalComp":
+			buildHeaders(array);
+			const cReport = reports[array.compReports.curr][0];
+			const pReport = reports[array.compReports.prev][0];
+			const cRow = [];
+			const pRow = [];
+			const compRow = [];
+			array.headers.forEach((col) => {
+				if (col.value === "selectedTime") {
+					cRow.push(currLabel);
+					pRow.push(prevLabel);
+					compRow.push("Difference:");
+				} else {
+					cRow.push(cReport[col.value]);
+					pRow.push(pReport[col.value]);
+					compRow.push(cReport[col.value] - pReport[col.value]);
+				}
+			});
+			dataArr.push(cRow, pRow, compRow);
+			return (
+				<>
 					<ColumnMapTable
 						id={merchantId}
 						topperText={topperText}
 						title={title}
-						tableMap={firstGraphMap}
-						table={firstGraph}
-						limit={10}
+						tableMap={headersArr}
+						table={dataArr}
+						limit={limit}
 					/>
+				</>
+			);
+		case "yoyHorizontal":
+			console.log(array);
+			buildHeaders(array);
+			buildHorizontalComp();
+			console.log("horizontalComp", array);
+			if (array.headers.length <= 4) {
+				return (
+					<>
+						<ColumnMapTable
+							id={merchantId}
+							topperText={topperText}
+							title={title}
+							tableMap={headersArr}
+							table={dataArr}
+							limit={limit}
+						/>
+					</>
+				);
+			} else {
+				console.log(array.headers.length);
+				const rowTitles = array.headers.filter(
+					(obj) => obj.comp === false
+				);
+				console.log(rowTitles);
+				const midpoint =
+					Math.round(
+						(array.headers.length - rowTitles.length) * 0.5
+					) *
+						4 +
+					rowTitles.length;
 
-					<ColumnMapTable
-						id={merchantId}
-						title={title + " Continued from above"}
-						tableMap={secondGraphMap}
-						table={secondGraph}
-						limit={10}
-					/>
-					<PageBreaker />
-				</Col>
-			</Row>
-		);
+				const firstTableMap = headersArr.slice(0, midpoint);
+				const secondTableMap = headersArr.slice(midpoint);
+
+				secondTableMap.unshift(headersArr[0]);
+				const firstTable = dataArr.map((row) => row.slice(0, midpoint));
+				const secondTable = dataArr.map((row) => {
+					const x = row[0];
+					const sliced = row.slice(midpoint);
+					console.log(sliced);
+					sliced.unshift(x);
+					return sliced;
+				});
+				console.log(
+					"++++++++++++++++++++++++++++++++++++++++++++++",
+					"midpoint",
+					midpoint,
+					"array",
+					array.headers.length,
+					"firstTableMap",
+					firstTableMap,
+					"secondTableMap",
+					secondTableMap
+				);
+				return (
+					<Row>
+						<Col>
+							<ColumnMapTable
+								id={merchantId}
+								topperText={topperText}
+								title={title}
+								tableMap={firstTableMap}
+								table={firstTable}
+								limit={10}
+							/>
+							<ColumnMapTable
+								id={merchantId}
+								title={title + " Continued from above"}
+								tableMap={secondTableMap}
+								table={secondTable}
+								limit={10}
+							/>
+
+							<PageBreaker />
+						</Col>
+					</Row>
+				);
+			}
+
+		case "currentOnly":
+			console.log("currentOnly");
 	}
 };
 

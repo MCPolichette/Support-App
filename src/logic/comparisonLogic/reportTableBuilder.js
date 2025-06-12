@@ -3,12 +3,17 @@ import { Row, Col, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { PerfSummary, ProductSummary } from "./SingleReportSummaryMaps";
 import { ProductAttributeDeltaTables } from "./productSoldMaps";
-import { Aff_And_Website_Map } from "./AffAndWebsitecomparisonMap";
 import { TableTopper } from "../../components/tables/tableExtras";
 import { PageBreaker } from "../../components/PDFelements";
 import YoySalesConversionChart from "../../components/graphs/YoySalesConversionChart";
 import { CustomCompTable } from "./DynamicTableConstructor";
-const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
+const ReportTableBuilder = ({
+	mid,
+	reports,
+	currentDates,
+	previousDates,
+	reportList,
+}) => {
 	const getReport = (text) => {
 		return reports[text]?.[0];
 	};
@@ -16,14 +21,6 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 		return text + " " + dates;
 	};
 	const [graphHeight, setGraphHeight] = useState(700);
-	const performanceSummaryCurr = PerfSummary(
-		getReport("Performance_Summary_current"),
-		currentDates
-	).tableDisplay;
-	const performanceSummaryPrev = PerfSummary(
-		getReport("Performance_Summary_previous"),
-		previousDates
-	).tableDisplay;
 	const productSummaryTable = ProductSummary(
 		reports["Product_Sold_current"],
 		currentDates
@@ -32,8 +29,12 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 		current: reports["Performance_Summary_By_Day_current"],
 		previous: reports["Performance_Summary_By_Day_previous"],
 	};
-	console.log(reports);
-	const testArray = [];
+	const Aff_Web_Sub = [
+		reportList["Performance_Summary_By_Affiliate"],
+		reportList["Performance_Summary_By_Affiliate_Website"],
+		reportList["Performance_Summary_By_Sub_Affiliate_Partner"],
+	];
+	console.log(Aff_Web_Sub);
 
 	return (
 		<Container className="container pt-0">
@@ -46,22 +47,17 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					id={mid}
 				/>
 				<Col md={6}>
-					<div>
-						<ColumnMapTable
-							id={mid}
-							title={currentDates.dateRange}
-							tableMap={performanceSummaryCurr.headers}
-							table={[performanceSummaryCurr.data]}
-							limit={1}
-						/>
-						<br></br>
-						<ColumnMapTable
-							title={previousDates.dateRange}
-							tableMap={performanceSummaryPrev.headers}
-							table={[performanceSummaryPrev.data]}
-							limit={1}
-						/>
-					</div>
+					<CustomCompTable
+						reportType={"verticalComp"}
+						reports={reports}
+						title={"Comparison of Selected Dates"}
+						limit={3}
+						merchantId={mid}
+						array={reportList["Performance_Summary_Total"]}
+						currLabel={currentDates.dateRange}
+						prevLabel={previousDates.dateRange}
+					/>
+
 					<div style={{ height: { graphHeight } }}>
 						<YoySalesConversionChart
 							data={dayGraphData}
@@ -105,24 +101,25 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 			<PageBreaker />
 
 			<Row>
-				{/* {" "}
-				<CustomCompTable
-					reports={reports}
-					topperText={"TEST"}
-					title={"test"}
-					limit={10}
-					merchantId={mid}
-					array={testArray}
-					currLabel={25}
-					prevLabel={24}
-				/> */}
-				<Aff_And_Website_Map
-					mid={mid}
-					size="sm"
-					reports={reports}
-					currentDates={currentDates}
-					previousDates={previousDates}
-				/>
+				{Aff_Web_Sub.map((report, i) => (
+					<Row key={i}>
+						<CustomCompTable
+							reportType="yoyHorizontal"
+							reports={reports}
+							topperText={"Custom Title"}
+							title={
+								currentDates.dateRange +
+								" over " +
+								previousDates.dateRange
+							}
+							limit={10}
+							merchantId={mid}
+							array={report}
+							currLabel={currentDates.year}
+							prevLabel={previousDates.year}
+						/>
+					</Row>
+				))}
 			</Row>
 		</Container>
 	);

@@ -15,6 +15,7 @@ import { getReportTexts } from "../utils/getTime";
 import { generatePDF } from "../utils/exportPDF";
 import { FloatingCenterButton } from "../components/PDFelements";
 import Loading from "../components/loadingWithSteps";
+import { DefaultReportArray } from "../logic/comparisonLogic/defaultReports";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
@@ -27,7 +28,7 @@ const ParrallelPulseReport = () => {
 	const [completedModules, setCompletedModules] = useState([]);
 	const [reportResults, setReportResults] = useState({});
 	// Report params
-	const [reportList, setReportList] = useState(defaultReportArray);
+	const [reportList, setReportList] = useState(DefaultReportArray);
 	// Display states
 	const [showComparisonTable, setShowComparisonTable] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -118,6 +119,8 @@ const ParrallelPulseReport = () => {
 							handleRunReport={handleRunReport}
 							loading={loading}
 							openSettings={openSettings}
+							reportList={reportList}
+							setReportList={setReportList}
 						/>
 					</div>
 				)}
@@ -217,6 +220,7 @@ const ParrallelPulseReport = () => {
 
 					<Row id="report_pdf">
 						<ReportTableBuilder
+							reportList={reportList}
 							mid={merchantReference}
 							reports={reportResults}
 							currentDates={currentDates}

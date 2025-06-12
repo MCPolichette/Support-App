@@ -15,7 +15,7 @@ const formatValue = (value, type) => {
 		case "int":
 			return parseInt(value, 10).toLocaleString();
 		case "percent":
-			return `${(parseFloat(value) * 100).toFixed(2)}%`;
+			return `${parseFloat(value).toFixed(2)}%`;
 		case "float":
 			return parseFloat(value).toFixed(2);
 		default:
@@ -71,8 +71,6 @@ const ColumnMapTable = ({
 		updatedCols[index] = false;
 		setVisibleCols(updatedCols);
 	};
-	console.log(hideTools);
-
 	return (
 		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}

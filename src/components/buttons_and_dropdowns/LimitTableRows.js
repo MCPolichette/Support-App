@@ -12,11 +12,11 @@ const LimitTableRows = ({
 }) => {
 	const dropdownarray = (max) => {
 		if (max <= 1) return false;
-		const baseOptions = [1, 2, 3, 4, 5, 10, 15, 20, 25];
+		const baseOptions = [1, 2, 3, 4, 5, 10, 15, 20, 25, 50, 100];
 		const filtered = baseOptions.filter((val) => val < max);
 		// Avoid duplicate if max is already in baseOptions
 		if (!filtered.includes(max)) {
-			filtered.push(max);
+			filtered.push(max + " max");
 		}
 
 		return filtered;
