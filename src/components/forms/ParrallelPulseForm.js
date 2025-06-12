@@ -20,7 +20,6 @@ import {
 	getMonthRange,
 	getPreviousYearMonthRange,
 } from "../../utils/getTime";
-import { DefaultReportArray } from "../../logic/comparisonLogic/defaultReports";
 import {
 	_adminApiModules,
 	getSettings,
@@ -28,6 +27,7 @@ import {
 import MonthYearSelector from "./MonthYearPicker";
 import CompareDatesPicker from "./CompareDatesPicker";
 import MerchantAndNetworkInupt from "./MerchantAndNetworkInput";
+import { DefaultReportArray } from "../../logic/comparisonLogic/defaultReports";
 import ReportSelection from "./ReportSelection";
 
 const getMerchantLogo = (id) =>
