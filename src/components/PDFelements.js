@@ -29,12 +29,13 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 		<Alert
 			variant="warning"
 			style={{
+				fontSize: 10,
 				position: "fixed",
 				bottom: "1em",
-				right: "10%",
-				width: "25%",
-				zIndex: 9998,
+				right: "1.8em",
+				width: "200px",
 			}}
+			className="p-3 rounded transition-shadow my-card"
 		>
 			<Row>
 				{showNotes && (
@@ -43,23 +44,21 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 							position: "fixed",
 							top: "-1em",
 
-							zIndex: 9999,
+							zIndex: 20,
 						}}
 						onClick={() => setShowNotes(false)}
 						className="position-relative d-print-none force-page-break"
 					/>
 				)}
 				{showNotes && (
-					<Col lg={6}>
-						<p>
-							All Green and Yellow Elements will be auto-removed
-							upon clicking the print button
-						</p>
-					</Col>
+					<p>
+						All Green and Yellow Elements will be auto-removed upon
+						clicking the print button
+					</p>
 				)}
 				<Col>
 					<Stack>
-						<Button size="md" variant="warning" onClick={onClick}>
+						<Button size="sm" variant="warning" onClick={onClick}>
 							Click Here To Print this Report
 						</Button>
 						<Button
@@ -91,7 +90,7 @@ export const PageBreaker = () => {
 				style={{
 					top: "0em",
 					left: "-25em",
-					zIndex: 10,
+					zIndex: 20,
 					opacity: 0.8,
 				}}
 			>

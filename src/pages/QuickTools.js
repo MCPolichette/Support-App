@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import FTPshorthand from "../components/modals/FTPshorthand";
-import REIDateConverter from "../components/modals/REIDateConverter";
-import UTMBuilder from "../components/modals/UTMBuilder";
-import DownloadXMLTool from "../components/modals/DownloadXMLTool";
+import { Container } from "react-bootstrap";
+import FTPshorthand from "../components/modals/quickTools/FTPshorthand";
+import IBCVerification from "../components/modals/quickTools/IBCVerification";
+import UTMBuilder from "../components/modals/quickTools/UTMBuilder";
+import DownloadXMLTool from "../components/modals/quickTools/DownloadXMLTool";
 
 import LinkCard from "../components/cards/LinkCard";
 
@@ -28,11 +29,11 @@ const QuickTools = () => {
 			apiRequired: false,
 		},
 		{
-			title: "REI Date Converter",
+			title: "IBC verification",
 			description:
-				"A quick CopyPaste for creating the SQL snippet Cristina's Dates in her REI reports.  ",
-			modal: <REIDateConverter />,
-			apiRequired: false,
+				"A quick API that returns product sold report over the last 30days   If the report is entirely populated with product names, and departments, IBC can be turned on.  Failure responses available.  ",
+			modal: <IBCVerification />,
+			apiRequired: true,
 		},
 		{
 			title: "Force Download XML",
@@ -47,11 +48,14 @@ const QuickTools = () => {
 	);
 
 	return (
-		<div className="container container-fluid  d-flex flex-column min-vh-50 justify-content-center align-items-center">
-			<div className="container mt-4 shadow callout-info bg-light">
+		<div className=" container container-fluid  d-flex flex-column min-vh-50 justify-content-center align-items-center">
+			<Container
+				className="container mt-4 shadow callout-info card-drop-in "
+				style={{ backgroundColor: "lightgrey", padding: "2rem" }}
+			>
 				<div classname="row">
 					<h1 className="mb-4">
-						<b>Chetti.Tools Dashboard</b>
+						<b>Quick Tools!</b>
 					</h1>
 				</div>
 				<div className="row">
@@ -61,10 +65,11 @@ const QuickTools = () => {
 							title={tool.title}
 							text={tool.description}
 							modal={tool.modal}
+							index={index}
 						/>
 					))}
 				</div>
-			</div>
+			</Container>{" "}
 		</div>
 	);
 };

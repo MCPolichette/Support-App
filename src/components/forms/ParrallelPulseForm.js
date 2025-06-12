@@ -26,6 +26,9 @@ import {
 } from "../../utils/API/_AdminApiModules";
 import MonthYearSelector from "./MonthYearPicker";
 import CompareDatesPicker from "./CompareDatesPicker";
+import MerchantAndNetworkInupt from "./MerchantAndNetworkInput";
+import { DefaultReportArray } from "../../logic/comparisonLogic/defaultReports";
+import ReportSelection from "./ReportSelection";
 
 const getMerchantLogo = (id) =>
 	id === "23437"
@@ -93,82 +96,20 @@ const ParrallelPulseForm = ({
 	};
 
 	return (
-		<Form className="shadow-sm p-4 bg-white border rounded mb-4">
-			<Row className="align-items-end mb-3">
-				<h4>Comparison Reports</h4>
-				<hr />
-				<Col md={6}>
-					<InputGroup className="mb-2">
-						<Form.Label>
-							<h5>
-								<strong>Merchant:_ </strong>
-							</h5>
-						</Form.Label>
-						{selectedMerchant && (
-							<Image
-								src={getMerchantLogo(selectedMerchant)}
-								style={{
-									maxHeight: "36px",
-									background: "#fff",
-									border: "1px solid #ccc",
-									borderRadius: "4px",
-								}}
-								className="me-2"
-							/>
-						)}
-						<Form.Control
-							type="text"
-							placeholder="Enter Merchant ID"
-							value={selectedMerchant}
-							onChange={(e) =>
-								setSelectedMerchant(e.target.value)
-							}
-						/>
-					</InputGroup>
-				</Col>
-				<Col md={6}>
-					<div>
-						<Form.Label>Network</Form.Label>
-						<div>
-							<Form.Check
-								inline
-								label="US"
-								name="network"
-								type="radio"
-								id="network-us"
-								checked={selectedNetwork === "US"}
-								onChange={() => setSelectedNetwork("US")}
-							/>
-							<Form.Check
-								inline
-								label="CA"
-								name="network"
-								type="radio"
-								id="network-ca"
-								checked={selectedNetwork === "CA"}
-								onChange={() => setSelectedNetwork("CA")}
-							/>
-							<Form.Check
-								inline
-								label="AU"
-								name="network"
-								type="radio"
-								id="network-au"
-								checked={selectedNetwork === "AU"}
-								onChange={() => setSelectedNetwork("AU")}
-							/>
-						</div>
-					</div>
-				</Col>
-			</Row>
+		<Form className="shadow-sm p-4 bg-white border rounded ">
+			<MerchantAndNetworkInupt
+				selectedMerchant={selectedMerchant}
+				selectedNetwork={selectedNetwork}
+				setSelectedMerchant={setSelectedMerchant}
+				setSelectedNetwork={setSelectedNetwork}
+			/>
 			<Row>
-				<hr />
 				<Col md={5}>
 					<Form.Text className="text-muted">
 						Select from below or manually enter an ID
 					</Form.Text>
 
-					<div className="d-flex flex-wrap mt-2">
+					<div className="d-flex flex-wrap ">
 						{commonMerchants.map((m) => (
 							<Button
 								key={m.id}
@@ -217,45 +158,14 @@ const ParrallelPulseForm = ({
 				</Col>
 			</Row>
 
+			<Row>
+				<hr />
+				<ReportSelection reportsData={DefaultReportArray} />
+			</Row>
 			<hr />
-			{/* TODO  
-			-Move these COMMENTED ROWS / settings into a MODAL, where the details can be edited..   
-			-Have a standard report. and an option to SELECT a custom report.. (made in the modal, and mapped in the same way that the above merchant details are displayed.   (with a single modal that opens up and allows one to edit, and SAVE on click. e.g LOAD STATE > SAVE STATE 
-			-But the overall document should rely on defaults.. I'm working way to fucking hard on making this part adjustable now, and I need/want a working product sooner.. THIS can be fined tuned once I HAVE REAL REPORTS GOING))
-			 */}
-			{/* <Row>
-				<ReportSettings
-					modules={formSelections}
-					setModules={setFormSelections}
-					merchantId={selectedMerchant.id}
-				/>
-			</Row> */}
 
 			<div className="d-flex justify-content-end">
 				<Stack>
-					{/* <Button
-						variant="info "
-						onClick={saveMerchantSettings()}
-						disabled
-					>
-						{loading ? (
-							"Saving..."
-						) : (
-							<h6>
-								Save All Settings to
-								<Image
-									src={getMerchantLogo(selectedMerchant)}
-									style={{
-										maxHeight: "36px",
-										background: "#fff",
-										border: "1px solid #ccc",
-										borderRadius: "4px",
-									}}
-									className="me-2"
-								/>
-							</h6>
-						)}
-					</Button> */}
 					<Button
 						variant="success"
 						onClick={updateSettingsRunReport}
@@ -265,6 +175,7 @@ const ParrallelPulseForm = ({
 					</Button>
 				</Stack>
 			</div>
+			<hr />
 		</Form>
 	);
 };

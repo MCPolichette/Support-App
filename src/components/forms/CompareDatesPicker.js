@@ -25,7 +25,6 @@ import {
 	getSettings,
 } from "../../utils/API/_AdminApiModules";
 import MonthYearSelector from "./MonthYearPicker";
-
 const CompareDatesPicker = ({
 	startDate,
 	setStartDate,
@@ -49,7 +48,6 @@ const CompareDatesPicker = ({
 	const [monthlyDatePs, setMonthlyDatePs] = useState(
 		oneYearPrior(monthlyDateCs)
 	);
-	console.log(monthlyDatePs);
 	const [activeTab, setActiveTab] = useState("dates");
 	const setDates = (cOrP, date) => {
 		if (cOrP === "current") {
@@ -80,11 +78,16 @@ const CompareDatesPicker = ({
 				fill
 				activeKey={activeTab}
 				onSelect={(k) => setActiveTab(k)}
-				className="mb-3 text-bg-secondary"
+				className="mb-3  "
+				style={{ backgroundColor: "lightgrey" }}
 			>
-				<Tab eventKey="dates" title="Compare Selected Dates">
+				<Tab
+					eventKey="dates"
+					title="Compare Selected Dates"
+					style={{ minHeight: "100px" }}
+				>
 					<Row>
-						<Col md={6} className="pe-3 border-end">
+						<Col md={6} className="pe-3 border-end ">
 							<h5>
 								<strong>Primary Week </strong>
 							</h5>
@@ -115,7 +118,7 @@ const CompareDatesPicker = ({
 						</Col>
 
 						<Col md={6}>
-							<h5>
+							<h5 className="text-truncate">
 								<strong>Comparison Week </strong>
 							</h5>
 							<DateRangePicker
@@ -137,6 +140,7 @@ const CompareDatesPicker = ({
 					eventKey="months"
 					title="Compare Month over Month"
 					className="text-dark"
+					style={{ minHeight: "100px" }}
 				>
 					<Row>
 						<Col lg={6} className="pe-3 border-end">
@@ -152,7 +156,7 @@ const CompareDatesPicker = ({
 						</Col>
 
 						<Col lg={6}>
-							<h5>
+							<h5 className="text-truncate">
 								<strong>Comparison Month</strong>
 							</h5>
 							<MonthYearSelector

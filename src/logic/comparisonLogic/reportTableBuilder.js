@@ -3,26 +3,24 @@ import { Row, Col, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { PerfSummary, ProductSummary } from "./SingleReportSummaryMaps";
 import { ProductAttributeDeltaTables } from "./productSoldMaps";
-import { Aff_And_Website_Map } from "./AffAndWebsitecomparisonMap";
 import { TableTopper } from "../../components/tables/tableExtras";
 import { PageBreaker } from "../../components/PDFelements";
 import YoySalesConversionChart from "../../components/graphs/YoySalesConversionChart";
-const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
+import { CustomCompTable } from "./DynamicTableConstructor";
+const ReportTableBuilder = ({
+	mid,
+	reports,
+	currentDates,
+	previousDates,
+	reportList,
+}) => {
 	const getReport = (text) => {
 		return reports[text]?.[0];
 	};
 	const reportTitle = (text, dates) => {
 		return text + " " + dates;
 	};
-	// const [graphHeight, setGraphHeight] = useState(800);
-	const performanceSummaryCurr = PerfSummary(
-		getReport("Performance_Summary_current"),
-		currentDates
-	).tableDisplay;
-	const performanceSummaryPrev = PerfSummary(
-		getReport("Performance_Summary_previous"),
-		previousDates
-	).tableDisplay;
+	const [graphHeight, setGraphHeight] = useState(700);
 	const productSummaryTable = ProductSummary(
 		reports["Product_Sold_current"],
 		currentDates
@@ -31,7 +29,12 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 		current: reports["Performance_Summary_By_Day_current"],
 		previous: reports["Performance_Summary_By_Day_previous"],
 	};
-	console.log(reports);
+	const Aff_Web_Sub = [
+		reportList["Performance_Summary_By_Affiliate"],
+		reportList["Performance_Summary_By_Affiliate_Website"],
+		reportList["Performance_Summary_By_Sub_Affiliate_Partner"],
+	];
+	console.log(Aff_Web_Sub);
 
 	return (
 		<Container className="container pt-0">
@@ -44,44 +47,35 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 					id={mid}
 				/>
 				<Col md={6}>
-					<ColumnMapTable
-						id={mid}
-						title={previousDates.dateRange}
-						tableMap={performanceSummaryCurr.headers}
-						table={[performanceSummaryCurr.data]}
-						limit={1}
+					<CustomCompTable
+						reportType={"verticalComp"}
+						reports={reports}
+						title={"Comparison of Selected Dates"}
+						limit={3}
+						merchantId={mid}
+						array={reportList["Performance_Summary_Total"]}
+						currLabel={currentDates.dateRange}
+						prevLabel={previousDates.dateRange}
 					/>
-					<br></br>
-					<ColumnMapTable
-						title={previousDates.dateRange}
-						tableMap={performanceSummaryPrev.headers}
-						table={[performanceSummaryPrev.data]}
-						limit={1}
-					/>
+
+					<div style={{ height: { graphHeight } }}>
+						<YoySalesConversionChart
+							data={dayGraphData}
+							title="Sales vs Conversion Rate"
+							hAxisTitle="Day"
+							size={graphHeight}
+						/>
+					</div>
 				</Col>
 
 				<Col md={6}>
 					<ColumnMapTable
-						title={["Most Sold Products ", previousDates.dateRange]}
+						title={["Most Sold Products ", currentDates.dateRange]}
 						tableMap={productSummaryTable.headers}
 						table={productSummaryTable.data}
-						limit={10}
+						limit={25}
 					/>
 				</Col>
-			</Row>
-			<Row
-				className="justify-content-md-center pt=0"
-				style={{
-					height: "550px",
-					marginTop: "-3em",
-					zIndex: -1,
-				}}
-			>
-				<YoySalesConversionChart
-					data={dayGraphData}
-					title="Sales vs Conversion Rate"
-					hAxisTitle="Day"
-				/>
 			</Row>
 
 			<Row className="mb-5 mt-5">
@@ -107,13 +101,25 @@ const ReportTableBuilder = ({ mid, reports, currentDates, previousDates }) => {
 			<PageBreaker />
 
 			<Row>
-				<Aff_And_Website_Map
-					mid={mid}
-					size="sm"
-					reports={reports}
-					currentDates={currentDates}
-					previousDates={previousDates}
-				/>
+				{Aff_Web_Sub.map((report, i) => (
+					<Row key={i}>
+						<CustomCompTable
+							reportType="yoyHorizontal"
+							reports={reports}
+							topperText={"Custom Title"}
+							title={
+								currentDates.dateRange +
+								" over " +
+								previousDates.dateRange
+							}
+							limit={10}
+							merchantId={mid}
+							array={report}
+							currLabel={currentDates.year}
+							prevLabel={previousDates.year}
+						/>
+					</Row>
+				))}
 			</Row>
 		</Container>
 	);

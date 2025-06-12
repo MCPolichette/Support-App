@@ -149,7 +149,7 @@ const SettingsModal = (keyRequired) => {
 									{m.id} | {m.network}
 								</div>
 							</div>
-							<div className="mt-2 d-flex justify-content-center">
+							<div className="position-absolute top-0 end-0 m-1">
 								<Button
 									variant="danger"
 									size="sm"
@@ -158,13 +158,13 @@ const SettingsModal = (keyRequired) => {
 										handleRemoveMerchant(m.id);
 									}}
 								>
-									<Trash size={14} />
+									<Trash size={11} />
 								</Button>
 							</div>
 							{isPrimary && (
 								<Badge
 									bg="primary"
-									className="position-absolute top-0 end-0 m-1"
+									className="position-absolute bottom-1 end-0"
 								>
 									Primary
 								</Badge>

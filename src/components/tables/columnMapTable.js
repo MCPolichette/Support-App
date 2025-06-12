@@ -15,7 +15,7 @@ const formatValue = (value, type) => {
 		case "int":
 			return parseInt(value, 10).toLocaleString();
 		case "percent":
-			return `${(parseFloat(value) * 100).toFixed(2)}%`;
+			return `${parseFloat(value).toFixed(2)}%`;
 		case "float":
 			return parseFloat(value).toFixed(2);
 		default:
@@ -48,6 +48,8 @@ const setRows = (limit, table) => {
 const checkforData = (data) => {
 	if (data.length) {
 		return true;
+	} else {
+		console.log("DATA has no length, error");
 	}
 };
 const ColumnMapTable = ({
@@ -57,17 +59,24 @@ const ColumnMapTable = ({
 	limit,
 	topperText,
 	id,
+	hideTools,
 }) => {
 	const [displayedRows, setDisplayedRows] = useState(
 		table.slice(0, setRows(limit, table))
 	);
 	const [displayTable, setDisplayTable] = useState(checkforData(table));
-
+	const [visibleCols, setVisibleCols] = useState(tableMap.map(() => true));
+	const hideColumn = (index) => {
+		const updatedCols = [...visibleCols];
+		updatedCols[index] = false;
+		setVisibleCols(updatedCols);
+	};
 	return (
 		<div className="mb-1">
 			{topperText && <TableTopper id={id} text={topperText} />}
 
 			<LimitTableRows
+				hidden={hideTools}
 				displayTable={displayTable}
 				setDisplayTable={setDisplayTable}
 				displayedRows={displayedRows}
@@ -80,29 +89,45 @@ const ColumnMapTable = ({
 					{title && <h5>{title}</h5>}
 					<Table striped bordered hover size="sm">
 						<thead>
-							<tr>
-								{tableMap.map((col, idx) => (
-									<th
-										key={idx}
-										className="border border-primary text-center align-middle"
-									>
-										{Array.isArray(col.label) ? (
-											<>
-												{col.label.map((line, i) => (
-													<div key={i}>{line}</div>
-												))}
-											</>
-										) : (
-											col.label || `Col ${idx}`
-										)}
-									</th>
-								))}
+							<tr className="blacktop">
+								{tableMap.map((col, idx) =>
+									visibleCols[idx] ? (
+										<th
+											key={idx}
+											className={col.className}
+											style={{ position: "relative" }}
+										>
+											<span
+												style={{
+													position: "absolute",
+													top: 0,
+													right: 4,
+													cursor: "pointer",
+													color: "red",
+													fontWeight: "bold",
+												}}
+												onClick={() => hideColumn(idx)}
+												title="Hide column"
+											>
+												×
+											</span>
+											{Array.isArray(col.label)
+												? col.label.map((line, i) => (
+														<div key={i}>
+															{line}
+														</div>
+												  ))
+												: col.label || `Col ${idx}`}
+										</th>
+									) : null
+								)}
 							</tr>
 						</thead>
 						<tbody>
 							{displayedRows.map((row, rowIdx) => (
 								<tr key={rowIdx}>
 									{row.map((cell, colIdx) => {
+										if (!visibleCols[colIdx]) return null;
 										const colMeta = tableMap[colIdx] || {};
 										return (
 											<td

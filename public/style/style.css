@@ -27,16 +27,42 @@ h6 {
 .my-card:hover {
 	box-shadow: 10px 10px 5px;
 }
-#affTable {
-	border-color: blue;
-	border-width: 3px;
-}
+
 #productsRow {
 	margin-top: 100px;
 }
 #noteInputSection {
 	background-color: rgb(238, 209, 45);
 }
+@keyframes dropIn {
+	from {
+		opacity: 1;
+		transform: translateY(-500px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes dropOut {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(550px);
+	}
+}
+
+.card-drop-in {
+	opacity: 0;
+	animation: dropIn 0.8s ease-out forwards;
+}
+.card-drop-out {
+	animation: dropOut 0.4s ease-in forwards;
+}
+
 #report_pdf {
 	background-color: white;
 	@page {
@@ -69,6 +95,9 @@ h6 {
 .psuedoinvisible {
 	height: 350px;
 	color: white;
+}
+.modal-header.bg-dark .btn-close {
+	filter: invert(1);
 }
 #report_pdf.pdf-mode {
 	width: 1120px;
