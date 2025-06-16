@@ -4,6 +4,7 @@ import { extractMonthYear, getMonthRange } from "../../utils/getTime";
 
 const MonthYearSelector = ({ date, onChange }) => {
 	const months = [
+		{ value: "00", name: "Select Month" },
 		{ value: "01", name: "January" },
 		{ value: "02", name: "February" },
 		{ value: "03", name: "March" },

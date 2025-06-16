@@ -61,7 +61,7 @@ export const CustomCompTable = ({
 	const reportP = reports[array.compReports.prev];
 	console.log(array.compReports.curr, reportP);
 	function addComparativeHeaders(element) {
-		const endBorder = element.addClass + " border-right border-dark ";
+		const endBorder = element.addClass + " border-right ";
 		headersArr.push({
 			label: [element.label, currLabel],
 			type: element.format,
@@ -145,13 +145,17 @@ export const CustomCompTable = ({
 	}
 	switch (reportType) {
 		case "verticalComp":
-			buildHeaders(array);
 			const cReport = reports[array.compReports.curr][0];
 			const pReport = reports[array.compReports.prev][0];
 			const cRow = [];
 			const pRow = [];
 			const compRow = [];
 			array.headers.forEach((col) => {
+				headersArr.push({
+					label: col.label,
+					type: col.format,
+					className: col.addClass,
+				});
 				if (col.value === "selectedTime") {
 					cRow.push(currLabel);
 					pRow.push(prevLabel);

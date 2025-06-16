@@ -3,14 +3,11 @@ import { Stack, Button, Row, Col, Container } from "react-bootstrap";
 import AvantLinkApiTester from "../components/modals/adminAPItester";
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "../components/modals/SettingsModal";
+import Edit_Report_Modal from "../components/modals/Edit_Report_Modal";
 import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
 import ReportTableBuilder from "../logic/comparisonLogic/reportTableBuilder";
 import { adminReportAPI } from "../utils/API/reportEngine";
-import {
-	_adminApiModules,
-	getSettings,
-	defaultReportArray,
-} from "../utils/API/_AdminApiModules";
+import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
 import { getReportTexts } from "../utils/getTime";
 import { generatePDF } from "../utils/exportPDF";
 import { FloatingCenterButton } from "../components/PDFelements";
@@ -37,7 +34,6 @@ const ParrallelPulseReport = () => {
 	const [currentDates, setCurrentDates] = useState({});
 	const [previousDates, setPreviousDates] = useState({});
 	const [merchantReference, setmerchantReference] = useState("");
-
 	const handleRunReport = async (dates, merchantId, network) => {
 		console.log(dates);
 		setCurrentDates(getReportTexts(dates.startDate, dates.endDate));
@@ -234,15 +230,6 @@ const ParrallelPulseReport = () => {
 					/>
 				</Container>
 			)}
-
-			<StylizedModal
-				show={!!modalType}
-				onHide={() => setModalType(null)}
-				title="Settings"
-			>
-				{modalType === "noKey" && <SettingsModal />},
-				{modalType === "test" && <AvantLinkApiTester />}
-			</StylizedModal>
 
 			{errorModal && (
 				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">

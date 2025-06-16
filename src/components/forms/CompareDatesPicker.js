@@ -43,7 +43,8 @@ const CompareDatesPicker = ({
 	};
 	const [disabledButton, setDisabledButton] = useState("disabled");
 	const [monthlyDateCs, setMonthlyDateCs] = useState(
-		extractMonthYear(startDate)
+		// "extractMonthYear(startDate)"
+		"00"
 	);
 	const [monthlyDatePs, setMonthlyDatePs] = useState(
 		oneYearPrior(monthlyDateCs)

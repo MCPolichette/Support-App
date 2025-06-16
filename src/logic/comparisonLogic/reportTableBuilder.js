@@ -29,12 +29,15 @@ const ReportTableBuilder = ({
 		current: reports["Performance_Summary_By_Day_current"],
 		previous: reports["Performance_Summary_By_Day_previous"],
 	};
-	const Aff_Web_Sub = [
-		reportList["Performance_Summary_By_Affiliate"],
-		reportList["Performance_Summary_By_Affiliate_Website"],
-		reportList["Performance_Summary_By_Sub_Affiliate_Partner"],
-	];
+	const Aff_Web_Sub = Object.entries(
+		reportList["Affiliate_Performance_Reports"]
+	).map(([key, value]) => ({
+		...value,
+		key,
+	}));
+
 	console.log(Aff_Web_Sub);
+	console.log(reportList);
 
 	return (
 		<Container className="container pt-0">
@@ -53,7 +56,11 @@ const ReportTableBuilder = ({
 						title={"Comparison of Selected Dates"}
 						limit={3}
 						merchantId={mid}
-						array={reportList["Performance_Summary_Total"]}
+						array={
+							reportList["Summary_Reports"][
+								"Performance_Summary_Total"
+							]
+						}
 						currLabel={currentDates.dateRange}
 						prevLabel={previousDates.dateRange}
 					/>
@@ -80,10 +87,7 @@ const ReportTableBuilder = ({
 
 			<Row className="mb-5 mt-5">
 				<PageBreaker />
-				<TableTopper
-					topperText={"Product Performance Reports"}
-					id={mid}
-				/>
+				<TableTopper text="Product Performance Reports" id={mid} />
 
 				<ProductAttributeDeltaTables
 					data={getReport("Product_Sold_current")}
@@ -106,7 +110,7 @@ const ReportTableBuilder = ({
 						<CustomCompTable
 							reportType="yoyHorizontal"
 							reports={reports}
-							topperText={"Custom Title"}
+							topperText={report.titleDisplay}
 							title={
 								currentDates.dateRange +
 								" over " +

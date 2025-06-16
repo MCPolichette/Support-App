@@ -11,20 +11,15 @@ import {
 	Tabs,
 	Tab,
 } from "react-bootstrap";
-import DateRangePicker from "./DateRangePicker";
-import ReportSettings from "./ReportSettingsPanel";
 import {
 	getDefaultStartDate,
 	getDefaultEndDate,
 	getLastYearSameWeek,
-	getMonthRange,
-	getPreviousYearMonthRange,
 } from "../../utils/getTime";
 import {
 	_adminApiModules,
 	getSettings,
 } from "../../utils/API/_AdminApiModules";
-import MonthYearSelector from "./MonthYearPicker";
 import CompareDatesPicker from "./CompareDatesPicker";
 import MerchantAndNetworkInupt from "./MerchantAndNetworkInput";
 import { DefaultReportArray } from "../../logic/comparisonLogic/defaultReports";
@@ -73,9 +68,6 @@ const ParrallelPulseForm = ({
 	const [selectedMerchant, setSelectedMerchant] = useState(
 		settings.commonMerchants[0].id || null
 	);
-
-	const [activeTab, setActiveTab] = useState("dates");
-
 	const [selectedNetwork, setSelectedNetwork] = useState(
 		settings.commonMerchants[0].network || null
 	);

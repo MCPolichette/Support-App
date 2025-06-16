@@ -3,7 +3,6 @@ import { runFishUSAReport } from "../logic/specificMerchantLogic/fishUSAreport";
 import LoadingSpinner from "../components/LoadingSpinner";
 import DateRangePicker from "../components/forms/DateRangePicker";
 import StylizedModal from "../components/modals/_ModalStylized";
-import UpdateKey from "../components/modals/UpdateKey";
 
 const FishUSA = () => {
 	const getDefaultStartDate = () => {
@@ -55,9 +54,7 @@ const FishUSA = () => {
 					show={showModal}
 					onHide={() => setShowModal(false)}
 					title="This Tool Requires an API Key"
-				>
-					<UpdateKey />
-				</StylizedModal>
+				></StylizedModal>
 			)}
 			<h1 className="text-2xl font-bold mb-4">FishUSA Custom Report</h1>
 			<div className="alert alert-danger mt-4" role="alert">
