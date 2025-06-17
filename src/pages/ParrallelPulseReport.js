@@ -1,9 +1,5 @@
 import React, { useState } from "react";
 import { Stack, Button, Row, Col, Container } from "react-bootstrap";
-import AvantLinkApiTester from "../components/modals/adminAPItester";
-import StylizedModal from "../components/modals/_ModalStylized";
-import SettingsModal from "../components/modals/SettingsModal";
-import Edit_Report_Modal from "../components/modals/Edit_Report_Modal";
 import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
 import ReportTableBuilder from "../logic/comparisonLogic/reportTableBuilder";
 import { adminReportAPI } from "../utils/API/reportEngine";
@@ -11,12 +7,11 @@ import { _adminApiModules, getSettings } from "../utils/API/_AdminApiModules";
 import { getReportTexts } from "../utils/getTime";
 import { generatePDF } from "../utils/exportPDF";
 import { FloatingCenterButton } from "../components/PDFelements";
-import Loading from "../components/loadingWithSteps";
-import { DefaultReportArray } from "../logic/comparisonLogic/defaultReports";
+import { useReportContext } from "../utils/reportContext";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
-	const [modalType, setModalType] = useState(settings.key ? null : "noKey");
+
 	const [pageDisplay, setPageDisplay] = useState(
 		settings.key ? null : "noKey"
 	);
@@ -25,9 +20,8 @@ const ParrallelPulseReport = () => {
 	const [completedModules, setCompletedModules] = useState([]);
 	const [reportResults, setReportResults] = useState({});
 	// Report params
-	const [reportList, setReportList] = useState(DefaultReportArray);
+	const { reportList } = useReportContext();
 	// Display states
-	const [showComparisonTable, setShowComparisonTable] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [loadingStage, setLoadingStage] = useState("");
 	const [tableButton, setTableButton] = useState(<div></div>);
@@ -41,7 +35,6 @@ const ParrallelPulseReport = () => {
 			getReportTexts(dates.previousPeriodStart, dates.previousPeriodEnd)
 		);
 		setmerchantReference(merchantId);
-		setShowComparisonTable(false);
 		setCompletedModules([]);
 		setLoading(true);
 		setLoadingStage("Initializing...");
@@ -86,8 +79,6 @@ const ParrallelPulseReport = () => {
 		setPageDisplay("Tables");
 	};
 
-	const openSettings = () => setModalType("noKey");
-
 	return (
 		<div className="container ">
 			<div className="position-relative card-drop-in ">
@@ -114,9 +105,7 @@ const ParrallelPulseReport = () => {
 							setModules={setModules}
 							handleRunReport={handleRunReport}
 							loading={loading}
-							openSettings={openSettings}
 							reportList={reportList}
-							setReportList={setReportList}
 						/>
 					</div>
 				)}
@@ -138,7 +127,7 @@ const ParrallelPulseReport = () => {
 								<h3>Step 1: Running APIs</h3>
 							</Col>
 							<Col md={2}>
-								{loadingStage != "Ready To Build Tables." && (
+								{loadingStage !== "Ready To Build Tables." && (
 									<div
 										className="spinner-border text-primary"
 										role="status"
@@ -229,20 +218,6 @@ const ParrallelPulseReport = () => {
 						}}
 					/>
 				</Container>
-			)}
-
-			{errorModal && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white p-4 rounded shadow">
-						<p className="text-danger mb-3">{errorModal}</p>
-						<Button
-							variant="danger"
-							onClick={() => setErrorModal("")}
-						>
-							Close
-						</Button>
-					</div>
-				</div>
 			)}
 		</div>
 	);

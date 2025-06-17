@@ -1,12 +1,26 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import { Master_List_of_Reports_Array } from "../../logic/comparisonLogic/masterListofReports";
+import { getSettings } from "../../utils/API/_AdminApiModules";
+import { useReportContext } from "../../utils/reportContext";
+
 const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
+	const { addReport, removeReportById, resetReports } = useReportContext();
+	console.log(useReportContext);
 	const [reportMap, setReportMap] = useState(reportEditor.headers || []);
 	const [error, setError] = useState("");
-
+	const [settings, setSettings] = useState(getSettings());
+	const [customReports, setCustomReports] = useState(settings.reports || []);
+	const [success, setSuccess] = useState(false);
+	const updateSettings = (updatedFields) => {
+		const updated = { ...settings, ...updatedFields };
+		setSettings(updated);
+		// saveSettings(updated);
+		setSuccess(true);
+		setTimeout(() => setSuccess(false), 800);
+	};
+	console.log(settings);
 	const masterFieldList = Master_List_of_Reports_Array[reportName].headers;
-	console.log(masterFieldList);
 
 	const handleAddField = (e) => {
 		const selectedKey = e.target.value;
@@ -40,7 +54,7 @@ const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
 			setError("You must select at least one field.");
 			return;
 		}
-		onSave({ ...reportEditor, headers: reportMap });
+		console.log({ ...reportEditor, headers: reportMap });
 	};
 
 	return (

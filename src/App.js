@@ -5,7 +5,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 // FrameWork:
 import Navbar from "./components/NavBar.js";
-
+import { ReportProvider } from "./utils/reportContext.js";
 // PAGES:
 import Automapper from "./pages/Automapper.js";
 import RecursiveCrawler from "./pages/RecursiveCrawler";
@@ -28,9 +28,14 @@ function App() {
 				<Route path="/fish_usa" element={<FishUSA />} />
 				<Route path="/website_scanner" element={<RecursiveCrawler />} />
 				<Route path="/more_tools" element={<QuickTools />} />
+
 				<Route
 					path="/ParrallelPulse"
-					element={<ParrallelPulseReport />}
+					element={
+						<ReportProvider>
+							<ParrallelPulseReport />
+						</ReportProvider>
+					}
 				/>
 			</Routes>
 		</Router>
