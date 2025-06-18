@@ -3,13 +3,24 @@ import { Stack, Row, Card, Button, Collapse, Form } from "react-bootstrap";
 import StylizedModal from "../modals/_ModalStylized";
 import Edit_Report_Modal from "../modals/Edit_Report_Modal";
 import { useReportContext } from "../../utils/reportContext";
-
+import { getSettings } from "../../utils/API/_AdminApiModules";
+import ReportCard from "../cards/ReportCard";
+import { removeCustomReport } from "../../utils/localStorageSettings";
 const ReportSelection = () => {
-	const { reportList, setReport, addReport, removeReportById, resetReports } =
-		useReportContext();
+	const {
+		reportList,
+		updateReportByName,
+		removeReportByName,
+		addReport,
+		loadReports,
+	} = useReportContext();
+	const settings = getSettings();
 	const [openItems, setOpenItems] = useState({});
 	const [modalType, setModalType] = useState(null);
 	const [reportEditor, setReportEditor] = useState({});
+	const [customReports, setCustomReports] = useState(
+		settings.customReports || {}
+	);
 
 	const toggleCategory = (category) => {
 		setOpenItems((prev) => ({
@@ -18,37 +29,46 @@ const ReportSelection = () => {
 		}));
 	};
 
-	const handleToggleInReport = (reportName) => {
-		// setReportMap((prev) =>
-		// 	prev.map((field, i) =>
-		// 		i === idx ? { ...field, comp: !field.comp } : field
-		// 	)
-		// );
+	const handleDeleteCustomReport = (reportName, categoryName) => {
+		const updated = { ...customReports };
+		delete updated[categoryName]?.[reportName];
+
+		// remove from storage too if needed
+
+		removeCustomReport(categoryName, reportName);
+		removeReportByName(reportName);
+		setCustomReports(updated);
+	};
+	const handleToggleInReport = (reportName, categoryName) => {
+		console.log((reportName, categoryName));
+
+		const category = reportList[categoryName];
+		if (!category || !category[reportName]) return;
+		const currentReport = category[reportName];
+		const updatedReport = {
+			...currentReport,
+			inReport: !currentReport.inReport,
+		};
+
+		updateReportByName(reportName, updatedReport, categoryName);
 	};
 
-	function editReport(reportName, reportConfig) {
-		setReportEditor({ reportName, reportConfig });
+	function editReport(reportName, reportConfig, categoryName) {
+		console.log(reportName, reportConfig, categoryName);
+		setReportEditor({ reportName, reportConfig, categoryName });
 		setModalType("edit-report");
 	}
-	console.log(reportList);
 
 	return (
 		<div>
 			{Object.entries(reportList).map(
 				([categoryName, categoryReports]) => {
 					const isOpen = !!openItems[categoryName];
-
 					return (
 						<div key={categoryName} className="mb-4">
 							<Stack direction="horizontal" gap={2}>
 								<h6 className="text-uppercase text-muted">
-									{categoryName.replaceAll("_", " ")}{" "}
-									{Object.entries(categoryReports).map(
-										([reportName, reportConfig]) => {
-											<p>{reportName}</p>;
-											<p>{reportConfig.headers}</p>;
-										}
-									)}
+									{categoryName.replaceAll("_", " ")}
 								</h6>
 
 								<Button
@@ -77,91 +97,42 @@ const ReportSelection = () => {
 														className="col-md-3 d-flex flex-column col-sm-6"
 														key={reportName}
 													>
-														<Card className=" small shadow-sm d-flex flex-column mb-2">
-															<Card.Body className="d-flex flex-column">
-																<Card.Title
-																	style={{
-																		fontSize:
-																			".8em",
-																	}}
-																	className="text-muted text-truncate"
-																	title={
-																		reportName
-																	}
-																>
-																	{reportName.replaceAll(
-																		"_",
-																		" "
-																	)}
-																</Card.Title>
-
-																<Stack>
-																	{reportConfig !=
-																		"string" && (
-																		<Form.Check
-																			type="checkbox"
-																			id={`comp-toggle-${reportName}`}
-																			label="Use In this Report"
-																			className="ms-3 text-nowrap"
-																			checked={
-																				reportConfig.inReport
-																			}
-																			onChange={() =>
-																				handleToggleInReport(
-																					reportName
-																				)
-																			}
-																		/>
-																	)}
-																	<Button
-																		disabled={
-																			!reportConfig.customizable
-																		}
-																		variant="outline-primary"
-																		size="sm"
-																		onClick={() =>
-																			editReport(
-																				reportName,
-																				reportConfig
-																			)
-																		}
-																	>
-																		Customize
-																	</Button>
-																</Stack>
-
-																<ul className="mb-0 ps-3 mt-2">
-																	{headersArray.map(
-																		(
-																			header,
-																			index
-																		) => (
-																			<li
-																				key={
-																					index
-																				}
-																			>
-																				{
-																					header.label
-																				}
-																			</li>
-																		)
-																	)}
-																</ul>
-															</Card.Body>
-														</Card>
+														<ReportCard
+															reportName={
+																reportName
+															}
+															reportConfig={
+																reportConfig
+															}
+															categoryName={
+																categoryName
+															}
+															onToggleInReport={() =>
+																handleToggleInReport(
+																	reportName,
+																	categoryName
+																)
+															}
+															onEdit={editReport}
+															onDelete={
+																handleDeleteCustomReport
+															}
+														/>
 													</Row>
 												);
 											}
 										)}
-										<Button
-											className=""
-											variant="outline-success"
-											size="sm"
-											disabled
-										>
-											Create a Custom Report
-										</Button>
+
+										<Row className="col-md-3 col-sm-6 d-flex align-items-start">
+											<Button
+												className="w-100 mt-2"
+												variant="outline-success"
+												size="sm"
+												disabled
+											>
+												Create a Custom Report
+											</Button>
+										</Row>
 									</Row>
 								</div>
 							</Collapse>
@@ -178,6 +149,7 @@ const ReportSelection = () => {
 				<Edit_Report_Modal
 					reportEditor={reportEditor.reportConfig}
 					reportName={reportEditor.reportName}
+					categoryName={reportEditor.categoryName}
 				/>
 			</StylizedModal>
 		</div>

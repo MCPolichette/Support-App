@@ -43,6 +43,7 @@ const ParrallelPulseReport = () => {
 		);
 
 		try {
+			console.log(selectedModules);
 			const results = await adminReportAPI({
 				reportType: "Comparison",
 				selectedModules,

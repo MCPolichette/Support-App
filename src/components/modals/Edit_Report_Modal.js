@@ -1,26 +1,35 @@
 import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Stack, InputGroup, Button, Alert } from "react-bootstrap";
 import { Master_List_of_Reports_Array } from "../../logic/comparisonLogic/masterListofReports";
 import { getSettings } from "../../utils/API/_AdminApiModules";
 import { useReportContext } from "../../utils/reportContext";
+import GlobalAlert from "../Elements/GlobalAlert";
+import { addCustomReport } from "../../utils/localStorageSettings";
 
-const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
-	const { addReport, removeReportById, resetReports } = useReportContext();
-	console.log(useReportContext);
-	const [reportMap, setReportMap] = useState(reportEditor.headers || []);
-	const [error, setError] = useState("");
+const Edit_Report_Modal = ({
+	onClose,
+	onSave,
+	reportEditor,
+	reportName,
+	categoryName,
+}) => {
+	const { addReport, updateReportByName } = useReportContext();
+	const [reportMap, setReportMap] = useState(reportEditor?.headers || []);
 	const [settings, setSettings] = useState(getSettings());
-	const [customReports, setCustomReports] = useState(settings.reports || []);
-	const [success, setSuccess] = useState(false);
-	const updateSettings = (updatedFields) => {
-		const updated = { ...settings, ...updatedFields };
-		setSettings(updated);
-		// saveSettings(updated);
-		setSuccess(true);
-		setTimeout(() => setSuccess(false), 800);
+	const [customReports, setCustomReports] = useState(
+		settings.customReports || {}
+	);
+	const [customName, setCustomName] = useState("");
+	const [error, setError] = useState("");
+	const [alert, setAlert] = useState(null);
+
+	const masterFieldList =
+		Master_List_of_Reports_Array[reportName]?.headers || [];
+
+	const showAlert = (variant, message, duration = 3000) => {
+		setAlert({ variant, message });
+		setTimeout(() => setAlert(null), duration);
 	};
-	console.log(settings);
-	const masterFieldList = Master_List_of_Reports_Array[reportName].headers;
 
 	const handleAddField = (e) => {
 		const selectedKey = e.target.value;
@@ -54,12 +63,47 @@ const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
 			setError("You must select at least one field.");
 			return;
 		}
-		console.log({ ...reportEditor, headers: reportMap });
+		setError("");
+		updateReportByName(reportName, {
+			...reportEditor,
+			headers: reportMap,
+		});
+		showAlert("success", "Settings Saved!");
+	};
+
+	const handleSaveCustomReport = () => {
+		const trimmedName = customName.trim();
+
+		if (reportMap.length === 0) {
+			showAlert("danger", "You must select at least one field.");
+			return;
+		}
+		if (trimmedName.length === 0) {
+			showAlert("danger", "You must type in a Report Name.");
+			return;
+		}
+		if (customReports[trimmedName]) {
+			showAlert("danger", "A report with this name already exists.");
+			return;
+		}
+
+		const newReport = {
+			...reportEditor,
+			headers: reportMap,
+			reportTitle: trimmedName,
+		};
+
+		addReport(categoryName, trimmedName, newReport);
+		addCustomReport(categoryName, trimmedName, newReport);
+		setCustomName("");
+		showAlert("success", `Saved "${trimmedName}" to Local Storage`);
 	};
 
 	return (
 		<div className="p-3 bg-white border rounded shadow-sm">
-			<h5>Customize: {reportEditor.titleDisplay}</h5>
+			<GlobalAlert alert={alert} />
+			<h5>Customize: {reportEditor?.titleDisplay}</h5>
+
 			{error && <Alert variant="danger">{error}</Alert>}
 
 			<Form>
@@ -67,7 +111,6 @@ const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
 				{reportMap.map((field, idx) => (
 					<div key={idx} className="d-flex align-items-center mb-2">
 						<strong>
-							{" "}
 							<Form.Check
 								type="checkbox"
 								label={field.label}
@@ -75,7 +118,7 @@ const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
 								onChange={() => handleToggleField(idx)}
 							/>
 						</strong>
-						{field.format != "string" && (
+						{field.format !== "string" && (
 							<Form.Check
 								type="checkbox"
 								id={`comp-toggle-${idx}`}
@@ -88,7 +131,6 @@ const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
 					</div>
 				))}
 
-				<hr />
 				<h6 className="text-muted">Add Field</h6>
 				<Form.Select className="mb-2" onChange={handleAddField}>
 					<option value="">Select a field...</option>
@@ -103,18 +145,33 @@ const Edit_Report_Modal = ({ onClose, onSave, reportEditor, reportName }) => {
 						))}
 				</Form.Select>
 
-				<div className="d-flex justify-content-end mt-4">
+				<hr />
+
+				<Stack className="mb-3">
 					<Button
-						variant="secondary"
+						variant="primary"
 						className="me-2"
-						onClick={onClose}
+						onClick={handleSave}
 					>
-						Cancel
+						Save Change for this Report
 					</Button>
-					<Button variant="primary" onClick={handleSave}>
-						Save Changes
+				</Stack>
+
+				<InputGroup className="mb-3">
+					<Form.Control
+						id="customNameInput"
+						placeholder="Custom Report Name"
+						aria-label="Custom Report Name"
+						value={customName}
+						onChange={(e) => setCustomName(e.target.value)}
+					/>
+					<Button
+						variant="outline-secondary"
+						onClick={handleSaveCustomReport}
+					>
+						Save Report to Local Storage
 					</Button>
-				</div>
+				</InputGroup>
 			</Form>
 		</div>
 	);

@@ -1,5 +1,5 @@
 export const DefaultReportArray = {
-	Summary_Reports: {
+	Performance_Summary: {
 		Performance_Summary_Total: {
 			customizable: true,
 			reportIds: [1, 8],
@@ -9,7 +9,7 @@ export const DefaultReportArray = {
 			},
 			inReport: true,
 			reportType: "verticalComp",
-			sortBy: "reportType",
+			sortBy: "selectedTime",
 			position: "start",
 			limit: 3,
 			titleDisplay: "Performance Summary",
@@ -72,6 +72,9 @@ export const DefaultReportArray = {
 				},
 			],
 		},
+	},
+	Vertical_Comparisons: {},
+	Timeline_Graphs: {
 		Performance_Summary_By_Day_Graph: {
 			ids: [12],
 			inReport: true,
@@ -82,6 +85,28 @@ export const DefaultReportArray = {
 			},
 			reportType: "graph",
 			titleDisplay: "Performance Summary By Day",
+			hAxisTitle: "Day",
+			headers: [
+				{ value: "Sales", label: "Sales", format: "currency" },
+
+				{
+					value: "Conversion Rate",
+					label: "Conversion Rate",
+					format: "percent",
+				},
+			],
+		},
+		Performance_Summary_By_Month_Graph: {
+			ids: [48],
+			inReport: true,
+			customizable: false,
+			compReports: {
+				curr: "Performance_Summary_By_Month_current",
+				prev: "Performance_Summary_By_Month_previous",
+			},
+			reportType: "graph",
+			titleDisplay: "YTD Summary By Month",
+			hAxisTitle: "Month",
 			headers: [
 				{ value: "Sales", label: "Sales", format: "currency" },
 

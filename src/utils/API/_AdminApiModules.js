@@ -58,7 +58,7 @@ export const defaultReportArray = {
 		},
 	},
 	Performance_Summary_By_Day_Graph: {
-		id: 12,
+		reportIds: 12,
 		inReport: true,
 		headers: {
 			"CPC Earnings": { yoy: true, dataType: "currency" },
@@ -83,6 +83,12 @@ export const defaultReportArray = {
 			Merchant: { yoy: false, dataType: "string" },
 			Weekday: { yoy: false, dataType: "string", display: true },
 		},
+	},
+	Performance_Summary_By_Month: {
+		reportIds: 48,
+		inReport: true,
+		ytd: true,
+		customizable: false,
 	},
 	Product_Performance_By_Departments_and_Brands: {
 		customizable: false,
@@ -472,6 +478,13 @@ export const _adminApiModules = {
 			Merchant: { yoy: false, dataType: "string" },
 			Weekday: { yoy: false, dataType: "string", display: true },
 		},
+	},
+	Performance_Summary_By_Month: {
+		id: 48,
+		inReport: true,
+		ytd: true,
+		customizable: false,
+		hAxisTitle: "Month",
 	},
 	// Performance_Summary_By_Hour: {
 	// 	id: 29,

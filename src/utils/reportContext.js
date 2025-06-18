@@ -1,24 +1,102 @@
-import React, { createContext, useContext, useState } from "react";
-import { DefaultReportArray } from "../logic/comparisonLogic/defaultReports";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { DefaultReportArray as DefaultReportList } from "../logic/comparisonLogic/defaultReports";
+import { getSettings } from "../utils/API/_AdminApiModules";
+
 const ReportContext = createContext();
 export const useReportContext = () => useContext(ReportContext);
 
 export const ReportProvider = ({ children }) => {
-	const [reportList, setReportList] = useState(DefaultReportArray);
+	const [reportList, setReportList] = useState({});
 
-	// Add a new report
-	const addReport = (newReport) => {
-		setReportList((prev) => [...prev, newReport]);
+	useEffect(() => {
+		const settings = getSettings();
+		const customReports = settings.customReports || {};
+		const merged = { ...DefaultReportList };
+
+		Object.entries(customReports).forEach(([categoryName, reports]) => {
+			if (!merged[categoryName]) merged[categoryName] = {};
+
+			Object.entries(reports).forEach(([reportName, reportConfig]) => {
+				if (!merged[categoryName][reportName]) {
+					merged[categoryName][reportName] = {
+						...reportConfig,
+						inReport: false,
+						custom: true,
+					};
+				}
+			});
+		});
+
+		setReportList(merged);
+	}, []);
+
+	const addReport = (categoryName, reportName, newReport) => {
+		setReportList((prev) => ({
+			...prev,
+			[categoryName]: {
+				...(prev[categoryName] || {}),
+				[reportName]: newReport,
+			},
+		}));
 	};
 
-	// Remove a report by ID
-	const removeReportById = (id) => {
-		setReportList((prev) => prev.filter((r) => r.id !== id));
+	const removeReportByName = (reportName) => {
+		setReportList((prev) => {
+			const updated = {};
+
+			for (const [category, reports] of Object.entries(prev)) {
+				const filteredReports = Object.fromEntries(
+					Object.entries(reports).filter(
+						([key]) => key !== reportName
+					)
+				);
+				updated[category] = filteredReports;
+			}
+
+			return updated;
+		});
 	};
 
-	// Reset to default
+	const setReportInReportFalse = (reportName) => {
+		setReportList((prev) => {
+			const updated = {};
+
+			for (const [category, reports] of Object.entries(prev)) {
+				updated[category] = {};
+
+				for (const [key, value] of Object.entries(reports)) {
+					updated[category][key] =
+						key === reportName
+							? { ...value, inReport: false }
+							: value;
+				}
+			}
+
+			return updated;
+		});
+	};
+
+	const updateReportByName = (reportName, updatedReport) => {
+		setReportList((prev) => {
+			const updated = {};
+
+			for (const [category, reports] of Object.entries(prev)) {
+				updated[category] = {};
+
+				for (const [key, value] of Object.entries(reports)) {
+					updated[category][key] =
+						key === reportName
+							? { ...value, ...updatedReport }
+							: value;
+				}
+			}
+
+			return updated;
+		});
+	};
+
 	const resetReports = () => {
-		setReportList(DefaultReportArray);
+		setReportList({ ...DefaultReportList });
 	};
 
 	return (
@@ -27,7 +105,9 @@ export const ReportProvider = ({ children }) => {
 				reportList,
 				setReportList,
 				addReport,
-				removeReportById,
+				removeReportByName,
+				setReportInReportFalse,
+				updateReportByName,
 				resetReports,
 			}}
 		>

@@ -25,19 +25,26 @@ const ReportTableBuilder = ({
 		reports["Product_Sold_current"],
 		currentDates
 	).tableDisplay;
-	const dayGraphData = {
-		current: reports["Performance_Summary_By_Day_current"],
-		previous: reports["Performance_Summary_By_Day_previous"],
-	};
+
+	const Performance_Summaries = Object.entries(
+		reportList["Performance_Summary"]
+	).map(([key, value]) => ({
+		...value,
+		key,
+	}));
+
+	const Graphs = Object.entries(reportList["Timeline_Graphs"]).map(
+		([key, value]) => ({
+			...value,
+			key,
+		})
+	);
 	const Aff_Web_Sub = Object.entries(
 		reportList["Affiliate_Performance_Reports"]
 	).map(([key, value]) => ({
 		...value,
 		key,
 	}));
-
-	console.log(Aff_Web_Sub);
-	console.log(reportList);
 
 	return (
 		<Container className="container pt-0">
@@ -50,29 +57,34 @@ const ReportTableBuilder = ({
 					id={mid}
 				/>
 				<Col md={6}>
-					<CustomCompTable
-						reportType={"verticalComp"}
-						reports={reports}
-						title={"Comparison of Selected Dates"}
-						limit={3}
-						merchantId={mid}
-						array={
-							reportList["Summary_Reports"][
-								"Performance_Summary_Total"
-							]
-						}
-						currLabel={currentDates.dateRange}
-						prevLabel={previousDates.dateRange}
-					/>
-
-					<div style={{ height: { graphHeight } }}>
-						<YoySalesConversionChart
-							data={dayGraphData}
-							title="Sales vs Conversion Rate"
-							hAxisTitle="Day"
-							size={graphHeight}
-						/>
-					</div>
+					{Performance_Summaries.map((report, i) => (
+						<Row key={i}>
+							<CustomCompTable
+								reportType="verticalComp"
+								reports={reports}
+								title={report.reportTitle}
+								limit={10}
+								merchantId={mid}
+								array={report}
+								currLabel={currentDates.year}
+								prevLabel={previousDates.year}
+							/>
+						</Row>
+					))}
+					{Graphs.map((report, i) => (
+						<Row key={i}>
+							<YoySalesConversionChart
+								data={{
+									current: reports[report.compReports.curr],
+									previous: reports[report.compReports.prev],
+								}}
+								title={report.titleDisplay}
+								size={graphHeight}
+								hAxisTitle={report.hAxisTitle}
+							/>
+						</Row>
+					))}
+					<div style={{ height: { graphHeight } }}></div>
 				</Col>
 
 				<Col md={6}>
