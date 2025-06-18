@@ -39,7 +39,6 @@ export const CustomCompTable = ({
 	const determineSCDValues = () => {
 		if (reports["Sales_Commissions_Detail_current"]) {
 			const SCD = reports["Sales_Commissions_Detail_current"];
-			console.log(SCD);
 			SCD.forEach((row) => {
 				if (row["Transaction Type"] === "SALE") {
 					grossSalesCurr =
@@ -55,13 +54,10 @@ export const CustomCompTable = ({
 	let totalColumns = 0;
 	const headersArr = [];
 	const dataArr = [];
-	//TODO  THIS IS HOW WE MAKE DYNAMIC SHIT WORK!!!!!
-	console.log(reports);
 	const reportC = reports[array.compReports.curr];
 	const reportP = reports[array.compReports.prev];
-	console.log(array.compReports.curr, reportP);
 	function addComparativeHeaders(element) {
-		const endBorder = element.addClass + " border-right border-dark ";
+		const endBorder = element.addClass + " border-right ";
 		headersArr.push({
 			label: [element.label, currLabel],
 			type: element.format,
@@ -145,13 +141,17 @@ export const CustomCompTable = ({
 	}
 	switch (reportType) {
 		case "verticalComp":
-			buildHeaders(array);
 			const cReport = reports[array.compReports.curr][0];
 			const pReport = reports[array.compReports.prev][0];
 			const cRow = [];
 			const pRow = [];
 			const compRow = [];
 			array.headers.forEach((col) => {
+				headersArr.push({
+					label: col.label,
+					type: col.format,
+					className: col.addClass,
+				});
 				if (col.value === "selectedTime") {
 					cRow.push(currLabel);
 					pRow.push(prevLabel);
@@ -176,10 +176,8 @@ export const CustomCompTable = ({
 				</>
 			);
 		case "yoyHorizontal":
-			console.log(array);
 			buildHeaders(array);
 			buildHorizontalComp();
-			console.log("horizontalComp", array);
 			if (array.headers.length <= 4) {
 				return (
 					<>
@@ -194,11 +192,9 @@ export const CustomCompTable = ({
 					</>
 				);
 			} else {
-				console.log(array.headers.length);
 				const rowTitles = array.headers.filter(
 					(obj) => obj.comp === false
 				);
-				console.log(rowTitles);
 				const midpoint =
 					Math.round(
 						(array.headers.length - rowTitles.length) * 0.5
@@ -214,21 +210,20 @@ export const CustomCompTable = ({
 				const secondTable = dataArr.map((row) => {
 					const x = row[0];
 					const sliced = row.slice(midpoint);
-					console.log(sliced);
 					sliced.unshift(x);
 					return sliced;
 				});
-				console.log(
-					"++++++++++++++++++++++++++++++++++++++++++++++",
-					"midpoint",
-					midpoint,
-					"array",
-					array.headers.length,
-					"firstTableMap",
-					firstTableMap,
-					"secondTableMap",
-					secondTableMap
-				);
+				// console.log(
+				// 	"++++++++++++++++++++++++++++++++++++++++++++++",
+				// 	"midpoint",
+				// 	midpoint,
+				// 	"array",
+				// 	array.headers.length,
+				// 	"firstTableMap",
+				// 	firstTableMap,
+				// 	"secondTableMap",
+				// 	secondTableMap
+				// );
 				return (
 					<Row>
 						<Col>

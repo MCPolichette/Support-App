@@ -17,10 +17,6 @@ const getSettings = () => {
 	}
 };
 
-const saveSettings = (newSettings) => {
-	localStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings));
-};
-
 const getMerchantLogo = (id) => {
 	return id === "23437"
 		? `https://static.avantlink.com/merchant-logos/23437`
@@ -37,6 +33,10 @@ const SettingsModal = (keyRequired) => {
 	const [error, setError] = useState("");
 	const [validKey, setValidKey] = useState(settings.validKey ? null : false);
 
+	const saveSettings = (newSettings) => {
+		console.log(newSettings);
+		localStorage.setItem(SETTINGS_KEY, JSON.stringify(newSettings));
+	};
 	const updateSettings = (updatedFields) => {
 		const updated = { ...settings, ...updatedFields };
 		setSettings(updated);

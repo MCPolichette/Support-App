@@ -3,9 +3,19 @@ import { Card } from "react-bootstrap";
 import { Chart } from "react-google-charts";
 import { formatDateShort } from "../../utils/getTime";
 
-const YoySalesConversionChart = ({ data, title = "YoY Sales vs CR", size }) => {
-	console.log(data);
+const YoySalesConversionChart = ({
+	data,
+	title = "YoY Sales vs CR",
+	hAxisTitle,
+}) => {
 	if (!data || !data.current || !data.previous) return null;
+	const dayOrMonth = () => {
+		if (data[0].Weekday) {
+			return "WeekDay";
+		} else if (data[0].Month) {
+			return "Month";
+		}
+	};
 
 	const chartData = [
 		[
@@ -16,7 +26,7 @@ const YoySalesConversionChart = ({ data, title = "YoY Sales vs CR", size }) => {
 			"Previous Conversion Rate",
 		],
 		...data.current.map((day, i) => [
-			day.Weekday,
+			day.hAxisTitle,
 			Number(day.Sales),
 			Number(day["Conversion Rate"]) / 100,
 			Number(data.previous[i]?.Sales ?? 0),
@@ -30,7 +40,7 @@ const YoySalesConversionChart = ({ data, title = "YoY Sales vs CR", size }) => {
 		width: "100%",
 		height: "100%",
 		hAxis: {
-			title: "Performance By Day",
+			title: hAxisTitle,
 			textStyle: {
 				fontSize: 8,
 				color: "#333",
@@ -43,10 +53,18 @@ const YoySalesConversionChart = ({ data, title = "YoY Sales vs CR", size }) => {
 			1: { title: "Conversion Rate", format: "#%" },
 		},
 		series: {
-			0: { type: "bars", targetAxisIndex: 0, color: "#3366cc" },
-			1: { type: "line", targetAxisIndex: 1, color: "#3366cc" },
-			2: { type: "bars", targetAxisIndex: 0, color: "#f45850" },
-			3: { type: "line", targetAxisIndex: 1, color: "#f45850" },
+			0: { type: "bars", targetAxisIndex: 0, color: "rgb(17, 17, 160)" },
+			1: { type: "line", targetAxisIndex: 1, color: "rgb(17, 17, 160)" },
+			2: {
+				type: "bars",
+				targetAxisIndex: 0,
+				color: "grey",
+			},
+			3: {
+				type: "line",
+				targetAxisIndex: 1,
+				color: "grey",
+			},
 		},
 		legend: { position: "in" },
 	};

@@ -2,6 +2,10 @@
 Table {
 	font-size: 7pt;
 }
+Table.largeFont {
+	font-size: 14pt;
+}
+
 .table th {
 	border-top: 2px solid #000;
 }
@@ -13,7 +17,9 @@ Table {
 .table tbody tr:first-child td {
 	border-top: 2px solid #000;
 }
-
+.table td.border-right {
+	border-right: 2px solid rgb(0, 0, 0);
+}
 Table tr:last-of-type td {
 	border-bottom: 2px solid rgb(23, 22, 22);
 }
@@ -38,23 +44,23 @@ th {
 }
 
 th.small-cell {
-	max-width: 15px;
+	width: 40px;
 	overflow: hidden;
 }
 td.small-cell {
-	max-width: 15px;
+	width: 40px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
 th.name-cell {
-	max-width: 80px;
+	max-width: 70px;
 	overflow: hidden;
 }
 td.name-cell {
-	max-width: 80px;
+	max-width: 70px;
+	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
 }

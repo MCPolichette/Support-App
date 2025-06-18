@@ -1,29 +1,7 @@
 import React, { useState } from "react";
-import {
-	Form,
-	Button,
-	InputGroup,
-	Row,
-	Col,
-	Stack,
-	Image,
-	Badge,
-	Tabs,
-	Tab,
-} from "react-bootstrap";
+import { Button, Row, Col, Badge, Tabs, Tab } from "react-bootstrap";
 import DateRangePicker from "./DateRangePicker";
-import ReportSettings from "./ReportSettingsPanel";
-import {
-	getLastYearSameWeek,
-	getPreviousYearMonthRange,
-	getMonthRange,
-	getDefaultStartDate,
-	extractMonthYear,
-} from "../../utils/getTime";
-import {
-	_adminApiModules,
-	getSettings,
-} from "../../utils/API/_AdminApiModules";
+import { getLastYearSameWeek, getMonthRange } from "../../utils/getTime";
 import MonthYearSelector from "./MonthYearPicker";
 const CompareDatesPicker = ({
 	startDate,
@@ -43,7 +21,8 @@ const CompareDatesPicker = ({
 	};
 	const [disabledButton, setDisabledButton] = useState("disabled");
 	const [monthlyDateCs, setMonthlyDateCs] = useState(
-		extractMonthYear(startDate)
+		// "extractMonthYear(startDate)"
+		"00"
 	);
 	const [monthlyDatePs, setMonthlyDatePs] = useState(
 		oneYearPrior(monthlyDateCs)

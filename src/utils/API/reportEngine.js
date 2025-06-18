@@ -20,32 +20,46 @@ export async function adminReportAPI({
 		merchant,
 		networkCode
 	);
+
 	const results = {};
 
 	for (const [name, mod] of selectedModules) {
 		try {
+			let currStart = startDate;
+			let prevStart = previousStartDate;
+
+			// If the report is marked ytd, override the start dates
+			if (mod.ytd === true) {
+				const currYear = startDate.split("-")[0];
+				const prevYear = previousStartDate.split("-")[0];
+				currStart = `${currYear}-01-01`;
+				prevStart = `${prevYear}-01-01`;
+			}
+			console.log(currStart, prevStart, mod.id);
+
 			updateProgress(
 				`Running ${name.replace(/_/g, " - ")} ${
-					getReportTexts(startDate, endDate).dateRange
+					getReportTexts(currStart, endDate).dateRange
 				} `
 			);
 
 			const current = await runAPI(
-				{ startDate, endDate, report_id: mod.id },
+				{ startDate: currStart, endDate, report_id: mod.id },
 				getSettings().key,
 				merchant,
 				networkCode
 			);
 			results[`${name}_current`] = current;
+
 			updateProgress(
-				`Running ${name.replace(/_/g, " - ")}${
-					getReportTexts(previousStartDate, previousEndDate).dateRange
+				`Running ${name.replace(/_/g, " - ")} ${
+					getReportTexts(prevStart, previousEndDate).dateRange
 				}`
 			);
 
 			const previous = await runAPI(
 				{
-					startDate: previousStartDate,
+					startDate: prevStart,
 					endDate: previousEndDate,
 					report_id: mod.id,
 				},
@@ -54,6 +68,7 @@ export async function adminReportAPI({
 				networkCode
 			);
 			results[`${name}_previous`] = previous;
+
 			updateProgress(`${name} ✅`);
 		} catch (error) {
 			console.error(`${name} failed`, error);

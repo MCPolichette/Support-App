@@ -11,7 +11,9 @@ const QuickTools = () => {
 	const settings =
 		JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
 
-	const [showApiTools, setShowApiTools] = useState(settings.validKey);
+	const [showApiTools, setShowApiTools] = useState(
+		settings.validKey || false
+	);
 	console.log(showApiTools);
 	const tools_list = [
 		{
@@ -53,7 +55,7 @@ const QuickTools = () => {
 				className="container mt-4 shadow callout-info card-drop-in "
 				style={{ backgroundColor: "lightgrey", padding: "2rem" }}
 			>
-				<div classname="row">
+				<div className="row">
 					<h1 className="mb-4">
 						<b>Quick Tools!</b>
 					</h1>

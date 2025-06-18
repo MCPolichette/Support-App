@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button, Alert } from "react-bootstrap";
+import { Container, Row, Col, Stack, Button, Alert } from "react-bootstrap";
 import { runAPI } from "../../../utils/API/apiRunner";
 import { getSettings } from "../../../utils/API/_AdminApiModules";
 import MerchantAndNetworkInput from "../../forms/MerchantAndNetworkInput";
@@ -144,21 +144,22 @@ const IBCVerification = () => {
 	return (
 		<Container className="mt-4">
 			<Row>
-				<Col md={9}>
+				<Col md={12}>
 					<MerchantAndNetworkInput
 						selectedMerchant={merchantId}
 						selectedNetwork={network}
 						setSelectedMerchant={setMerchantId}
 						setSelectedNetwork={setNetwork}
 					/>
-				</Col>
-				<Col md={3}>
 					{merchantId != "" && (
-						<Button onClick={checkProducts}>
-							Run Product Report API
-						</Button>
+						<Stack>
+							<Button onClick={checkProducts}>
+								Run Product Report API
+							</Button>
+						</Stack>
 					)}
 				</Col>
+
 				<hr />
 			</Row>
 			{stage === "input" && (

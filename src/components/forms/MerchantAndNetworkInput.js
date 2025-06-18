@@ -27,7 +27,7 @@ const MerchantAndNetworkInupt = ({
 		<Row className="align-items-end mb-3">
 			<h4>{title}</h4>
 			<hr />
-			<Col md={6}>
+			<Col md={5}>
 				<InputGroup className="mb-2">
 					<Form.Label>
 						<h5>
@@ -54,7 +54,7 @@ const MerchantAndNetworkInupt = ({
 					/>
 				</InputGroup>
 			</Col>
-			<Col md={6}>
+			<Col md={7}>
 				<div>
 					<Form.Label>Network</Form.Label>
 					<div>

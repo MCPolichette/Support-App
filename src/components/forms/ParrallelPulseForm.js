@@ -1,30 +1,11 @@
 import React, { useState } from "react";
-import {
-	Form,
-	Button,
-	InputGroup,
-	Row,
-	Col,
-	Stack,
-	Image,
-	Badge,
-	Tabs,
-	Tab,
-} from "react-bootstrap";
-import DateRangePicker from "./DateRangePicker";
-import ReportSettings from "./ReportSettingsPanel";
+import { Form, Button, Row, Col, Stack, Image } from "react-bootstrap";
 import {
 	getDefaultStartDate,
 	getDefaultEndDate,
 	getLastYearSameWeek,
-	getMonthRange,
-	getPreviousYearMonthRange,
 } from "../../utils/getTime";
-import {
-	_adminApiModules,
-	getSettings,
-} from "../../utils/API/_AdminApiModules";
-import MonthYearSelector from "./MonthYearPicker";
+import { getSettings } from "../../utils/API/_AdminApiModules";
 import CompareDatesPicker from "./CompareDatesPicker";
 import MerchantAndNetworkInupt from "./MerchantAndNetworkInput";
 import { DefaultReportArray } from "../../logic/comparisonLogic/defaultReports";
@@ -35,27 +16,10 @@ const getMerchantLogo = (id) =>
 		? `https://static.avantlink.com/merchant-logos/23437`
 		: `https://static.avantlink.com/merchant-logos/${id}.png`;
 
-const ParrallelPulseForm = ({
-	handleRunReport,
-	loading,
-	openSettings,
-	commonMerchants,
-}) => {
+const ParrallelPulseForm = ({ handleRunReport, loading, commonMerchants }) => {
 	const settings = getSettings();
 	commonMerchants = settings.commonMerchants || [];
-	function determineMerchantSettings(data) {
-		if (data) {
-			console.log(data, commonMerchants[0]);
-			const index = commonMerchants.findIndex((m) => m.id === data);
-			console.log(index);
 
-			return settings.commonMerchants[index];
-		} else if (settings.commonMerchants) {
-			return settings.commonMerchants[0];
-		} else {
-			return { id: null, network: "US", reportMap: _adminApiModules };
-		}
-	}
 	const [startDate, setStartDate] = useState(
 		getDefaultStartDate("last7days")
 	);
@@ -66,22 +30,14 @@ const ParrallelPulseForm = ({
 	const [previousPeriodEnd, setPreviousPeriodEnd] = useState(
 		getLastYearSameWeek(startDate, endDate).end
 	);
-	const [disabledButton, setDisabledButton] = useState("disabled");
-	const [formSelections, setFormSelections] = useState(
-		settings.commonMerchants[0].reportmap || _adminApiModules
-	);
+
 	const [selectedMerchant, setSelectedMerchant] = useState(
 		settings.commonMerchants[0].id || null
 	);
-
-	const [activeTab, setActiveTab] = useState("dates");
-
 	const [selectedNetwork, setSelectedNetwork] = useState(
 		settings.commonMerchants[0].network || null
 	);
-	const saveMerchantSettings = () => {
-		console.log("THIS ISNT WORKING YET");
-	};
+
 	const updateSettingsRunReport = () => {
 		handleRunReport(
 			{
@@ -134,14 +90,7 @@ const ParrallelPulseForm = ({
 								{m.id} ({m.network})
 							</Button>
 						))}
-						<Button
-							variant="link"
-							size="sm"
-							className="text-decoration-none"
-							onClick={openSettings}
-						>
-							Update Merchants in Settings →
-						</Button>
+						<p>Add/Remove Listed Merchants in Tools - Settings</p>
 					</div>
 				</Col>
 				<Col md={7}>
