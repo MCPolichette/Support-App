@@ -74,7 +74,6 @@ export const DefaultReportArray = {
 			],
 		},
 	},
-	Vertical_Comparisons: {},
 	Timeline_Graphs: {
 		Performance_Summary_By_Day_Graph: {
 			ids: [12],
@@ -115,6 +114,105 @@ export const DefaultReportArray = {
 					value: "Conversion Rate",
 					label: "Conversion Rate",
 					format: "percent",
+				},
+			],
+		},
+	},
+
+	Product_Performance: {
+		Product_Sold_List: {
+			customizable: false,
+			reportIds: 18,
+			inReport: true,
+			sortBy: "Total Product Sale Quantity",
+			joinKey: "Product Name",
+			titleDisplay: "",
+			headers: [
+				{
+					label: "Product Name",
+					format: "string",
+					value: "Product Name",
+				},
+				{
+					label: "Product SKU",
+					format: "string",
+					value: "Product SKU",
+				},
+				{
+					label: "Sale Count ",
+					format: "int",
+					value: "Sale Count ",
+				},
+				{
+					label: "Total Product Sale Amount",
+					format: "dollar",
+					value: "Total Product Sale Amount",
+				},
+			],
+		},
+
+		Product_Performance_By_Departments_and_Brands: {
+			customizable: false,
+			reportIds: 18,
+			inReport: true,
+			sortBy: "Total Product Sale Quantity",
+			joinKey: "Product Name",
+			titleDisplay: "",
+			headers: [
+				{
+					label: "Product Name",
+					format: "string",
+					value: "Product Name",
+				},
+				{
+					label: "Product SKU",
+					format: "string",
+					value: "Product SKU",
+				},
+				{
+					label: "Sale Count ",
+					format: "int",
+					value: "Sale Count ",
+				},
+				{
+					label: "Total Product Sale Amount",
+					format: "dollar",
+					value: "Total Product Sale Amount",
+				},
+				{
+					value: "Brand Name",
+					format: "string",
+					label: "Brand Name",
+				},
+				{
+					value: "Category",
+					format: "string",
+					label: "Category",
+				},
+				{
+					value: "Department",
+					format: "string",
+					label: "Department",
+				},
+				{
+					value: "Merchant",
+					format: "string",
+					label: "Merchant",
+				},
+				{
+					value: "Sub Category",
+					format: "string",
+					label: "Sub Category",
+				},
+				{
+					value: "Total Product Sale Amount",
+					format: "dollar",
+					label: "Total Product Sale Amount",
+				},
+				{
+					value: "Total Product Sale Quantity",
+					format: "int",
+					label: "Total Product Sale Quantity",
 				},
 			],
 		},
@@ -179,11 +277,11 @@ export const DefaultReportArray = {
 					addClass: "small-cell",
 				},
 				{
-					value: "AOV",
-					format: "dollar",
-					label: "AOV",
-					comp: true,
 					addClass: "small-cell",
+					comp: true,
+					label: "AOV",
+					format: "dollar",
+					value: "Average Sale Amount",
 				},
 				{
 					value: "Total Spend",
@@ -379,37 +477,3 @@ export const DefaultReportArray = {
 		},
 	},
 };
-// Product_Sold_List: {
-// 	customizable: false,
-// 	reportIds: 18,
-// 	inReport: true,
-// 	sortBy: "Total Product Sale Quantity",
-// 	joinKey: "Product Name",
-// 	titleDisplay:"",headers: {
-// 		"Product Name": { yoy: false, dataType: "string" },
-// 		"Product SKU": { yoy: false, dataType: "string" },
-// 		"Sale Count ": { yoy: true, dataType: "currency" },
-// 		"Total Product Sale Amount": { yoy: true, dataType: "currency" },
-// 	},
-// },
-
-// },
-// Product_Performance_By_Departments_and_Brands: {
-// 	customizable: false,
-// 	reportIds: 18,
-// 	inReport: true,
-// 	sortBy: "Total Product Sale Quantity",
-// 	joinKey: "Product Name",
-// 	titleDisplay:"",headers: {
-// 		"Brand Name": { yoy: false, dataType: "string" },
-// 		Category: { yoy: false, dataType: "string" },
-// 		Department: { yoy: false, dataType: "string" },
-// 		Merchant: { yoy: false, dataType: "string" },
-// 		"Product Name": { yoy: false, dataType: "string" },
-// 		"Product SKU": { yoy: false, dataType: "string" },
-// 		"Sale Count ": { yoy: true, dataType: "currency" },
-// 		"Sub Category": { yoy: false, dataType: "string" },
-// 		"Total Product Sale Amount": { yoy: true, dataType: "currency" },
-// 		"Total Product Sale Quantity": { yoy: true, dataType: "int" },
-// 	},
-// },

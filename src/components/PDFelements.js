@@ -79,7 +79,7 @@ export const PageBreaker = () => {
 	return (
 		<div
 			className="position-relative   force-page-break"
-			style={{ height: "2em" }}
+			style={{ height: ".5em" }}
 		>
 			<Badge
 				size="sm"

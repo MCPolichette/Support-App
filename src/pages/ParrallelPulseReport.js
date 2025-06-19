@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack, Button, Row, Col, Container } from "react-bootstrap";
+import { Spinner, Stack, Button, Row, Col, Container } from "react-bootstrap";
 import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
 import ReportTableBuilder from "../logic/comparisonLogic/reportTableBuilder";
 import { adminReportAPI } from "../utils/API/reportEngine";
@@ -8,6 +8,7 @@ import { getReportTexts } from "../utils/getTime";
 import { generatePDF } from "../utils/exportPDF";
 import { FloatingCenterButton } from "../components/PDFelements";
 import { useReportContext } from "../utils/reportContext";
+import { TableTopper } from "../components/tables/tableExtras";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
@@ -45,6 +46,7 @@ const ParrallelPulseReport = () => {
 			console.log(selectedModules);
 			const results = await adminReportAPI({
 				reportType: "Comparison",
+				reportList,
 				selectedModules,
 				startDate: dates.startDate,
 				endDate: dates.endDate,
@@ -123,21 +125,33 @@ const ParrallelPulseReport = () => {
 							className="position-absolute top-0 start-0 w-100 h-100 d-flex   align-items-center justify-content-center"
 							style={{ zIndex: 10 }}
 						>
-							<Col md={4}>
-								<h3>Step 1: Running APIs</h3>
-							</Col>
-							<Col md={2}>
-								{loadingStage !== "Ready To Build Tables." && (
-									<div
-										className="spinner-border text-primary"
-										role="status"
+							<Col
+								md={6}
+								className="d-flex justify-content-center"
+							>
+								<Row>
+									<Col
+										sm={12}
+										className="d-flex justify-content-center"
 									>
-										<h1 className="visually-hidden">
-											Loading...
-										</h1>
-									</div>
-								)}
+										{loadingStage !==
+											"Ready To Build Tables." && (
+											<Spinner
+												animation="border"
+												size="xl"
+												variant="secondary"
+											/>
+										)}
+									</Col>
+									<Col
+										className="d-flex justify-content-center"
+										sm={12}
+									>
+										<h3>Step 1: Running APIs</h3>
+									</Col>
+								</Row>
 							</Col>
+
 							<Col
 								md={6}
 								className="bg-white rounded shadow-sm p-3"
@@ -176,11 +190,14 @@ const ParrallelPulseReport = () => {
 										))}
 								</div>
 							</Col>
-
+							<TableTopper
+								id={merchantReference}
+								text={loadingStage}
+							/>
 							<Stack gap={2} className="col-md-5 mx-auto">
-								<h5 style={{ textAlign: "center" }}>
+								{/* <h5 style={{ textAlign: "center" }}>
 									{loadingStage}
-								</h5>
+								</h5> */}
 								{tableButton}
 							</Stack>
 						</Row>

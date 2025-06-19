@@ -3,6 +3,7 @@ import { getSettings } from "./_AdminApiModules";
 import { getReportTexts } from "../../utils/getTime";
 
 export async function adminReportAPI({
+	reportList,
 	selectedModules,
 	startDate,
 	endDate,

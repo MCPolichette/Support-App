@@ -11,57 +11,37 @@ const getLocalMerchantLogo = (id) => `/style/merchant_logos/${id}.png`;
 
 export const TableTopper = ({ id, text }) => {
 	const [logoSrc, setLogoSrc] = useState(getLocalMerchantLogo(id));
-	const [isFallback, setIsFallback] = useState(false);
 
 	// Attempt to verify local image loads
 	useEffect(() => {
 		const img = new Image();
 		img.onload = () => {
 			setLogoSrc(getLocalMerchantLogo(id));
-			setIsFallback(false);
 		};
 		img.onerror = () => {
 			setLogoSrc(getRemoteMerchantLogo(id));
-			setIsFallback(true);
 		};
 		img.src = getLocalMerchantLogo(id);
 	}, [id]);
 
 	return (
-		<Row
-			className="justify-content-md-center bg-light p-4"
-			// style={{
-			// 	height: "auto",
-			// }}
-		>
-			<Col md="auto">
+		<Row className="justify-content-md-center  bg-light p-4 align-items-center">
+			<Col
+				md={3}
+				className="d-flex justify-content-center"
+				style={{ height: "70px" }}
+			>
 				<img
 					src={logoSrc}
 					alt="Merchant Logo"
-					style={{ height: "68px" }}
+					style={{ height: "auto" }}
 				/>
-				{isFallback && (
-					<span
-						style={{
-							position: "absolute",
-							top: 0,
-							right: 0,
-							backgroundColor: "red",
-							color: "white",
-							fontSize: "0.6rem",
-							padding: "2px 4px",
-							borderRadius: "3px",
-						}}
-					>
-						remote
-					</span>
-				)}
 			</Col>
 
-			<Col md={6}>
+			<Col md={6} className="d-flex justify-content-center">
 				<h4>{text}</h4>
 			</Col>
-			<Col md={2}>
+			<Col md={3} className="d-flex justify-content-center">
 				<img
 					src="/style/Avantlink_fullcolor.png"
 					alt="Avantlink Banner"
