@@ -50,7 +50,6 @@ export const CustomCompTable = ({
 		} else return;
 	};
 	determineSCDValues();
-
 	let totalColumns = 0;
 	const headersArr = [];
 	const dataArr = [];
@@ -213,17 +212,7 @@ export const CustomCompTable = ({
 					sliced.unshift(x);
 					return sliced;
 				});
-				// console.log(
-				// 	"++++++++++++++++++++++++++++++++++++++++++++++",
-				// 	"midpoint",
-				// 	midpoint,
-				// 	"array",
-				// 	array.headers.length,
-				// 	"firstTableMap",
-				// 	firstTableMap,
-				// 	"secondTableMap",
-				// 	secondTableMap
-				// );
+
 				return (
 					<Row>
 						<Col>
@@ -249,18 +238,7 @@ export const CustomCompTable = ({
 				);
 			}
 
-		case "currentOnly":
+		default:
 			console.log("currentOnly");
 	}
 };
-
-// Example usage definition
-const exampleArray = [
-	{
-		value: "Affiliate Name",
-		format: "string",
-		label: "Affiliate Name",
-		comp: true,
-		addClass: "",
-	},
-];

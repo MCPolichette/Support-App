@@ -1,21 +1,11 @@
 import React from "react";
-import { Card } from "react-bootstrap";
 import { Chart } from "react-google-charts";
-import { formatDateShort } from "../../utils/getTime";
-
 const YoySalesConversionChart = ({
 	data,
 	title = "YoY Sales vs CR",
 	hAxisTitle,
 }) => {
 	if (!data || !data.current || !data.previous) return null;
-	const dayOrMonth = () => {
-		if (data[0].Weekday) {
-			return "WeekDay";
-		} else if (data[0].Month) {
-			return "Month";
-		}
-	};
 
 	const chartData = [
 		[

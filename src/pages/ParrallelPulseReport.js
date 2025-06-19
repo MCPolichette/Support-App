@@ -11,7 +11,6 @@ import { useReportContext } from "../utils/reportContext";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
-
 	const [pageDisplay, setPageDisplay] = useState(
 		settings.key ? null : "noKey"
 	);

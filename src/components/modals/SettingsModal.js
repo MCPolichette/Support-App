@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Form, Button, Alert, Badge, InputGroup, Image } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import "./SettingsModal.css";
-import { Link } from "react-router-dom";
 import ServerIndicator from "../Elements/ServerIndicator";
 import { runAPI } from "../../utils/API/apiRunner";
 

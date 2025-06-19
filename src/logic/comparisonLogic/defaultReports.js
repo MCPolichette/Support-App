@@ -1,6 +1,7 @@
 export const DefaultReportArray = {
 	Performance_Summary: {
 		Performance_Summary_Total: {
+			title: "Comparison Summaries",
 			customizable: true,
 			reportIds: [1, 8],
 			compReports: {

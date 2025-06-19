@@ -1,6 +1,6 @@
 // components/GlobalAlert.js
 import React from "react";
-import { Alert, Row, Col } from "react-bootstrap";
+import { Alert, Row } from "react-bootstrap";
 
 const GlobalAlert = ({ alert }) => {
 	if (!alert?.message) return null;
@@ -33,6 +33,5 @@ export default GlobalAlert;
 // };
 
 // {/* Drop this once per page where alerts might show */}
-{
-	/* <GlobalAlert alert={alert} /> */
-}
+
+/* <GlobalAlert alert={alert} /> */
