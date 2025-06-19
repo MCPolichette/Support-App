@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
-import { extractMonthYear, getMonthRange } from "../../utils/getTime";
 
 const MonthYearSelector = ({ date, onChange }) => {
 	const months = [

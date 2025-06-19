@@ -1,16 +1,5 @@
-import React, { useState } from "react";
-import {
-	Form,
-	Button,
-	InputGroup,
-	Row,
-	Col,
-	Stack,
-	Image,
-	Badge,
-	Tabs,
-	Tab,
-} from "react-bootstrap";
+import React from "react";
+import { Form, InputGroup, Row, Col, Image } from "react-bootstrap";
 const getMerchantLogo = (id) =>
 	id === "23437"
 		? `https://static.avantlink.com/merchant-logos/23437`

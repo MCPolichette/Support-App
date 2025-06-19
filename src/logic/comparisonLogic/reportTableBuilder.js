@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Row, Col, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
-import { PerfSummary, ProductSummary } from "./SingleReportSummaryMaps";
+import { ProductSummary } from "./SingleReportSummaryMaps";
 import { ProductAttributeDeltaTables } from "./productSoldMaps";
 import { TableTopper } from "../../components/tables/tableExtras";
 import { PageBreaker } from "../../components/PDFelements";
@@ -20,7 +20,7 @@ const ReportTableBuilder = ({
 	const reportTitle = (text, dates) => {
 		return text + " " + dates;
 	};
-	const [graphHeight, setGraphHeight] = useState(700);
+
 	const productSummaryTable = ProductSummary(
 		reports["Product_Sold_current"],
 		currentDates
@@ -78,13 +78,11 @@ const ReportTableBuilder = ({
 									current: reports[report.compReports.curr],
 									previous: reports[report.compReports.prev],
 								}}
-								title={report.titleDisplay}
-								size={graphHeight}
+								title={report.titleDisize}
 								hAxisTitle={report.hAxisTitle}
 							/>
 						</Row>
 					))}
-					<div style={{ height: { graphHeight } }}></div>
 				</Col>
 
 				<Col md={6}>

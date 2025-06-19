@@ -85,7 +85,7 @@ const IBCVerification = () => {
 							notes: "No Items in this report.  Its not possible to determine whether or Not IBC can be turned on.",
 							alertType: "danger",
 						};
-					} else if (productSoldReport.length > 1 && percent == 0) {
+					} else if (productSoldReport.length > 1 && percent === 0) {
 						return {
 							notes: "There are items in the report, BUT NO Items were recognized.  Do not turn on IBC",
 							alertType: "danger",
@@ -151,7 +151,7 @@ const IBCVerification = () => {
 						setSelectedMerchant={setMerchantId}
 						setSelectedNetwork={setNetwork}
 					/>
-					{merchantId != "" && (
+					{merchantId !== "" && (
 						<Stack>
 							<Button onClick={checkProducts}>
 								Run Product Report API

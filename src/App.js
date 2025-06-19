@@ -10,7 +10,6 @@ import { ReportProvider } from "./utils/reportContext.js";
 import Automapper from "./pages/Automapper.js";
 import RecursiveCrawler from "./pages/RecursiveCrawler";
 import Home from "./pages/home.js";
-import FishUSA from "./pages/FishUSA.js";
 import QuickTools from "./pages/QuickTools.js";
 import ParrallelPulseReport from "./pages/ParrallelPulseReport.js";
 
@@ -25,7 +24,6 @@ function App() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/automapper" element={<Automapper />} />
-				<Route path="/fish_usa" element={<FishUSA />} />
 				<Route path="/website_scanner" element={<RecursiveCrawler />} />
 				<Route path="/more_tools" element={<QuickTools />} />
 

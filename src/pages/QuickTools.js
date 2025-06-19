@@ -11,9 +11,7 @@ const QuickTools = () => {
 	const settings =
 		JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
 
-	const [showApiTools, setShowApiTools] = useState(
-		settings.validKey || false
-	);
+	const [showApiTools] = useState(settings.validKey || false);
 	console.log(showApiTools);
 	const tools_list = [
 		{

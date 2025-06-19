@@ -1,47 +1,40 @@
 import React, { useState } from "react";
-import { Stack, Row, Card, Button, Collapse, Form } from "react-bootstrap";
+import { Tabs, Tab, Row, Button } from "react-bootstrap";
 import StylizedModal from "../modals/_ModalStylized";
-import Edit_Report_Modal from "../modals/Edit_Report_Modal";
+import EditReportModal from "../modals/EditReportModal";
 import { useReportContext } from "../../utils/reportContext";
 import { getSettings } from "../../utils/API/_AdminApiModules";
 import ReportCard from "../cards/ReportCard";
 import { removeCustomReport } from "../../utils/localStorageSettings";
+
 const ReportSelection = () => {
 	const {
 		reportList,
 		updateReportByName,
 		removeReportByName,
-		addReport,
-		loadReports,
+		// addReport,
+		// loadReports,
 	} = useReportContext();
+
 	const settings = getSettings();
-	const [openItems, setOpenItems] = useState({});
 	const [modalType, setModalType] = useState(null);
 	const [reportEditor, setReportEditor] = useState({});
 	const [customReports, setCustomReports] = useState(
 		settings.customReports || {}
 	);
-
-	const toggleCategory = (category) => {
-		setOpenItems((prev) => ({
-			...prev,
-			[category]: !prev[category],
-		}));
-	};
+	const [activeTab, setActiveTab] = useState(
+		Object.keys(reportList)[0] || ""
+	);
 
 	const handleDeleteCustomReport = (reportName, categoryName) => {
 		const updated = { ...customReports };
 		delete updated[categoryName]?.[reportName];
-
-		// remove from storage too if needed
-
 		removeCustomReport(categoryName, reportName);
 		removeReportByName(reportName);
 		setCustomReports(updated);
 	};
-	const handleToggleInReport = (reportName, categoryName) => {
-		console.log((reportName, categoryName));
 
+	const handleToggleInReport = (reportName, categoryName) => {
 		const category = reportList[categoryName];
 		if (!category || !category[reportName]) return;
 		const currentReport = category[reportName];
@@ -49,104 +42,76 @@ const ReportSelection = () => {
 			...currentReport,
 			inReport: !currentReport.inReport,
 		};
-
 		updateReportByName(reportName, updatedReport, categoryName);
 	};
 
 	function editReport(reportName, reportConfig, categoryName) {
-		console.log(reportName, reportConfig, categoryName);
 		setReportEditor({ reportName, reportConfig, categoryName });
 		setModalType("edit-report");
 	}
 
 	return (
 		<div>
-			{Object.entries(reportList).map(
-				([categoryName, categoryReports]) => {
-					const isOpen = !!openItems[categoryName];
-					return (
-						<div key={categoryName} className="mb-4">
-							<Stack direction="horizontal" gap={2}>
-								<h6 className="text-uppercase text-muted">
-									{categoryName.replaceAll("_", " ")}
-								</h6>
-
-								<Button
-									variant="outline-secondary"
-									size="sm"
-									onClick={() => toggleCategory(categoryName)}
-								>
-									{isOpen ? "Hide Reports" : "Show Reports"}
-								</Button>
-							</Stack>
-
-							<Collapse in={isOpen}>
-								<div>
-									<Row className="row mt-2">
-										{Object.entries(categoryReports).map(
-											([reportName, reportConfig]) => {
-												const headersArray =
-													Array.isArray(
-														reportConfig.headers
+			<Tabs
+				id="report-tabs"
+				activeKey={activeTab}
+				onSelect={(k) => setActiveTab(k)}
+				className="mb-3"
+			>
+				{Object.entries(reportList).map(
+					([categoryName, categoryReports]) => (
+						<Tab
+							eventKey={categoryName}
+							title={categoryName.replaceAll("_", " ")}
+							key={categoryName}
+						>
+							<Row className="row mt-2">
+								{Object.entries(categoryReports).map(
+									([reportName, reportConfig]) => (
+										<Row
+											className="col-md-3 d-flex flex-column col-sm-6"
+											key={reportName}
+										>
+											<ReportCard
+												reportName={reportName}
+												reportConfig={reportConfig}
+												categoryName={categoryName}
+												onToggleInReport={() =>
+													handleToggleInReport(
+														reportName,
+														categoryName
 													)
-														? reportConfig.headers
-														: [];
-
-												return (
-													<Row
-														className="col-md-3 d-flex flex-column col-sm-6"
-														key={reportName}
-													>
-														<ReportCard
-															reportName={
-																reportName
-															}
-															reportConfig={
-																reportConfig
-															}
-															categoryName={
-																categoryName
-															}
-															onToggleInReport={() =>
-																handleToggleInReport(
-																	reportName,
-																	categoryName
-																)
-															}
-															onEdit={editReport}
-															onDelete={
-																handleDeleteCustomReport
-															}
-														/>
-													</Row>
-												);
-											}
-										)}
-
-										<Row className="col-md-3 col-sm-6 d-flex align-items-start">
-											<Button
-												className="w-100 mt-2"
-												variant="outline-success"
-												size="sm"
-												disabled
-											>
-												Create a Custom Report
-											</Button>
+												}
+												onEdit={editReport}
+												onDelete={
+													handleDeleteCustomReport
+												}
+											/>
 										</Row>
-									</Row>
-								</div>
-							</Collapse>
-						</div>
-					);
-				}
-			)}
+									)
+								)}
+								<Row className="col-md-3 col-sm-6 d-flex align-items-start">
+									<Button
+										className="w-100 mt-2"
+										variant="outline-success"
+										size="sm"
+										disabled
+									>
+										Create a Custom Report
+									</Button>
+								</Row>
+							</Row>
+						</Tab>
+					)
+				)}
+			</Tabs>
 
 			<StylizedModal
 				show={!!modalType}
 				onHide={() => setModalType(null)}
 				title="Settings"
 			>
-				<Edit_Report_Modal
+				<EditReportModal
 					reportEditor={reportEditor.reportConfig}
 					reportName={reportEditor.reportName}
 					categoryName={reportEditor.categoryName}
