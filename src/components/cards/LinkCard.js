@@ -5,7 +5,7 @@ import StylizedModal from "../modals/_ModalStylized";
 
 const LinkCard = ({ title, text, route, modal, dev, index }) => {
 	const [showModal, setShowModal] = useState(false);
-	const [showDev, setShowDev] = useState(dev);
+	const [showDev] = useState(dev);
 	const hasRoute = !!route;
 	const hasModal = !!modal;
 
