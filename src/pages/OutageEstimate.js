@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Spinner, Stack, Button, Row, Col, Container } from "react-bootstrap";
+import { Button, Row, Col, Container } from "react-bootstrap";
 import {
 	getDefaultStartDate,
 	getDefaultEndDate,
 	getLastYearSameWeek,
+	getReportTexts,
 } from "../utils/getTime";
 import StylizedModal from "../components/modals/_ModalStylized";
 import PerformanceSummaryByDay from "../components/modals/quickTools/PerfomanceSummaryByDay";
+import { FloatingCenterButton } from "../components/PDFelements";
+import { generatePDF } from "../utils/exportPDF";
+// import { exportToCSV } from "../utils/exportCSV";
 import DateRangePicker from "../components/forms/DateRangePicker";
 import MerchantAndNetworkInupt from "../components/forms/MerchantAndNetworkInput";
+import { adminReportAPI } from "../utils/API/reportEngine";
+import LoadingOverlay from "../components/LoadingOverlay";
+import OutageReport from "../logic/comparisonLogic/outageEstimateTableBuilder";
 
 const getMerchantLogo = (id) =>
 	id === "23437"
@@ -27,11 +34,19 @@ const OutageEstimate = () => {
 	const [previousPeriodEnd, setPreviousPeriodEnd] = useState(
 		getLastYearSameWeek(startDate, endDate).end
 	);
+	const [reportResults, setReportResults] = useState("");
+	const [loading, setLoading] = useState(false);
+	const [loadingStage, setLoadingStage] = useState("");
+	const [currentDates, setCurrentDates] = useState({});
+	const [previousDates, setPreviousDates] = useState({});
 
+	const [completedModules, setCompletedModules] = useState([]);
 	const [selectedMerchant, setSelectedMerchant] = useState("");
 	const [selectedNetwork, setSelectedNetwork] = useState("");
-	const [reportingStage, setReportingStage] = useState("start");
+	const [reportingStage, setReportingStage] = useState("baseline");
 	const [disabledBaselineButton, setDisabledBaselineButton] = useState(true);
+
+	const [tableButton, setTableButton] = useState(<div></div>);
 	useEffect(() => {
 		if (selectedMerchant !== "" && selectedNetwork !== "") {
 			setDisabledBaselineButton(false);
@@ -47,13 +62,70 @@ const OutageEstimate = () => {
 	const testfunction = () => {
 		console.log("date update");
 	};
+	const selectedModules = {
+		Performance_Summary: {
+			id: 1,
+			inReport: true,
+			sortBy: "Sales",
+			limit: 1,
+		},
+
+		Performance_Summary_By_Affiliate_Website: { id: 20, inReport: true },
+	};
+	const buildTables = () => {
+		setLoading(false);
+		setLoadingStage("");
+		setReportingStage("Tables");
+	};
+	const handleRunReport = async (dates) => {
+		setCurrentDates(getReportTexts(startDate, endDate));
+		setPreviousDates(
+			getReportTexts(previousPeriodStart, previousPeriodEnd)
+		);
+		setModalType(null);
+		setCompletedModules([]);
+		setLoading(true);
+		setLoadingStage("Initializing...");
+		const reportModules = Object.entries(selectedModules).filter(
+			([_, mod]) => mod.inReport
+		);
+		try {
+			const results = await adminReportAPI({
+				reportType: "Comparison",
+				selectedModules: reportModules,
+				startDate: startDate,
+				endDate: endDate,
+				previousStartDate: dates.start,
+				previousEndDate: dates.end,
+				networkCode: selectedNetwork,
+				merchant: selectedMerchant,
+				updateProgress: (message) => {
+					setLoadingStage(message);
+					if (message.includes("✅")) {
+						const name = message.split(" ")[0];
+						setCompletedModules((prev) => [...prev, name]);
+					}
+				},
+			});
+			setReportResults(results);
+		} catch (err) {
+			console.error("Report run failed", err);
+		} finally {
+			setTableButton(
+				<Button variant="success" size="lg" onClick={buildTables}>
+					Compare Data and Display Tables
+				</Button>
+			);
+			setLoadingStage("Ready To Build Tables.");
+		}
+	};
 
 	return (
 		<div className="position-relative card-drop-in ">
-			<Button onClick={() => setReportingStage("start")}>
+			<Button onClick={() => setReportingStage("baseline")}>
 				set to start
 			</Button>
-			{reportingStage === ("start" || "baseline") && (
+			{reportingStage === "baseline" && (
 				<Container className="shadow-sm p-4 bg-white border rounded ">
 					<Row>
 						<h1>Outage Estimate 2.0</h1>
@@ -122,6 +194,47 @@ const OutageEstimate = () => {
 						</Col>
 					</Row>
 				</Container>
+			)}{" "}
+			{loading && (
+				<LoadingOverlay
+					modules={selectedModules}
+					completedModules={completedModules}
+					loadingStage={loadingStage}
+					merchantReference={selectedMerchant}
+					tableButton={tableButton}
+				/>
+			)}
+			{reportingStage === "Tables" && (
+				<Container>
+					<FloatingCenterButton
+						label="test"
+						onClick={() =>
+							generatePDF(
+								"OutageReport" +
+									selectedMerchant +
+									"_" +
+									startDate +
+									"-" +
+									endDate
+							)
+						}
+					/>
+
+					<Row id="report_pdf">
+						<OutageReport
+							reportList={""}
+							mid={selectedMerchant}
+							reports={reportResults}
+							currentDates={currentDates}
+							previousDates={previousDates}
+						/>
+					</Row>
+					<hr
+						style={{
+							height: "10em",
+						}}
+					/>
+				</Container>
 			)}
 			<StylizedModal
 				show={!!modalType}
@@ -137,6 +250,7 @@ const OutageEstimate = () => {
 					mNetwork={selectedNetwork}
 					start={startDate}
 					end={endDate}
+					runReport={handleRunReport}
 				/>
 			</StylizedModal>
 		</div>

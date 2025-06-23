@@ -20,18 +20,19 @@ import {
 } from "../../../utils/getTime";
 import PerformanceSummaryByTimeGraph from "../../graphs/PerformanceSummaryByTime";
 import DateRangePicker from "../../forms/DateRangePicker";
+import LoadingOverlay from "../../LoadingOverlay";
 const PerformanceSummaryByDay = ({
 	startingStage,
 	mId,
 	mNetwork,
 	start,
 	end,
+	runReport,
 }) => {
 	const [baselineDays, setBaselineDays] = useState(14);
 	const settings = getSettings();
 	const [merchantId, setMerchantId] = useState(mId || "");
 	const [network, setNetwork] = useState(mNetwork || "US");
-	const [report, setReport] = useState({});
 	const [stage, setStage] = useState(startingStage || "input");
 	const [results, setResults] = useState(["Clicks", "Sales VS Clicks"]);
 	const [startDate, setStartDate] = useState(
@@ -104,9 +105,9 @@ const PerformanceSummaryByDay = ({
 								<Button>Run Product Report API</Button>
 							</Stack>
 						)}
+						<hr />
 					</Col>
 				)}
-				<hr />
 			</Row>
 			{stage === "start" && (
 				<Row>
@@ -143,9 +144,9 @@ const PerformanceSummaryByDay = ({
 						</Col>
 						<Col sm={4}>
 							<Alert variant="success">
-								<h4>Choosing BaseLine Period</h4>
+								<h4>Choosing Baseline Period</h4>
 								<p>
-									The Default BaseLine Period is generally the
+									The Default Baseline Period is generally the
 									2 weeks prior to the outage. However, there
 									are circumstances and scenarios where one
 									may choose different time periods based on
@@ -167,7 +168,17 @@ const PerformanceSummaryByDay = ({
 							</Alert>
 						</Col>
 
-						<Button variant="primary" size="lg">
+						<Button
+							variant="primary"
+							size="lg"
+							className="mt-2"
+							onClick={() =>
+								runReport({
+									start: suggestedBaselineStart,
+									end: suggestedBaselineEnd,
+								})
+							}
+						>
 							Use Baseline Dates{" - "}
 							{
 								getReportTexts(

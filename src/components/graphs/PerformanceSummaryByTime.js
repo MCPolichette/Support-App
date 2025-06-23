@@ -125,13 +125,14 @@ const PerformanceSummaryByTimeGraph = ({
 				height="200px"
 				loader={<div>Loading Chart...</div>}
 			/>
+			<hr />
 			<h6>Sales Performance Summary by Day</h6>
 			<Chart
 				chartType="ColumnChart"
 				data={salesChart}
 				options={{
 					...commonOptions,
-					vAxes: { 0: { title: "Sales", format: "#" } },
+					vAxes: { 0: { title: "Sales", format: "$#.##" } },
 				}}
 				width="100%"
 				height="200px"
