@@ -4,19 +4,20 @@ const YoySalesConversionChart = ({
 	data,
 	title = "YoY Sales vs CR",
 	hAxisTitle,
+	TimeFormat,
 }) => {
 	if (!data || !data.current || !data.previous) return null;
 
 	const chartData = [
 		[
-			"Weekday",
+			TimeFormat,
 			"Sales",
 			"Conversion Rate",
 			"Previous Sales",
 			"Previous Conversion Rate",
 		],
 		...data.current.map((day, i) => [
-			day.hAxisTitle,
+			day.TimeFormat,
 			Number(day.Sales),
 			Number(day["Conversion Rate"]) / 100,
 			Number(data.previous[i]?.Sales ?? 0),
@@ -43,17 +44,17 @@ const YoySalesConversionChart = ({
 			1: { title: "Conversion Rate", format: "#%" },
 		},
 		series: {
-			0: { type: "bars", targetAxisIndex: 0, color: "rgb(17, 17, 160)" },
-			1: { type: "line", targetAxisIndex: 1, color: "rgb(17, 17, 160)" },
+			0: { type: "bars", targetAxisIndex: 0, color: "#354cbe" },
+			1: { type: "line", targetAxisIndex: 1, color: "#354cbe" },
 			2: {
 				type: "bars",
 				targetAxisIndex: 0,
-				color: "grey",
+				color: "#8d8d98",
 			},
 			3: {
 				type: "line",
 				targetAxisIndex: 1,
-				color: "grey",
+				color: "#8d8d98",
 			},
 		},
 		legend: { position: "in" },

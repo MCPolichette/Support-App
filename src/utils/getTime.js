@@ -26,6 +26,42 @@ export function extractMonthYear(dateStr) {
 	const [year, month, day] = dateStr.split("-");
 	return { month, year };
 }
+export function get30DaysPrior(dateStr) {
+	// Parse the input date (yyyy-mm-dd)
+	const inputDate = new Date(dateStr);
+	// Subtract 30 days
+	inputDate.setDate(inputDate.getDate() - 30);
+	// Format back to yyyy-mm-dd
+	const yyyy = inputDate.getFullYear();
+	const mm = String(inputDate.getMonth() + 1).padStart(2, "0");
+	const dd = String(inputDate.getDate()).padStart(2, "0");
+	return `${yyyy}-${mm}-${dd}`;
+}
+
+export function getBaselineRange(dateStr, days) {
+	const inputDate = new Date(`${dateStr}T00:00:00`);
+	// Clone and adjust start date (15 days prior)
+	const startDate = new Date(inputDate);
+	startDate.setDate(startDate.getDate() - days - 1);
+
+	// Clone and adjust end date (1 day prior)
+	const endDate = new Date(inputDate);
+	endDate.setDate(endDate.getDate() - 1);
+
+	// Format helper
+	const formatDate = (date) => {
+		const yyyy = date.getFullYear();
+		const mm = String(date.getMonth() + 1).padStart(2, "0");
+		const dd = String(date.getDate()).padStart(2, "0");
+		return `${yyyy}-${mm}-${dd}`;
+	};
+
+	return {
+		start: formatDate(startDate),
+		end: formatDate(endDate),
+	};
+}
+
 export function getPreviousYearMonthRange(currentStartDateStr) {
 	const currentDate = new Date(currentStartDateStr);
 	const startDate = new Date(

@@ -14,8 +14,9 @@ const MerchantAndNetworkInupt = ({
 }) => {
 	return (
 		<Row className="align-items-end mb-3">
-			<h4>{title}</h4>
+			{" "}
 			<hr />
+			<h4>{title}</h4>
 			<Col md={5}>
 				<InputGroup className="mb-2">
 					<Form.Label>

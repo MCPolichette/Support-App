@@ -84,20 +84,6 @@ const ParrallelPulseReport = () => {
 	return (
 		<div className="container ">
 			<div className="position-relative card-drop-in ">
-				{pageDisplay === "NoKey" && (
-					<Stack gap={3} className="text-center">
-						<Button
-							variant="danger"
-							size="lg"
-							href="/settings" // or wherever your API key settings live
-						>
-							This tool requires an API key to use
-						</Button>
-						<Button variant="secondary" href="/">
-							Return to Home Page
-						</Button>
-					</Stack>
-				)}
 				{pageDisplay === null && (
 					<div
 						className={loading ? "blur-sm pointer-events-none" : ""}
