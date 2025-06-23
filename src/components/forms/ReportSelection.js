@@ -57,6 +57,7 @@ const ReportSelection = () => {
 				activeKey={activeTab}
 				onSelect={(k) => setActiveTab(k)}
 				className="mb-3"
+				style={{ backgroundColor: "lightgrey" }}
 			>
 				{Object.entries(reportList).map(
 					([categoryName, categoryReports]) => (
@@ -65,7 +66,7 @@ const ReportSelection = () => {
 							title={categoryName.replaceAll("_", " ")}
 							key={categoryName}
 						>
-							<Row className="row mt-2">
+							<Row className="p-3">
 								{Object.entries(categoryReports).map(
 									([reportName, reportConfig]) => (
 										<Row

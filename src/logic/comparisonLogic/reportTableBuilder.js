@@ -62,7 +62,7 @@ const ReportTableBuilder = ({
 							<CustomCompTable
 								reportType="verticalComp"
 								reports={reports}
-								title={report.reportTitle}
+								title={report.titleDisplay}
 								limit={10}
 								merchantId={mid}
 								array={report}
@@ -78,7 +78,7 @@ const ReportTableBuilder = ({
 									current: reports[report.compReports.curr],
 									previous: reports[report.compReports.prev],
 								}}
-								title={report.titleDisize}
+								title={report.titleDisplay}
 								hAxisTitle={report.hAxisTitle}
 							/>
 						</Row>

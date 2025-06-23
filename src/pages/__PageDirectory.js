@@ -16,6 +16,14 @@ const _PageDirectory = [
 		keyRequired: false,
 	},
 	{
+		title: "Outage Estimate 2.0",
+		description:
+			"An updated version of the Outage Estimate, with more simplified logic, and easier setup.",
+		route: "/outage_estimate",
+		devOnly: true,
+		keyRequired: true,
+	},
+	{
 		title: "Recursive Link Crawler",
 		description: "work in progress. ",
 		route: "/link-detector",

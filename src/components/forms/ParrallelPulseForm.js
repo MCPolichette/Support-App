@@ -8,7 +8,7 @@ import {
 import { getSettings } from "../../utils/API/_AdminApiModules";
 import CompareDatesPicker from "./CompareDatesPicker";
 import MerchantAndNetworkInupt from "./MerchantAndNetworkInput";
-import { DefaultReportArray } from "../../logic/comparisonLogic/defaultReports";
+import { DefaultReportArray } from "../../utils/API/defaultReports";
 import ReportSelection from "./ReportSelection";
 
 const getMerchantLogo = (id) =>

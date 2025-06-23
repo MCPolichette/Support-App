@@ -1,9 +1,14 @@
 import React from "react";
-import { Row, Col, Button, Stack } from "react-bootstrap";
-//TODO.. THIS DOESNT WORK YET.. and I'll adress it later
+import { Row, Col, Spinner, Stack } from "react-bootstrap";
+import { TableTopper } from "./tables/tableExtras";
 
-const Loading = (modules, completedModules, loadingStage, continueButton) => {
-	console.log(modules, completedModules, loadingStage, continueButton);
+const LoadingOverlay = ({
+	modules,
+	completedModules,
+	loadingStage,
+	merchantReference,
+	tableButton,
+}) => {
 	return (
 		<Row>
 			<div
@@ -15,33 +20,32 @@ const Loading = (modules, completedModules, loadingStage, continueButton) => {
 				}}
 			></div>
 			<Row
-				className="position-absolute top-0 start-0 w-100 h-100 d-flex   align-items-center justify-content-center"
+				className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
 				style={{ zIndex: 10 }}
 			>
-				<Col md={4}>
-					<h3>Step 1: Running APIs</h3>
+				<Col md={6} className="d-flex justify-content-center">
+					<Row>
+						<Col sm={12} className="d-flex justify-content-center">
+							{loadingStage !== "Ready To Build Tables." && (
+								<Spinner
+									animation="border"
+									size="xl"
+									variant="secondary"
+								/>
+							)}
+						</Col>
+						<Col className="d-flex justify-content-center" sm={12}>
+							<h3>Step 1: Running APIs</h3>
+						</Col>
+					</Row>
 				</Col>
-				<Col md={2}>
-					{loadingStage != "Ready To Build Tables." && (
-						<div
-							className="spinner-border text-primary"
-							role="status"
-						>
-							<h1 className="visually-hidden">Loading...</h1>
-						</div>
-					)}
-				</Col>
+
 				<Col md={6} className="bg-white rounded shadow-sm p-3">
 					<h5 className="mb-3">Running Reports</h5>
-					<div
-						style={{
-							maxHeight: "300px",
-							overflowY: "auto",
-						}}
-					>
+					<div style={{ maxHeight: "300px", overflowY: "auto" }}>
 						{Object.entries(modules)
 							.filter(([_, mod]) => mod.inReport)
-							.map(([name, mod]) => (
+							.map(([name]) => (
 								<div
 									key={name}
 									className="d-flex align-items-center mb-2 small"
@@ -63,12 +67,13 @@ const Loading = (modules, completedModules, loadingStage, continueButton) => {
 					</div>
 				</Col>
 
+				<TableTopper id={merchantReference} text={loadingStage} />
 				<Stack gap={2} className="col-md-5 mx-auto">
-					<h5 style={{ textAlign: "center" }}>{loadingStage}</h5>
-					{continueButton}
+					{tableButton}
 				</Stack>
 			</Row>
 		</Row>
 	);
 };
-export default Loading;
+
+export default LoadingOverlay;

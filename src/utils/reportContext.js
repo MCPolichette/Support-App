@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { DefaultReportArray as DefaultReportList } from "../logic/comparisonLogic/defaultReports";
+import { DefaultReportArray as DefaultReportList } from "./API/defaultReports";
 import { getSettings } from "../utils/API/_AdminApiModules";
 
 const ReportContext = createContext();

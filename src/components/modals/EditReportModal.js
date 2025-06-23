@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Stack, InputGroup, Button, Alert } from "react-bootstrap";
-import { Master_List_of_Reports_Array } from "../../logic/comparisonLogic/masterListofReports";
+import { Master_List_of_Reports_Array } from "../../utils/API/masterListofReports";
 import { getSettings } from "../../utils/API/_AdminApiModules";
 import { useReportContext } from "../../utils/reportContext";
 import GlobalAlert from "../Elements/GlobalAlert";

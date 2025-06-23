@@ -102,21 +102,25 @@ export const CustomCompTable = ({
 		});
 
 		Object.entries(sortedArray).forEach(([i, curr]) => {
-			if (!curr || typeof curr !== "object") return;
+			if (!curr || typeof curr != "object") return;
 
 			const match =
 				reportP[i] && typeof reportP[i] === "object" ? reportP[i] : {};
 			const row = [];
 
 			// AOV
+
 			curr["AOV"] = curr["Sales"] / curr["# of Sales"];
 			match["AOV"] = match["Sales"] / match["# of Sales"];
 
 			// Total Spend
+
 			curr["Total Spend"] =
-				curr["Network Commission"] + curr["Commission"];
+				Number(curr["Network Commissions"]) +
+				Number(curr["Commissions"]);
 			match["Total Spend"] =
-				match["Network Commission"] + match["Commission"];
+				Number(match["Network Commissions"]) +
+				Number(match["Commissions"]);
 
 			// ROA
 			curr["ROA"] = curr["Sales"] / curr["Total Spend"];

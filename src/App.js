@@ -12,6 +12,7 @@ import RecursiveCrawler from "./pages/RecursiveCrawler";
 import Home from "./pages/home.js";
 import QuickTools from "./pages/QuickTools.js";
 import ParrallelPulseReport from "./pages/ParrallelPulseReport.js";
+import OutageEstimate from "./pages/OutageEstimate.js";
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 				<Route path="/automapper" element={<Automapper />} />
 				<Route path="/website_scanner" element={<RecursiveCrawler />} />
 				<Route path="/more_tools" element={<QuickTools />} />
+				<Route path="/outage_estimate" element={<OutageEstimate />} />
 
 				<Route
 					path="/ParrallelPulse"

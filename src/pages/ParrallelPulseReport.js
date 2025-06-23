@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack, Button, Row, Col, Container } from "react-bootstrap";
+import { Button, Row, Container } from "react-bootstrap";
 import ParrallelPulseForm from "../components/forms/ParrallelPulseForm";
 import ReportTableBuilder from "../logic/comparisonLogic/reportTableBuilder";
 import { adminReportAPI } from "../utils/API/reportEngine";
@@ -8,6 +8,7 @@ import { getReportTexts } from "../utils/getTime";
 import { generatePDF } from "../utils/exportPDF";
 import { FloatingCenterButton } from "../components/PDFelements";
 import { useReportContext } from "../utils/reportContext";
+import LoadingOverlay from "../components/LoadingOverlay";
 
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
@@ -45,6 +46,7 @@ const ParrallelPulseReport = () => {
 			console.log(selectedModules);
 			const results = await adminReportAPI({
 				reportType: "Comparison",
+				reportList,
 				selectedModules,
 				startDate: dates.startDate,
 				endDate: dates.endDate,
@@ -82,20 +84,6 @@ const ParrallelPulseReport = () => {
 	return (
 		<div className="container ">
 			<div className="position-relative card-drop-in ">
-				{pageDisplay === "NoKey" && (
-					<Stack gap={3} className="text-center">
-						<Button
-							variant="danger"
-							size="lg"
-							href="/settings" // or wherever your API key settings live
-						>
-							This tool requires an API key to use
-						</Button>
-						<Button variant="secondary" href="/">
-							Return to Home Page
-						</Button>
-					</Stack>
-				)}
 				{pageDisplay === null && (
 					<div
 						className={loading ? "blur-sm pointer-events-none" : ""}
@@ -110,81 +98,13 @@ const ParrallelPulseReport = () => {
 					</div>
 				)}
 				{loading && (
-					<Row>
-						<div
-							className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
-							style={{
-								backgroundColor: "rgba(255, 255, 255, 0.7)",
-								backdropFilter: "blur(4px)",
-								zIndex: 10,
-							}}
-						></div>
-						<Row
-							className="position-absolute top-0 start-0 w-100 h-100 d-flex   align-items-center justify-content-center"
-							style={{ zIndex: 10 }}
-						>
-							<Col md={4}>
-								<h3>Step 1: Running APIs</h3>
-							</Col>
-							<Col md={2}>
-								{loadingStage !== "Ready To Build Tables." && (
-									<div
-										className="spinner-border text-primary"
-										role="status"
-									>
-										<h1 className="visually-hidden">
-											Loading...
-										</h1>
-									</div>
-								)}
-							</Col>
-							<Col
-								md={6}
-								className="bg-white rounded shadow-sm p-3"
-							>
-								<h5 className="mb-3">Running Reports</h5>
-								<div
-									style={{
-										maxHeight: "300px",
-										overflowY: "auto",
-									}}
-								>
-									{Object.entries(modules)
-										.filter(([_, mod]) => mod.inReport)
-										.map(([name, mod]) => (
-											<div
-												key={name}
-												className="d-flex align-items-center mb-2 small"
-											>
-												<span
-													className="me-2"
-													style={{
-														fontSize: "1.2rem",
-														color: "#0d6efd",
-													}}
-												>
-													{completedModules.includes(
-														name
-													)
-														? "✅"
-														: "⏳"}
-												</span>
-												<span>
-													{name.replace(/_/g, " ")}
-												</span>
-											</div>
-										))}
-								</div>
-							</Col>
-
-							<Stack gap={2} className="col-md-5 mx-auto">
-								<h5 style={{ textAlign: "center" }}>
-									{loadingStage}
-								</h5>
-								{tableButton}
-							</Stack>
-						</Row>
-					</Row>
+					<LoadingOverlay
+						modules={modules}
+						completedModules={completedModules}
+						loadingStage={loadingStage}
+						merchantReference={merchantReference}
+						tableButton={tableButton}
+					/>
 				)}
 			</div>
 			{pageDisplay === "Tables" && (

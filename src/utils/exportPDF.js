@@ -31,7 +31,6 @@ export async function generatePDF(fileName) {
 	const imgHeight = canvas.height;
 	const imgWidth = canvas.width;
 	const scale = pageWidth / imgWidth;
-
 	const ctx = canvas.getContext("2d");
 
 	// Step 1: Gather break points
