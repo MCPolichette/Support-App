@@ -39,6 +39,7 @@ const ReportTableBuilder = ({
 			key,
 		})
 	);
+	console.log(Graphs);
 	const Aff_Web_Sub = Object.entries(
 		reportList["Affiliate_Performance_Reports"]
 	).map(([key, value]) => ({

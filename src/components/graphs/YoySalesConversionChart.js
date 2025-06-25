@@ -7,6 +7,9 @@ const YoySalesConversionChart = ({
 	TimeFormat,
 }) => {
 	if (!data || !data.current || !data.previous) return null;
+	if (!TimeFormat) {
+		TimeFormat = hAxisTitle;
+	}
 
 	const chartData = [
 		[

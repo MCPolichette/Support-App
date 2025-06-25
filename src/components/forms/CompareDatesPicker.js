@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Button, Row, Col, Badge, Tabs, Tab } from "react-bootstrap";
 import DateRangePicker from "./DateRangePicker";
-import { getLastYearSameWeek, getMonthRange } from "../../utils/getTime";
+import {
+	getLastYearSameWeek,
+	extractMonthYear,
+	getMonthRange,
+} from "../../utils/getTime";
 import MonthYearSelector from "./MonthYearPicker";
 const CompareDatesPicker = ({
 	startDate,
@@ -14,15 +18,15 @@ const CompareDatesPicker = ({
 	setPreviousPeriodEnd,
 }) => {
 	const oneYearPrior = (x) => {
+		const y = x.year - 1;
 		return {
 			month: x.month,
-			year: x.year - 1,
+			year: y,
 		};
 	};
 	const [disabledButton, setDisabledButton] = useState("disabled");
 	const [monthlyDateCs, setMonthlyDateCs] = useState(
-		// "extractMonthYear(startDate)"
-		"00"
+		extractMonthYear(startDate)
 	);
 	const [monthlyDatePs, setMonthlyDatePs] = useState(
 		oneYearPrior(monthlyDateCs)
@@ -41,7 +45,6 @@ const CompareDatesPicker = ({
 	};
 
 	const autoChangePreviousMonthYear = (date) => {
-		console.log(date);
 		setMonthlyDateCs(date);
 		setMonthlyDatePs(oneYearPrior(date));
 		setDates("current", date);

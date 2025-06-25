@@ -20,7 +20,7 @@ import {
 } from "../../../utils/getTime";
 import PerformanceSummaryByTimeGraph from "../../graphs/PerformanceSummaryByTime";
 import DateRangePicker from "../../forms/DateRangePicker";
-import LoadingOverlay from "../../LoadingOverlay";
+// import LoadingOverlay from "../../LoadingOverlay";
 const PerformanceSummaryByDay = ({
 	startingStage,
 	mId,
@@ -45,19 +45,59 @@ const PerformanceSummaryByDay = ({
 		getBaselineRange(startDate, baselineDays).end
 	);
 	const [endDate, setEndDate] = useState(end || getDefaultEndDate());
+	const [baseSummary, setBaseSummary] = useState({
+		clicks: 0,
+		sales: 0,
+		numOfSales: 0,
+	});
+	const [outageSummary, setOutageSummary] = useState({
+		clicks: 0,
+		sales: 0,
+		numOfSales: 0,
+	});
 
 	useEffect(() => {
 		if (stage === "baseline") {
 			const oneMonthPrior = get30DaysPrior(startDate);
-
 			console.log(oneMonthPrior);
 			runDayReport(oneMonthPrior);
 		} else {
 			return;
 		}
 	});
-	function nothing() {
-		return "";
+	function updateGraphData() {
+		const data = results.data;
+		const referenceDate = new Date(`${startDate}T00:00:00`);
+		const baseLineDates = {
+			end: new Date(`${suggestedBaselineEnd}T00:00:00`),
+			start: new Date(`${suggestedBaselineStart}T00:00:00`),
+		};
+		baseLineDates.end.setDate(baseLineDates.end.getDate() + 1);
+		baseLineDates.start.setDate(baseLineDates.start.getDate());
+		const oSummary = { clicks: 0, sales: 0, numOfSales: 0 };
+		const bSummary = { clicks: 0, sales: 0, numOfSales: 0 };
+		for (let i = 0; i < data.length; i++) {
+			const dayDate = new Date(`${data[i].Date}T00:00:00`);
+			const clicks = Number(data[i]["Click Throughs"]);
+			const sales = Number(data[i]["Sales"]);
+			const numOfSales = Number(data[i]["# of Sales"]);
+			const isBaseline =
+				dayDate < baseLineDates.end && dayDate > baseLineDates.start;
+			const isOutage = dayDate >= referenceDate;
+			if (isBaseline) {
+				bSummary.clicks = bSummary.clicks + clicks;
+				bSummary.sales = bSummary.sales + sales;
+				bSummary.numOfSales = bSummary.numOfSales + numOfSales;
+			} else if (isOutage) {
+				oSummary.clicks = oSummary.clicks + clicks;
+				oSummary.sales = oSummary.sales + sales;
+				oSummary.numOfSales = oSummary.numOfSales + numOfSales;
+			}
+		}
+		oSummary.conversionRate = oSummary.numOfSales / oSummary.clicks;
+		bSummary.conversionRate = bSummary.numOfSales / bSummary.clicks;
+		setBaseSummary(bSummary);
+		setOutageSummary(oSummary);
 	}
 
 	const runDayReport = async (newStartDate) => {
@@ -69,7 +109,6 @@ const PerformanceSummaryByDay = ({
 				settings.key,
 				merchantId
 			);
-			console.log(performanceSummaryReport);
 			const errorMessage =
 				"Invalid authentication key supplied for admin/private login-specific request.";
 			if (
@@ -140,10 +179,12 @@ const PerformanceSummaryByDay = ({
 									end: suggestedBaselineEnd,
 								}}
 								outageDates={{ start: startDate, end: endDate }}
+								setBaseSummary={setBaseSummary}
+								setOutageSummary={setOutageSummary}
 							/>
 						</Col>
 						<Col sm={4}>
-							<Alert variant="success">
+							<Alert variant="success" className="small">
 								<h4>Choosing Baseline Period</h4>
 								<p>
 									The Default Baseline Period is generally the
@@ -153,6 +194,31 @@ const PerformanceSummaryByDay = ({
 									the size of the outage, and the click
 									performances
 								</p>
+								<dl>
+									<dt>Baseline Data</dt>
+									<dd>-Clicks={baseSummary.clicks}</dd>
+									<dd>-sales={baseSummary.sales}</dd>
+									<dd>
+										-Number of Sales=
+										{baseSummary.numOfSales}
+									</dd>
+									<dd>
+										-Conversion rate=
+										{baseSummary.conversionRate}
+									</dd>
+									<dt>Outage Data</dt>
+									<dd>-Clicks={outageSummary.clicks}</dd>
+									<dd>-sales={outageSummary.sales}</dd>
+									<dd>
+										-Number of Sales=
+										{outageSummary.numOfSales}
+									</dd>
+									<dd>
+										-Conversion rate=
+										{outageSummary.conversionRate}
+									</dd>
+								</dl>
+
 								<Row>
 									<h4>Adjust Baseline Dates</h4>
 									<DateRangePicker
@@ -162,7 +228,7 @@ const PerformanceSummaryByDay = ({
 											setSuggestedBaselineStart
 										}
 										onEndChange={setSuggestedBaselineEnd}
-										otherFunction={nothing}
+										otherFunction={updateGraphData}
 									/>
 								</Row>
 							</Alert>
