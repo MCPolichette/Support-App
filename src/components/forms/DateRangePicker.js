@@ -19,7 +19,7 @@ const DateRangePicker = ({
 							value={startDate}
 							onChange={(e) => {
 								onStartChange(e.target.value);
-								otherFunction();
+								otherFunction("test");
 							}}
 						/>
 					</Form.Group>
@@ -32,7 +32,7 @@ const DateRangePicker = ({
 							value={endDate}
 							onChange={(e) => {
 								onEndChange(e.target.value);
-								otherFunction();
+								otherFunction("test");
 							}}
 						/>
 					</Form.Group>

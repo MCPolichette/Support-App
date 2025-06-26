@@ -16,8 +16,10 @@ const getSettings = () => {
 const storageSettings =
 	JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
 const showDev = storageSettings.showDev;
-const visiblePages = _PageDirectory.filter((page) => !page.devOnly || showDev);
-
+const showApiTools = storageSettings.validKey;
+const visiblePages = _PageDirectory.filter(
+	(page) => !page.keyRequired || showApiTools
+);
 const AppNavbar = () => {
 	const settings = getSettings();
 	const [modalOpen, setModalOpen] = useState(false);

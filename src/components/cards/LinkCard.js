@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { Card, Button, Badge } from "react-bootstrap";
-import StylizedModal from "../modals/_ModalStylized";
 
-const LinkCard = ({ title, text, route, modal, dev, index }) => {
+import { InputGroup, Form, Card, Button, Badge } from "react-bootstrap";
+import StylizedModal from "../modals/_ModalStylized";
+import { Link } from "react-router-dom";
+
+import e from "cors";
+
+const LinkCard = ({ title, text, route, modal, dev, index, cardInput }) => {
 	const [showModal, setShowModal] = useState(false);
 	const [showDev] = useState(dev);
+	const [inputValue, setInputValue] = useState("");
+
+	const handleChange = (e) => {
+		setInputValue(e.target.value);
+	};
 	const hasRoute = !!route;
 	const hasModal = !!modal;
+	const isCardInput = !!cardInput;
 
 	const renderButton = () => {
 		if (hasRoute && hasModal) {
@@ -36,7 +45,30 @@ const LinkCard = ({ title, text, route, modal, dev, index }) => {
 					Open {title}
 				</Button>
 			);
+		} else if (isCardInput) {
+			return (
+				<div>
+					<p>
+						<strong>Enter Affiliate ID:</strong>
+					</p>
+					<Form.Control
+						type="text"
+						placeholder="Enter Affiliate ID"
+						value={inputValue}
+						onChange={handleChange}
+					/>
+					<Button
+						className="mt-2"
+						onClick={() =>
+							window.open(cardInput + inputValue, "_blank")
+						}
+					>
+						Open Popup
+					</Button>
+				</div>
+			);
 		}
+
 		return null;
 	};
 
@@ -58,7 +90,7 @@ const LinkCard = ({ title, text, route, modal, dev, index }) => {
 						)}
 						<p className="card-text">{text}</p>
 					</div>
-					{(hasRoute || hasModal) && (
+					{(hasRoute || hasModal || isCardInput) && (
 						<div className="mt-4">{renderButton()}</div>
 					)}
 				</div>

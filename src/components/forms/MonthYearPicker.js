@@ -20,11 +20,20 @@ const MonthYearSelector = ({ date, onChange }) => {
 	const currentYear = new Date().getFullYear();
 	const yearRange = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
+	console.log(date);
 	const handleMonthChange = (e) => {
+		if (date.year === "undefiend") {
+			console.log(date);
+			return;
+		}
 		onChange({ ...date, month: e.target.value });
 	};
 
 	const handleYearChange = (e) => {
+		if (date.month === "undefiend") {
+			console.log(date);
+			return;
+		}
 		onChange({ ...date, year: e.target.value });
 	};
 

@@ -3,6 +3,7 @@ import { Form, Button, InputGroup, Row, Col, Alert } from "react-bootstrap";
 import CopyToClipboard from "../../buttons_and_dropdowns/CopyToClipboard";
 
 //TODO: Filters for ampersands and other characters that may adversly affect the link parameters.  (encoding may be optional)
+//TODO A copypasta link example of what it would look like. for the UTM options.
 const UTMBuilder = () => {
 	const [utm, setUtm] = useState({
 		utm_campaign: "",
@@ -125,12 +126,22 @@ const UTMBuilder = () => {
 						</Button>
 
 						<div>
-							<Button
-								variant="primary"
-								onClick={buildQueryString}
-							>
-								GO!
-							</Button>
+							{output === "" && (
+								<Button
+									variant="primary"
+									onClick={buildQueryString}
+								>
+									Create UTM string
+								</Button>
+							)}
+							{output && (
+								<Button
+									variant="primary"
+									onClick={buildQueryString}
+								>
+									Update UTM string
+								</Button>
+							)}
 						</div>
 					</Form>
 

@@ -39,14 +39,13 @@ const OutageEstimate = () => {
 	const [loadingStage, setLoadingStage] = useState("");
 	const [currentDates, setCurrentDates] = useState({});
 	const [previousDates, setPreviousDates] = useState({});
-
 	const [completedModules, setCompletedModules] = useState([]);
 	const [selectedMerchant, setSelectedMerchant] = useState("");
 	const [selectedNetwork, setSelectedNetwork] = useState("");
 	const [reportingStage, setReportingStage] = useState("baseline");
 	const [disabledBaselineButton, setDisabledBaselineButton] = useState(true);
-
 	const [tableButton, setTableButton] = useState(<div></div>);
+	const [graphs, setGraphs] = useState(<div></div>);
 	useEffect(() => {
 		if (selectedMerchant !== "" && selectedNetwork !== "") {
 			setDisabledBaselineButton(false);
@@ -129,7 +128,6 @@ const OutageEstimate = () => {
 				<Container className="shadow-sm p-4 bg-white border rounded ">
 					<Row>
 						<h1>Outage Estimate 2.0</h1>
-
 						<MerchantAndNetworkInupt
 							title="Fill in the Merchant Id and Network to begin"
 							selectedMerchant={selectedMerchant}
@@ -223,10 +221,11 @@ const OutageEstimate = () => {
 					<Row id="report_pdf">
 						<OutageReport
 							reportList={""}
+							Graphs={graphs}
 							mid={selectedMerchant}
 							reports={reportResults}
-							currentDates={currentDates}
-							previousDates={previousDates}
+							outageDates={currentDates}
+							baselineDates={previousDates}
 						/>
 					</Row>
 					<hr
@@ -251,6 +250,7 @@ const OutageEstimate = () => {
 					start={startDate}
 					end={endDate}
 					runReport={handleRunReport}
+					setGraphs={setGraphs}
 				/>
 			</StylizedModal>
 		</div>

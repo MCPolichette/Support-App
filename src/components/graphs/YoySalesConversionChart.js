@@ -7,6 +7,9 @@ const YoySalesConversionChart = ({
 	TimeFormat,
 }) => {
 	if (!data || !data.current || !data.previous) return null;
+	if (!TimeFormat) {
+		TimeFormat = hAxisTitle;
+	}
 
 	const chartData = [
 		[
@@ -40,7 +43,7 @@ const YoySalesConversionChart = ({
 			slantedTextAngle: 19,
 		},
 		vAxes: {
-			0: { title: "Sales", format: "$#,###" },
+			0: { title: "Sales", format: "$#,##" },
 			1: { title: "Conversion Rate", format: "#%" },
 		},
 		series: {

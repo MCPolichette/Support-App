@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Outage Estimate Report</title>
+		<style>
+			body {
+				font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+				margin: 2rem;
+				color: #333;
+			}
+			h2,
+			h3 {
+				border-bottom: 2px solid #ddd;
+				padding-bottom: 0.4rem;
+				margin-top: 2rem;
+			}
+			.section {
+				margin-bottom: 2rem;
+			}
+			.info-box {
+				background: #f9f9f9;
+				border-left: 4px solid #2196f3;
+				padding: 1rem;
+				margin: 1rem 0;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 1rem;
+			}
+			th,
+			td {
+				padding: 0.5rem;
+				border: 1px solid #ccc;
+				text-align: right;
+			}
+			th {
+				background-color: #f0f0f0;
+			}
+			.table-footer {
+				font-weight: bold;
+				background-color: #eef2f7;
+			}
+			.summary-box {
+				background-color: #f4f4f4;
+				padding: 1rem;
+				border-radius: 6px;
+				width: 300px;
+			}
+		</style>
+	</head>
+	<body>
+		<h2>Outage Estimate Report</h2>
+		<div class="section">
+			<strong>Merchant:</strong> Helly Hansen CA<br />
+			<strong>Program ID:</strong> 18065<br />
+			<strong>Outage Date:</strong> June 26, 2025<br />
+			<strong>Affiliate Commission Rates:</strong> 5.00% - 20.00%<br />
+			<strong>Network Commission Rate:</strong> 20% of Affiliate
+			Commission
+		</div>
+
+		<div class="info-box">
+			<p><strong>About This Report:</strong></p>
+			<p>
+				This report compares the outage period with a baseline period of
+				similar length in the past. To estimate lost sales by affiliate,
+				we evaluate their clickthrough performance.
+			</p>
+			<p>
+				Sales estimates are calculated using two methods: one based on
+				the affiliate’s historical AOV and conversion rate, and another
+				based on their share of total clicks. The final estimate is the
+				average of these two methods. Any tracked sales during the
+				outage are deducted to avoid duplication.
+			</p>
+		</div>
+
+		<div class="section">
+			<h3>Performance Comparison</h3>
+			<table>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Baseline Period<br />May 22–Jun 10</th>
+						<th>Outage Period<br />Jun 12–Jun 17</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Sales</td>
+						<td>$12,050.87</td>
+						<td>—</td>
+					</tr>
+					<tr>
+						<td>Clickthroughs</td>
+						<td>530</td>
+						<td>1245</td>
+					</tr>
+					<tr>
+						<td>Conversion Rate</td>
+						<td>1.56%</td>
+						<td>—</td>
+					</tr>
+					<tr>
+						<td>Average Order Value (AOV)</td>
+						<td>$206.05</td>
+						<td>—</td>
+					</tr>
+					<tr>
+						<td>Estimated Sales</td>
+						<td>—</td>
+						<td>$4,001.09</td>
+					</tr>
+					<tr>
+						<td>Tracked Sales</td>
+						<td>—</td>
+						<td>$110.00</td>
+					</tr>
+					<tr class="table-footer">
+						<td><strong>Adjusted Discrepancy</strong></td>
+						<td>—</td>
+						<td>$3,891.99</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="section">
+			<h3>Top Affiliates During Outage</h3>
+			<p>
+				20 affiliates selected based on click volume (accounting for
+				99.6% of clicks).
+			</p>
+			<!-- You can paste your full affiliate breakdown table here -->
+		</div>
+
+		<div class="section">
+			<h3>Estimated Payout Summary</h3>
+			<div class="summary-box">
+				<p><strong>Affiliate Commission:</strong> $652.90</p>
+				<p><strong>Network Commission:</strong> $130.58</p>
+				<hr />
+				<p><strong>Total:</strong> $783.48</p>
+			</div>
+		</div>
+	</body>
+</html>

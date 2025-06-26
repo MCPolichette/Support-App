@@ -5,6 +5,9 @@ Table {
 Table.largeFont {
 	font-size: 14pt;
 }
+Table.standard {
+	font-size: 10pt;
+}
 
 .table th {
 	border-top: 2px solid #000;
