@@ -1,10 +1,8 @@
 import React from "react";
 import { Chart } from "react-google-charts";
-
 const PerformanceSummaryByTimeGraph = ({
 	data,
 	title,
-	hAxisTitle,
 	outageDates,
 	baselineDays,
 	setBaseSummary,
@@ -15,7 +13,7 @@ const PerformanceSummaryByTimeGraph = ({
 	const referenceDate = new Date(`${outageDates.start}T00:00:00`);
 	const baseLineStart = new Date(baselineDays.start);
 	const baseLineEnd = new Date(baselineDays.end);
-	baseLineEnd.setDate(baseLineEnd.getDate() + 1); // This logic works.. but something is odd here.
+	baseLineEnd.setDate(baseLineEnd.getDate() + 1);
 	const clickChart = [
 		[
 			"Date",
@@ -46,7 +44,6 @@ const PerformanceSummaryByTimeGraph = ({
 				bSummary.clicks = bSummary.clicks + clicks;
 				bSummary.sales = bSummary.sales + sales;
 				bSummary.numOfSales = bSummary.numOfSales + numOfSales;
-
 				if (!prevDay || prevDay <= baseLineStart) {
 					label = "Baseline Start";
 				} else if (!nextDay || nextDay >= baseLineEnd) {
@@ -70,8 +67,7 @@ const PerformanceSummaryByTimeGraph = ({
 	const salesChart = [
 		[
 			"Date",
-			"Sales",
-
+			"Sales Dollar Amount",
 			"Number Of Sales",
 			{ role: "style" },
 			{ role: "annotation" },
@@ -82,21 +78,17 @@ const PerformanceSummaryByTimeGraph = ({
 			const numOfSales = Number(day["# of Sales"]);
 			let label = "";
 			let color = "color:#8d8d98";
-
 			const isBaseline =
 				dayDate <= baseLineEnd && dayDate > baseLineStart;
 			const isOutage = dayDate >= referenceDate;
-
 			const prevDay =
 				i > 0 ? new Date(`${data[i - 1].Date}T00:00:00`) : null;
 			const nextDay =
 				i < data.length - 1
 					? new Date(`${data[i + 1].Date}T00:00:00`)
 					: null;
-
 			if (isBaseline) {
 				color = "color: green";
-
 				if (!prevDay || prevDay <= baseLineStart) {
 					label = "Baseline Start";
 				} else if (!nextDay || nextDay >= baseLineEnd) {
@@ -104,14 +96,12 @@ const PerformanceSummaryByTimeGraph = ({
 				}
 			} else if (isOutage) {
 				color = "color: red";
-
 				if (!prevDay || prevDay < referenceDate) {
 					label = "Outage Start";
 				} else if (i === data.length - 1) {
 					label = "Outage End";
 				}
 			}
-
 			return [day.Date, sales, numOfSales, color, label];
 		}),
 	];
@@ -119,7 +109,6 @@ const PerformanceSummaryByTimeGraph = ({
 		title,
 		fontSize: 10,
 		hAxis: {
-			title: hAxisTitle,
 			textStyle: { fontSize: 8, color: "#333" },
 			slantedText: true,
 			slantedTextAngle: 40,
@@ -134,6 +123,7 @@ const PerformanceSummaryByTimeGraph = ({
 				data={clickChart}
 				options={{
 					...commonOptions,
+					hAxisTitle: "Clicks and Conversion Rates",
 					vAxes: {
 						0: { title: "Clicks", format: "#" },
 						1: { title: "Conversion Rate", format: "#%" },
@@ -155,6 +145,7 @@ const PerformanceSummaryByTimeGraph = ({
 				height="200px"
 				loader={<div>Loading Chart...</div>}
 			/>
+			<p> Clicks and Conversions - 30 days prior to the outage</p>
 			<hr />
 			<h6>Sales Performance Summary by Day</h6>
 			<Chart
@@ -163,7 +154,7 @@ const PerformanceSummaryByTimeGraph = ({
 				options={{
 					...commonOptions,
 					vAxes: {
-						0: { title: "Sales", format: "$#.##" },
+						0: { title: "Sales in Dollars", format: "$#.##" },
 						1: { title: "Number of Sales", format: "#" },
 					},
 					series: {
@@ -183,6 +174,10 @@ const PerformanceSummaryByTimeGraph = ({
 				height="200px"
 				loader={<div>Loading Chart...</div>}
 			/>
+			<p>
+				Number of Sales and Sales Totals - 30 days prior to the outage
+			</p>
+			<hr />
 		</div>
 	);
 };

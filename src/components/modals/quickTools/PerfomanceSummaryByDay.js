@@ -29,6 +29,7 @@ const PerformanceSummaryByDay = ({
 	start,
 	end,
 	runReport,
+	setGraphs,
 }) => {
 	const settings = getSettings();
 	const [baselineDays, setBaselineDays] = useState(14);
@@ -59,9 +60,23 @@ const PerformanceSummaryByDay = ({
 		sales: 0,
 		numOfSales: 0,
 	});
-
+	function runComparison(bDates) {
+		setGraphs(
+			<PerformanceSummaryByTimeGraph
+				data={results.data}
+				reportFormat={"Clicks"}
+				baselineDays={{
+					start: suggestedBaselineStart,
+					end: suggestedBaselineEnd,
+				}}
+				outageDates={{ start: startDate, end: endDate }}
+				setBaseSummary={setBaseSummary}
+				setOutageSummary={setOutageSummary}
+			/>
+		);
+		runReport(bDates);
+	}
 	const BaseAndOutageData = [];
-
 	function updateGraphData(data) {
 		const referenceDate = new Date(`${startDate}T00:00:00`);
 		const baseLineDates = {
@@ -87,7 +102,6 @@ const PerformanceSummaryByDay = ({
 			const clicks = Number(data[i]["Click Throughs"]);
 			const sales = Number(data[i]["Sales"]);
 			const numOfSales = Number(data[i]["# of Sales"]);
-
 			const isBaseline =
 				dayDate < baseLineDates.end && dayDate > baseLineDates.start;
 			const isOutage = dayDate >= referenceDate;
@@ -103,7 +117,6 @@ const PerformanceSummaryByDay = ({
 		}
 		oSummary.conversionRate = (oSummary.numOfSales / oSummary.clicks) * 100;
 		bSummary.conversionRate = (bSummary.numOfSales / bSummary.clicks) * 100;
-
 		const table = [
 			[
 				"Suggested Baseline Period",
@@ -217,7 +230,6 @@ const PerformanceSummaryByDay = ({
 						<Col sm={8}>
 							<PerformanceSummaryByTimeGraph
 								data={results.data}
-								hAxisTitle={"TODO"}
 								reportFormat={"Clicks"}
 								baselineDays={{
 									start: suggestedBaselineStart,
@@ -254,13 +266,12 @@ const PerformanceSummaryByDay = ({
 								</Row>
 							</Alert>
 						</Col>
-
 						<Button
 							variant="primary"
 							size="lg"
 							className="mt-2"
 							onClick={() =>
-								runReport({
+								runComparison({
 									start: suggestedBaselineStart,
 									end: suggestedBaselineEnd,
 								})

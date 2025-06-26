@@ -12,6 +12,21 @@ const getLocalMerchantLogo = (id) => `/style/merchant_logos/${id}.png`;
 export const TableTopper = ({ id, text }) => {
 	const [logoSrc, setLogoSrc] = useState(getLocalMerchantLogo(id));
 
+	function formatTextToHeadings(textArray) {
+		if (!Array.isArray(textArray) || textArray.length === 0) return "";
+
+		return (
+			<Col md={6} className="d-flex flex-column align-items-center">
+				<h4 className="mb-1">{textArray[0]}</h4>
+				{textArray.slice(1).map((line, index) => (
+					<h5 key={index} className="mb-0">
+						{line}
+					</h5>
+				))}
+			</Col>
+		);
+	}
+	const title = formatTextToHeadings(text);
 	// Attempt to verify local image loads
 	useEffect(() => {
 		const img = new Image();
@@ -38,9 +53,8 @@ export const TableTopper = ({ id, text }) => {
 				/>
 			</Col>
 
-			<Col md={6} className="d-flex justify-content-center">
-				<h4>{text}</h4>
-			</Col>
+			{title}
+
 			<Col md={3} className="d-flex justify-content-center">
 				<img
 					src="/style/Avantlink_fullcolor.png"

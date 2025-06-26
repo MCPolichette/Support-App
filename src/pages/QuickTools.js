@@ -4,6 +4,7 @@ import FTPshorthand from "../components/modals/quickTools/FTPshorthand";
 import IBCVerification from "../components/modals/quickTools/IBCVerification";
 import UTMBuilder from "../components/modals/quickTools/UTMBuilder";
 import DownloadXMLTool from "../components/modals/quickTools/DownloadXMLTool";
+import AffPopup from "../components/modals/quickTools/AffiliatePopup";
 
 import LinkCard from "../components/cards/LinkCard";
 
@@ -36,6 +37,15 @@ const QuickTools = () => {
 			apiRequired: true,
 		},
 		{
+			title: "Affiliate Pop-up",
+			description:
+				"A quick link, to open the Affiliate information pop-up based on Affiliate ID.\n Use-case : 2FA , etc.. Must be logged into AvantLink with same Browser Application, and Network to work.",
+			cardInput:
+				"https://classic.avantlink.com/admin/affiliate_application_detail.php?lngApplicationId=",
+			apiRequired: true,
+		},
+
+		{
 			title: "Force Download XML",
 			description:
 				"For those Awful XML docs that cannot download or display in the browser. this should force the download to your downloads folder.",
@@ -66,6 +76,7 @@ const QuickTools = () => {
 							text={tool.description}
 							modal={tool.modal}
 							index={index}
+							cardInput={tool.cardInput}
 						/>
 					))}
 				</div>
