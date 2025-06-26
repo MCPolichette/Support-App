@@ -35,7 +35,7 @@ const PerformanceSummaryByDay = ({
 	const [merchantId, setMerchantId] = useState(mId || "");
 	const [network, setNetwork] = useState(mNetwork || "US");
 	const [stage, setStage] = useState("input");
-	const [results, setResults] = useState({ data: {}, title: "" });
+	const [results, setResults] = useState({ data: [], title: "" });
 	const [startDate, setStartDate] = useState(
 		start || getDefaultStartDate("first-of-last-month")
 	);
@@ -62,9 +62,7 @@ const PerformanceSummaryByDay = ({
 
 	const BaseAndOutageData = [];
 
-	function updateGraphData() {
-		const data = results.data;
-		console.log(results);
+	function updateGraphData(data) {
 		const referenceDate = new Date(`${startDate}T00:00:00`);
 		const baseLineDates = {
 			end: new Date(`${suggestedBaselineEnd}T00:00:00`),
@@ -72,13 +70,24 @@ const PerformanceSummaryByDay = ({
 		};
 		baseLineDates.end.setDate(baseLineDates.end.getDate() + 1);
 		baseLineDates.start.setDate(baseLineDates.start.getDate());
-		const oSummary = { clicks: 0, sales: 0, numOfSales: 0 };
-		const bSummary = { clicks: 0, sales: 0, numOfSales: 0 };
+		const oSummary = {
+			clicks: 0,
+			sales: 0,
+			numOfSales: 0,
+			conversionRate: 0,
+		};
+		const bSummary = {
+			clicks: 0,
+			sales: 0,
+			numOfSales: 0,
+			conversionRate: 0,
+		};
 		for (let i = 0; i < data.length; i++) {
 			const dayDate = new Date(`${data[i].Date}T00:00:00`);
 			const clicks = Number(data[i]["Click Throughs"]);
 			const sales = Number(data[i]["Sales"]);
 			const numOfSales = Number(data[i]["# of Sales"]);
+
 			const isBaseline =
 				dayDate < baseLineDates.end && dayDate > baseLineDates.start;
 			const isOutage = dayDate >= referenceDate;
@@ -92,44 +101,45 @@ const PerformanceSummaryByDay = ({
 				oSummary.numOfSales = oSummary.numOfSales + numOfSales;
 			}
 		}
-		oSummary.conversionRate = oSummary.numOfSales / oSummary.clicks;
-		bSummary.conversionRate = bSummary.numOfSales / bSummary.clicks;
-		console.log(oSummary, bSummary);
+		oSummary.conversionRate = (oSummary.numOfSales / oSummary.clicks) * 100;
+		bSummary.conversionRate = (bSummary.numOfSales / bSummary.clicks) * 100;
+
+		const table = [
+			[
+				"Suggested Baseline Period",
+				bSummary.clicks,
+				bSummary.sales,
+				bSummary.numOfSales,
+				bSummary.conversionRate,
+			],
+			[
+				"Outage",
+				oSummary.clicks,
+				oSummary.sales,
+				oSummary.numOfSales,
+				oSummary.conversionRate,
+			],
+		];
 		setSummaries(
 			<ColumnMapTable
 				id={mId}
-				// topperText={}
+				hideTools={true}
+				classNames="standard"
 				title={"Comparing periods"}
 				tableMap={[
 					{ label: "TimeLine", type: "string" },
 					{ label: "Clicks", type: "int" },
 					{ label: "Sales", type: "dollar" },
 					{ label: "Number of Sales", type: "int" },
-					{ label: "Conversion Rate", type: "int" },
+					{ label: "Conversion Rate", type: "percent" },
 				]}
-				table={[
-					[
-						"Baseline",
-						bSummary.clicks,
-						bSummary.sales,
-						bSummary.numOfSales,
-						bSummary.conversionRate,
-					],
-					[
-						"Outage",
-						oSummary.clicks,
-						oSummary.sales,
-						oSummary.numOfSales,
-						oSummary.conversionRate,
-					],
-				]}
+				table={table}
 				limit={3}
 			/>
 		);
 	}
 	async function runDayReport(newStartDate) {
 		const apiStart = newStartDate || startDate;
-		console.log(apiStart, newStartDate);
 		try {
 			const performanceSummaryReport = await runAPI(
 				{ report_id: 12, startDate: apiStart, endDate: endDate },
@@ -150,7 +160,7 @@ const PerformanceSummaryByDay = ({
 			}
 			setResults({ data: performanceSummaryReport });
 			setStage("results");
-			updateGraphData();
+			updateGraphData(performanceSummaryReport);
 		} catch (err) {
 			setStage("error");
 			console.log(err);

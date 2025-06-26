@@ -60,6 +60,7 @@ const ColumnMapTable = ({
 	topperText,
 	id,
 	hideTools,
+	classNames,
 }) => {
 	const [displayedRows, setDisplayedRows] = useState(
 		table.slice(0, setRows(limit, table))
@@ -87,7 +88,13 @@ const ColumnMapTable = ({
 			{displayTable ? (
 				<div>
 					{title && <h5>{title}</h5>}
-					<Table striped bordered hover size="sm">
+					<Table
+						striped
+						bordered
+						hover
+						size="sm"
+						classNames={classNames}
+					>
 						<thead>
 							<tr className="blacktop">
 								{tableMap.map((col, idx) =>
