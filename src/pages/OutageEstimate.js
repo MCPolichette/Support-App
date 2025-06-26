@@ -39,7 +39,6 @@ const OutageEstimate = () => {
 	const [loadingStage, setLoadingStage] = useState("");
 	const [currentDates, setCurrentDates] = useState({});
 	const [previousDates, setPreviousDates] = useState({});
-
 	const [completedModules, setCompletedModules] = useState([]);
 	const [selectedMerchant, setSelectedMerchant] = useState("");
 	const [selectedNetwork, setSelectedNetwork] = useState("");

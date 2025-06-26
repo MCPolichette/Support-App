@@ -43,7 +43,7 @@ const YoySalesConversionChart = ({
 			slantedTextAngle: 19,
 		},
 		vAxes: {
-			0: { title: "Sales", format: "$#,###" },
+			0: { title: "Sales", format: "$#,##" },
 			1: { title: "Conversion Rate", format: "#%" },
 		},
 		series: {

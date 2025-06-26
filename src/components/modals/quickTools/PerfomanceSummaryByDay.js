@@ -20,6 +20,7 @@ import {
 } from "../../../utils/getTime";
 import PerformanceSummaryByTimeGraph from "../../graphs/PerformanceSummaryByTime";
 import DateRangePicker from "../../forms/DateRangePicker";
+import ColumnMapTable from "../../tables/columnMapTable";
 // import LoadingOverlay from "../../LoadingOverlay";
 const PerformanceSummaryByDay = ({
 	startingStage,
@@ -29,12 +30,12 @@ const PerformanceSummaryByDay = ({
 	end,
 	runReport,
 }) => {
-	const [baselineDays, setBaselineDays] = useState(14);
 	const settings = getSettings();
+	const [baselineDays, setBaselineDays] = useState(14);
 	const [merchantId, setMerchantId] = useState(mId || "");
 	const [network, setNetwork] = useState(mNetwork || "US");
-	const [stage, setStage] = useState(startingStage || "input");
-	const [results, setResults] = useState(["Clicks", "Sales VS Clicks"]);
+	const [stage, setStage] = useState("input");
+	const [results, setResults] = useState({ data: {}, title: "" });
 	const [startDate, setStartDate] = useState(
 		start || getDefaultStartDate("first-of-last-month")
 	);
@@ -45,6 +46,9 @@ const PerformanceSummaryByDay = ({
 		getBaselineRange(startDate, baselineDays).end
 	);
 	const [endDate, setEndDate] = useState(end || getDefaultEndDate());
+
+	const [summaries, setSummaries] = useState(<></>);
+	const [load, setLoad] = useState(true);
 	const [baseSummary, setBaseSummary] = useState({
 		clicks: 0,
 		sales: 0,
@@ -56,17 +60,11 @@ const PerformanceSummaryByDay = ({
 		numOfSales: 0,
 	});
 
-	useEffect(() => {
-		if (stage === "baseline") {
-			const oneMonthPrior = get30DaysPrior(startDate);
-			console.log(oneMonthPrior);
-			runDayReport(oneMonthPrior);
-		} else {
-			return;
-		}
-	});
+	const BaseAndOutageData = [];
+
 	function updateGraphData() {
 		const data = results.data;
+		console.log(results);
 		const referenceDate = new Date(`${startDate}T00:00:00`);
 		const baseLineDates = {
 			end: new Date(`${suggestedBaselineEnd}T00:00:00`),
@@ -96,13 +94,42 @@ const PerformanceSummaryByDay = ({
 		}
 		oSummary.conversionRate = oSummary.numOfSales / oSummary.clicks;
 		bSummary.conversionRate = bSummary.numOfSales / bSummary.clicks;
-		setBaseSummary(bSummary);
-		setOutageSummary(oSummary);
+		console.log(oSummary, bSummary);
+		setSummaries(
+			<ColumnMapTable
+				id={mId}
+				// topperText={}
+				title={"Comparing periods"}
+				tableMap={[
+					{ label: "TimeLine", type: "string" },
+					{ label: "Clicks", type: "int" },
+					{ label: "Sales", type: "dollar" },
+					{ label: "Number of Sales", type: "int" },
+					{ label: "Conversion Rate", type: "int" },
+				]}
+				table={[
+					[
+						"Baseline",
+						bSummary.clicks,
+						bSummary.sales,
+						bSummary.numOfSales,
+						bSummary.conversionRate,
+					],
+					[
+						"Outage",
+						oSummary.clicks,
+						oSummary.sales,
+						oSummary.numOfSales,
+						oSummary.conversionRate,
+					],
+				]}
+				limit={3}
+			/>
+		);
 	}
-
-	const runDayReport = async (newStartDate) => {
+	async function runDayReport(newStartDate) {
 		const apiStart = newStartDate || startDate;
-		setStage("loading");
+		console.log(apiStart, newStartDate);
 		try {
 			const performanceSummaryReport = await runAPI(
 				{ report_id: 12, startDate: apiStart, endDate: endDate },
@@ -123,10 +150,18 @@ const PerformanceSummaryByDay = ({
 			}
 			setResults({ data: performanceSummaryReport });
 			setStage("results");
+			updateGraphData();
 		} catch (err) {
-			setStage("error", err);
+			setStage("error");
+			console.log(err);
 		}
-	};
+	}
+	if (startingStage === "baseline" && load === true) {
+		console.log("firstLoad, setting to false");
+		setLoad(false);
+		const newStartDate = get30DaysPrior(start);
+		runDayReport(newStartDate);
+	}
 
 	return (
 		<Container>
@@ -182,6 +217,7 @@ const PerformanceSummaryByDay = ({
 								setBaseSummary={setBaseSummary}
 								setOutageSummary={setOutageSummary}
 							/>
+							{summaries}
 						</Col>
 						<Col sm={4}>
 							<Alert variant="success" className="small">
@@ -194,31 +230,6 @@ const PerformanceSummaryByDay = ({
 									the size of the outage, and the click
 									performances
 								</p>
-								<dl>
-									<dt>Baseline Data</dt>
-									<dd>-Clicks={baseSummary.clicks}</dd>
-									<dd>-sales={baseSummary.sales}</dd>
-									<dd>
-										-Number of Sales=
-										{baseSummary.numOfSales}
-									</dd>
-									<dd>
-										-Conversion rate=
-										{baseSummary.conversionRate}
-									</dd>
-									<dt>Outage Data</dt>
-									<dd>-Clicks={outageSummary.clicks}</dd>
-									<dd>-sales={outageSummary.sales}</dd>
-									<dd>
-										-Number of Sales=
-										{outageSummary.numOfSales}
-									</dd>
-									<dd>
-										-Conversion rate=
-										{outageSummary.conversionRate}
-									</dd>
-								</dl>
-
 								<Row>
 									<h4>Adjust Baseline Dates</h4>
 									<DateRangePicker
