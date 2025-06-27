@@ -17,6 +17,9 @@ const LinkCard = ({ title, text, route, modal, dev, index, cardInput }) => {
 	const hasRoute = !!route;
 	const hasModal = !!modal;
 	const isCardInput = !!cardInput;
+	const direction =
+		Math.random() > 0.5 ? "dropInFromTop" : "dropInFromBottom";
+	const [delay] = useState(() => Math.random() * 1.2);
 
 	const renderButton = () => {
 		if (hasRoute && hasModal) {
