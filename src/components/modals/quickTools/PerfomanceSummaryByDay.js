@@ -32,7 +32,7 @@ const PerformanceSummaryByDay = ({
 	setGraphs,
 }) => {
 	const settings = getSettings();
-	const [baselineDays, setBaselineDays] = useState(14);
+	const [baselineDays, setBaselineDays] = useState(30);
 	const [merchantId, setMerchantId] = useState(mId || "");
 	const [network, setNetwork] = useState(mNetwork || "US");
 	const [stage, setStage] = useState("input");
@@ -47,7 +47,6 @@ const PerformanceSummaryByDay = ({
 		getBaselineRange(startDate, baselineDays).end
 	);
 	const [endDate, setEndDate] = useState(end || getDefaultEndDate());
-
 	const [summaries, setSummaries] = useState(<></>);
 	const [load, setLoad] = useState(true);
 	const [baseSummary, setBaseSummary] = useState({
@@ -152,13 +151,39 @@ const PerformanceSummaryByDay = ({
 		);
 	}
 	async function runDayReport(newStartDate) {
+		const today = new Date();
+		const newEndDate = new Date();
+		const todayMidnight = new Date();
+		todayMidnight.setHours(0, 0, 0, 0);
+
+		const parsedEndDate = new Date(`${endDate}T00:00:00`);
+		const tenDaysAfter = new Date(parsedEndDate);
+		tenDaysAfter.setDate(parsedEndDate.getDate() + 10);
+
+		// Determine adjusted endDate string in yyyy-mm-dd format
+		let finalEndDateObj;
+		if (parsedEndDate < todayMidnight) {
+			finalEndDateObj =
+				tenDaysAfter < todayMidnight ? todayMidnight : tenDaysAfter;
+		} else {
+			finalEndDateObj = parsedEndDate;
+		}
+
+		const finalEndDate = `${finalEndDateObj.getFullYear()}-${String(
+			finalEndDateObj.getMonth() + 1
+		).padStart(2, "0")}-${String(finalEndDateObj.getDate()).padStart(
+			2,
+			"0"
+		)}`;
+
 		const apiStart = newStartDate || startDate;
 		try {
 			const performanceSummaryReport = await runAPI(
-				{ report_id: 12, startDate: apiStart, endDate: endDate },
+				{ report_id: 12, startDate: apiStart, endDate: finalEndDate },
 				settings.key,
 				merchantId
 			);
+
 			const errorMessage =
 				"Invalid authentication key supplied for admin/private login-specific request.";
 			if (
@@ -166,6 +191,7 @@ const PerformanceSummaryByDay = ({
 				performanceSummaryReport.length === 1 &&
 				performanceSummaryReport[0] === errorMessage
 			) {
+				console.log("error");
 				setResults({
 					title: "ERROR No Data present in this report.",
 				});
@@ -174,6 +200,7 @@ const PerformanceSummaryByDay = ({
 			setResults({ data: performanceSummaryReport });
 			setStage("results");
 			updateGraphData(performanceSummaryReport);
+			console.log(performanceSummaryReport);
 		} catch (err) {
 			setStage("error");
 			console.log(err);
@@ -182,7 +209,7 @@ const PerformanceSummaryByDay = ({
 	if (startingStage === "baseline" && load === true) {
 		console.log("firstLoad, setting to false");
 		setLoad(false);
-		const newStartDate = get30DaysPrior(start);
+		const newStartDate = get30DaysPrior(suggestedBaselineStart);
 		runDayReport(newStartDate);
 	}
 

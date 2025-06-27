@@ -37,14 +37,10 @@ export function get30DaysPrior(dateStr) {
 	const dd = String(inputDate.getDate()).padStart(2, "0");
 	return `${yyyy}-${mm}-${dd}`;
 }
-
 export function getBaselineRange(dateStr, days) {
 	const inputDate = new Date(`${dateStr}T00:00:00`);
-	// Clone and adjust start date (15 days prior)
 	const startDate = new Date(inputDate);
 	startDate.setDate(startDate.getDate() - days - 1);
-
-	// Clone and adjust end date (1 day prior)
 	const endDate = new Date(inputDate);
 	endDate.setDate(endDate.getDate() - 1);
 
@@ -61,7 +57,6 @@ export function getBaselineRange(dateStr, days) {
 		end: formatDate(endDate),
 	};
 }
-
 export function getPreviousYearMonthRange(currentStartDateStr) {
 	const currentDate = new Date(currentStartDateStr);
 	const startDate = new Date(

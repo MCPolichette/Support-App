@@ -1,13 +1,8 @@
 import React, { useRef, useState } from "react";
 import { Row, Col, Card, Container } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
-import { ProductSummary } from "./SingleReportSummaryMaps";
-import { ProductAttributeDeltaTables } from "./productSoldMaps";
 import { TableTopper } from "../../components/tables/tableExtras";
-import { PageBreaker } from "../../components/PDFelements";
-import YoySalesConversionChart from "../../components/graphs/YoySalesConversionChart";
-import { CustomCompTable } from "./DynamicTableConstructor";
-import { defaultReportArray } from "../../utils/API/_AdminApiModules";
+
 const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 	console.log(outageDates);
 	const getReport = (text) => {

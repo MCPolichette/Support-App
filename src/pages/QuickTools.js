@@ -41,7 +41,7 @@ const QuickTools = () => {
 			description:
 				"A quick link, to open the Affiliate information pop-up based on Affiliate ID.\n Use-case : 2FA , etc.. Must be logged into AvantLink with same Browser Application, and Network to work.",
 			cardInput:
-				"https://classic.avantlink.com/admin/affiliate_application_detail.php?lngApplicationId=",
+				"https://classic.avantlink.com/admin/affiliate_application_detail.php?lngPubliserId=",
 			apiRequired: true,
 		},
 

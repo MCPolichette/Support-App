@@ -4,7 +4,6 @@ import _PageDirectory from "../pages/__PageDirectory";
 import StylizedModal from "../components/modals/_ModalStylized";
 import SettingsModal from "./modals/SettingsModal";
 import { Navbar, Nav, NavDropdown, Alert, Badge } from "react-bootstrap";
-
 const getSettings = () => {
 	try {
 		const raw = localStorage.getItem("ChettiToolsSettings");

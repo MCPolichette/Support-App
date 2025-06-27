@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import StylizedModal from "../components/modals/_ModalStylized";
+import SettingsModal from "./modals/SettingsModal";
 import {
 	Alert,
 	Row,

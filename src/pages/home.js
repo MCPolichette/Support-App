@@ -16,12 +16,8 @@ const Home = () => {
 			<div className="container mt-4 shadow my-card transition-shadow callout-info bg-light">
 				<div className="row">
 					<h1 className="mb-4">
-						<b>Chetti.Tools Dashboard</b>
+						<b>Chetti.Tools </b>
 					</h1>
-					<h4>
-						If you believe there should be more cards displayed,
-						navigate to settings above and apply your API key
-					</h4>
 				</div>
 				<div className="row">
 					{visiblePages.map((page, index) => (
