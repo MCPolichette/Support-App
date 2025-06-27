@@ -9,7 +9,6 @@ import { generatePDF } from "../utils/exportPDF";
 import { FloatingCenterButton } from "../components/PDFelements";
 import { useReportContext } from "../utils/reportContext";
 import LoadingOverlay from "../components/LoadingOverlay";
-
 const ParrallelPulseReport = () => {
 	const settings = getSettings();
 	const [pageDisplay, setPageDisplay] = useState(

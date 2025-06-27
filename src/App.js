@@ -6,6 +6,7 @@ import { HashRouter as Router, Route, Routes } from "react-router-dom";
 // FrameWork:
 import Navbar from "./components/NavBar.js";
 import { ReportProvider } from "./utils/reportContext.js";
+import { FloatingCenterButton } from "./components/PDFelements.js";
 // PAGES:
 import Automapper from "./pages/Automapper.js";
 import RecursiveCrawler from "./pages/RecursiveCrawler";
@@ -13,6 +14,7 @@ import Home from "./pages/home.js";
 import QuickTools from "./pages/QuickTools.js";
 import ParrallelPulseReport from "./pages/ParrallelPulseReport.js";
 import OutageEstimate from "./pages/OutageEstimate.js";
+import { NoApiKey } from "./components/Elements/NoAPIKey.js";
 
 function App() {
 	return (
@@ -38,6 +40,7 @@ function App() {
 					}
 				/>
 			</Routes>
+			<NoApiKey />
 		</Router>
 	);
 }
