@@ -1,25 +1,33 @@
 import React, { useState } from "react";
-
-import { InputGroup, Form, Card, Button, Badge } from "react-bootstrap";
+import { Form, Card, Button, Badge } from "react-bootstrap";
 import StylizedModal from "../modals/_ModalStylized";
 import { Link } from "react-router-dom";
 
-import e from "cors";
+const LinkCard = ({
+	title,
+	text = "",
+	route,
+	modal,
+	dev,
 
-const LinkCard = ({ title, text, route, modal, dev, index, cardInput }) => {
+	cardInput,
+	list = [],
+}) => {
 	const [showModal, setShowModal] = useState(false);
-	const [showDev] = useState(dev);
 	const [inputValue, setInputValue] = useState("");
+	const hasRoute = !!route;
+	const hasModal = !!modal;
+	const isCardInput = !!cardInput;
+
+	// Cache delay and direction using useState so they don’t change on rerenders
+	const [delay] = useState(() => Math.random() * 0.5);
+	const [direction] = useState(() =>
+		Math.random() > 0.5 ? "dropInFromTop" : "dropInFromBottom"
+	);
 
 	const handleChange = (e) => {
 		setInputValue(e.target.value);
 	};
-	const hasRoute = !!route;
-	const hasModal = !!modal;
-	const isCardInput = !!cardInput;
-	const direction =
-		Math.random() > 0.5 ? "dropInFromTop" : "dropInFromBottom";
-	const [delay] = useState(() => Math.random() * 1.2);
 
 	const renderButton = () => {
 		if (hasRoute && hasModal) {
@@ -78,23 +86,31 @@ const LinkCard = ({ title, text, route, modal, dev, index, cardInput }) => {
 	return (
 		<div className="col-12 col-md-6 col-lg-4 mb-4">
 			<Card
-				className="card-drop-in bg-light-subtle bg-light-subtle  transition-shadow my-card h-100 position-relative "
-				style={{ animationDelay: `${index * 0.22}s` }}
+				className="card-drop-in bg-light-subtle transition-shadow my-card h-100 position-relative"
+				style={{
+					animationDelay: `${delay}s`,
+					animationName: direction,
+				}}
 			>
 				<div className="card-body d-flex flex-column justify-content-between">
 					<div>
 						<h5 className="card-title">{title}</h5>
-						{showDev && (
-							<h5 className="mt-4 text-muted">
+						{dev && (
+							<h5 className="mt-1 text-muted">
 								<Badge bg="warning" text="dark">
 									Not published yet.
 								</Badge>
 							</h5>
 						)}
 						<p className="card-text">{text}</p>
+						<ul>
+							{list.map((item) => (
+								<li>◾{item}</li>
+							))}
+						</ul>
 					</div>
 					{(hasRoute || hasModal || isCardInput) && (
-						<div className="mt-4">{renderButton()}</div>
+						<div className="mt-1">{renderButton()}</div>
 					)}
 				</div>
 			</Card>

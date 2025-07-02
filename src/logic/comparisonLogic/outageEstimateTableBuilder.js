@@ -119,10 +119,7 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 				</Row>
 
 				{/* Explanation Section */}
-				<Row className="mb-4">
-					<Col md={6}> </Col>
-					<Col md={6}>{Graphs}</Col>
-				</Row>
+				<Row className="mb-4">{Graphs}</Row>
 				{/* Top Affiliates Table Placeholder */}
 				<Row className="mb-4">
 					<Col>

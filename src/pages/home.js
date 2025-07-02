@@ -5,7 +5,7 @@ import LinkCard from "../components/cards/LinkCard";
 const Home = () => {
 	const settings =
 		JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
-	const showDev = settings.showDev;
+
 	const showApiTools = settings.validKey;
 	const visiblePages = _PageDirectory.filter(
 		(page) => !page.keyRequired || showApiTools
@@ -28,6 +28,7 @@ const Home = () => {
 							route={page.route}
 							dev={page.devOnly}
 							index={index}
+							list={page.listArray}
 						/>
 					))}
 				</div>
