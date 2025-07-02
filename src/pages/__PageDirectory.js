@@ -14,6 +14,7 @@ const _PageDirectory = [
 		route: "/more_tools",
 		devOnly: false,
 		keyRequired: false,
+		listArray: ["UTMs", "FTP", "IBC verification", "etc..."],
 	},
 	{
 		title: "Outage Estimate 2.0",
@@ -38,6 +39,13 @@ const _PageDirectory = [
 		route: "/ParrallelPulse",
 		devOnly: false,
 		keyRequired: true,
+	},
+	{
+		title: "Ad Tool Playground",
+		description: "Tool Examples",
+		route: "/AdTools",
+		devOnly: false,
+		keyRequired: false,
 	},
 ];
 

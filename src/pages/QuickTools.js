@@ -4,7 +4,6 @@ import FTPshorthand from "../components/modals/quickTools/FTPshorthand";
 import IBCVerification from "../components/modals/quickTools/IBCVerification";
 import UTMBuilder from "../components/modals/quickTools/UTMBuilder";
 import DownloadXMLTool from "../components/modals/quickTools/DownloadXMLTool";
-import AffPopup from "../components/modals/quickTools/AffiliatePopup";
 
 import LinkCard from "../components/cards/LinkCard";
 
@@ -30,27 +29,37 @@ const QuickTools = () => {
 			apiRequired: false,
 		},
 		{
+			title: "Force Download XML",
+			description:
+				"For those Awful XML docs that cannot download or display in the browser. this should force the download to your downloads folder.",
+			modal: <DownloadXMLTool />,
+			apiRequired: false,
+		},
+		{
 			title: "IBC verification",
 			description:
-				"A quick API that returns product sold report over the last 30days   If the report is entirely populated with product names, and departments, IBC can be turned on.  Failure responses available.  ",
+				"A quick API that returns product sold report over the last 30days   ",
+			listArray: [
+				"Verifies connection between feed and reports",
+				"Returns department, brand, and category totals.",
+				"  Failure responses available.  ",
+			],
 			modal: <IBCVerification />,
 			apiRequired: true,
 		},
 		{
 			title: "Affiliate Pop-up",
 			description:
-				"A quick link, to open the Affiliate information pop-up based on Affiliate ID.\n Use-case : 2FA , etc.. Must be logged into AvantLink with same Browser Application, and Network to work.",
+				"A quick link, to open the Affiliate information pop-up based on Affiliate ID. Most common Use Case is quick 2FA",
+			listArray: [
+				"requirements:",
+				"logged in",
+				"as Admin in Network",
+				"on same Browser Application ",
+			],
 			cardInput:
-				"https://classic.avantlink.com/admin/affiliate_application_detail.php?lngPubliserId=",
+				"http://classic.avantlink.com/admin/affiliate_all_detail.php?lngPublisherId=",
 			apiRequired: true,
-		},
-
-		{
-			title: "Force Download XML",
-			description:
-				"For those Awful XML docs that cannot download or display in the browser. this should force the download to your downloads folder.",
-			modal: <DownloadXMLTool />,
-			apiRequired: false,
 		},
 	];
 	const visibletools = tools_list.filter(
@@ -77,6 +86,7 @@ const QuickTools = () => {
 							modal={tool.modal}
 							index={index}
 							cardInput={tool.cardInput}
+							list={tool.listArray}
 						/>
 					))}
 				</div>

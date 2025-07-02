@@ -1,16 +1,19 @@
 import React from "react";
 import { Chart } from "react-google-charts";
+import { Col } from "react-bootstrap";
 const PerformanceSummaryByTimeGraph = ({
 	data,
 	title,
 	outageDates,
 	baselineDays,
 	setBaseSummary,
+	horizontal = false,
 }) => {
 	if (!data) return null;
 	const oSummary = { clicks: 0, sales: 0, numOfSales: 0 };
 	const bSummary = { clicks: 0, sales: 0, numOfSales: 0 };
 	const referenceDate = new Date(`${outageDates.start}T00:00:00`);
+	const end = new Date(`${outageDates.end}T00:00:00`);
 	const baseLineStart = new Date(baselineDays.start);
 	const baseLineEnd = new Date(baselineDays.end);
 	baseLineEnd.setDate(baseLineEnd.getDate() + 1);
@@ -31,7 +34,7 @@ const PerformanceSummaryByTimeGraph = ({
 			let label = "";
 			let color = "color:#8d8d98";
 			const isBaseline = dayDate < baseLineEnd && dayDate > baseLineStart;
-			const isOutage = dayDate >= referenceDate;
+			const isOutage = dayDate <= end && dayDate >= referenceDate;
 			const prevDay =
 				i > 0 ? new Date(`${data[i - 1].Date}T00:00:00`) : null;
 			const nextDay =
@@ -56,7 +59,7 @@ const PerformanceSummaryByTimeGraph = ({
 				oSummary.numOfSales = oSummary.numOfSales + numOfSales;
 				if (!prevDay || prevDay < referenceDate) {
 					label = "Outage Start";
-				} else if (i === data.length - 1) {
+				} else if (!nextDay || nextDay > end) {
 					label = "Outage End";
 				}
 			}
@@ -78,9 +81,8 @@ const PerformanceSummaryByTimeGraph = ({
 			const numOfSales = Number(day["# of Sales"]);
 			let label = "";
 			let color = "color:#8d8d98";
-			const isBaseline =
-				dayDate <= baseLineEnd && dayDate > baseLineStart;
-			const isOutage = dayDate >= referenceDate;
+			const isBaseline = dayDate < baseLineEnd && dayDate > baseLineStart;
+			const isOutage = dayDate < end && dayDate >= referenceDate;
 			const prevDay =
 				i > 0 ? new Date(`${data[i - 1].Date}T00:00:00`) : null;
 			const nextDay =
@@ -98,7 +100,7 @@ const PerformanceSummaryByTimeGraph = ({
 				color = "color: red";
 				if (!prevDay || prevDay < referenceDate) {
 					label = "Outage Start";
-				} else if (i === data.length - 1) {
+				} else if (!nextDay || nextDay >= end) {
 					label = "Outage End";
 				}
 			}
@@ -117,67 +119,76 @@ const PerformanceSummaryByTimeGraph = ({
 	};
 	return (
 		<div>
-			<h6>Click Performance Summary by Day</h6>
-			<Chart
-				chartType="ComboChart"
-				data={clickChart}
-				options={{
-					...commonOptions,
-					hAxisTitle: "Clicks and Conversion Rates",
-					vAxes: {
-						0: { title: "Clicks", format: "#" },
-						1: { title: "Conversion Rate", format: "#%" },
-					},
-					series: {
-						0: {
-							type: "bars",
-							targetAxisIndex: 0,
-							color: "#8d8d98",
+			<Col>
+				<h6>Click Performance Summary by Day</h6>
+				<Chart
+					chartType="ComboChart"
+					data={clickChart}
+					options={{
+						...commonOptions,
+						hAxisTitle: "Clicks and Conversion Rates",
+						vAxes: {
+							0: { title: "Clicks", format: "#" },
+							1: { title: "Conversion Rate", format: "#%" },
 						},
-						1: {
-							type: "line",
-							targetAxisIndex: 1,
-							color: "#354cbe",
+						series: {
+							0: {
+								type: "bars",
+								targetAxisIndex: 0,
+								color: "#8d8d98",
+							},
+							1: {
+								type: "line",
+								targetAxisIndex: 1,
+								color: "#354cbe",
+							},
 						},
-					},
-				}}
-				width="100%"
-				height="200px"
-				loader={<div>Loading Chart...</div>}
-			/>
-			<p> Clicks and Conversions - 30 days prior to the outage</p>
-			<hr />
-			<h6>Sales Performance Summary by Day</h6>
-			<Chart
-				chartType="ColumnChart"
-				data={salesChart}
-				options={{
-					...commonOptions,
-					vAxes: {
-						0: { title: "Sales in Dollars", format: "$#.##" },
-						1: { title: "Number of Sales", format: "#" },
-					},
-					series: {
-						1: {
-							type: "bars",
-							targetAxisIndex: 1,
-							color: "#8d8d98",
+					}}
+					width="100%"
+					height="200px"
+					loader={<div>Loading Chart...</div>}
+				/>
+				<p>
+					{" "}
+					Clicks and Conversions - 60 days prior to the outage, and up
+					to 10 days after.
+				</p>
+				<hr />
+			</Col>
+			<Col>
+				<h6>Sales Performance Summary by Day</h6>
+				<Chart
+					chartType="ColumnChart"
+					data={salesChart}
+					options={{
+						...commonOptions,
+						vAxes: {
+							0: { title: "Sales in Dollars", format: "$#.##" },
+							1: { title: "Number of Sales", format: "#" },
 						},
-						0: {
-							type: "line",
-							targetAxisIndex: 0,
-							color: "#354cbe",
+						series: {
+							1: {
+								type: "bars",
+								targetAxisIndex: 1,
+								color: "#8d8d98",
+							},
+							0: {
+								type: "line",
+								targetAxisIndex: 0,
+								color: "#354cbe",
+							},
 						},
-					},
-				}}
-				width="100%"
-				height="200px"
-				loader={<div>Loading Chart...</div>}
-			/>
-			<p>
-				Number of Sales and Sales Totals - 30 days prior to the outage
-			</p>
-			<hr />
+					}}
+					width="100%"
+					height="200px"
+					loader={<div>Loading Chart...</div>}
+				/>
+				<p>
+					Number of Sales and Sales Totals - 60 days prior to the
+					outage, and up to 10 days after.
+				</p>
+				<hr />
+			</Col>
 		</div>
 	);
 };

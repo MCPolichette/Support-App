@@ -164,7 +164,7 @@ const PerformanceSummaryByDay = ({
 		let finalEndDateObj;
 		if (parsedEndDate < todayMidnight) {
 			finalEndDateObj =
-				tenDaysAfter < todayMidnight ? todayMidnight : tenDaysAfter;
+				tenDaysAfter > todayMidnight ? todayMidnight : tenDaysAfter;
 		} else {
 			finalEndDateObj = parsedEndDate;
 		}
