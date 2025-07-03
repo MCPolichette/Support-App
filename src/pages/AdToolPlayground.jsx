@@ -1,20 +1,19 @@
 // AdToolPlayground.jsx
 import React, { useState } from "react";
 import { Container, Row, Col, Card, Form, Tabs, Tab } from "react-bootstrap";
-// Import or define preset HTMLs (these will be stored separately)
-// For now these are placeholders to simulate imports
-import skateboardHTML from "../components/htmlTemplates/SkateboardBlog";
-// import travelBlogHTML from "../htmlTemplates/travelBlog";
+import exampleHTML from "../components/htmlTemplates/EmptyExample";
+import soakOpsHTML from "../components/htmlTemplates/soakBlog";
 import muppetConspiracyHTML from "../components/htmlTemplates/MuppetBlog";
 
 const AdToolPlayground = () => {
 	const presets = {
-		"Skate Blog": skateboardHTML,
-		// "Travel Blog": travelBlogHTML,
+		example: exampleHTML,
+		"Soak Blog": soakOpsHTML,
+
 		MuppetWire: muppetConspiracyHTML,
 	};
 
-	const [activeTab, setActiveTab] = useState("Skate Blog");
+	const [activeTab, setActiveTab] = useState("example");
 	const [htmlCode, setHtmlCode] = useState(presets[activeTab]);
 	const [iframeKey, setIframeKey] = useState(0); // to force reload iframe
 
@@ -31,7 +30,7 @@ const AdToolPlayground = () => {
 	return (
 		<Container fluid data-bs-theme="dark">
 			<Row className="my-4">
-				<Col md={6}>
+				<Col md={4}>
 					<Card
 						className="h-100 card-drop-in "
 						style={{
@@ -59,8 +58,9 @@ const AdToolPlayground = () => {
 							<Form>
 								<Form.Group controlId="htmlInput">
 									<Form.Control
+										style={{ fontSize: "0.85rem" }}
 										as="textarea"
-										rows={30}
+										rows={45}
 										value={htmlCode}
 										onChange={handleCodeChange}
 									/>
@@ -69,7 +69,7 @@ const AdToolPlayground = () => {
 						</Card.Body>
 					</Card>
 				</Col>
-				<Col md={6}>
+				<Col md={8}>
 					<Card
 						className="h-100 card-drop-in "
 						style={{

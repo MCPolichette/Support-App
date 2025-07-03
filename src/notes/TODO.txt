@@ -14,10 +14,11 @@ merchant test link format http://tracking.avantlink.com/docs/order.php?mi=[MERCH
 List of things to accomplish. 
 -To do  X DONE
 =======================
--Fix the Affiliate popup link. 
+
 -Finish Outage estimate
     -final tables for Website performance.
         with ability to change affiliate totals and math to accomplish as much. AND remove affiliates from the array... if necessary,
     -printout as clean pdf
     -print out as clean batch Sale doc.
 - quick merchant test link. opens in new tab.
+

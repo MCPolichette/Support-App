@@ -18,6 +18,7 @@ const QuickTools = () => {
 			title: "FTP conversion tools",
 			description:
 				"creating FTP strings, encoding passwords, and copypasta for explaining logins.",
+			listArray: ["assembles and encodes FTP", "decodes FTP URLS"],
 			modal: <FTPshorthand />,
 			apiRequired: false,
 		},
@@ -25,6 +26,7 @@ const QuickTools = () => {
 			title: "SIMPLE UTM Builder",
 			description:
 				"basic inputs for building UTMs, with lower chances of creating a syntax eroor",
+			listArray: ["assemble UTM strings"],
 			modal: <UTMBuilder />,
 			apiRequired: false,
 		},
