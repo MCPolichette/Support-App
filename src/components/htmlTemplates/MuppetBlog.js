@@ -1,94 +1,118 @@
 const muppetConspiracyHTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MuppetWire — Exposing the Felt Agenda</title>
-  <style>
-    body {
-      font-family: 'Courier New', monospace;
-      background: #f2f0ec;
-      margin: 0;
-      color: #222;
-    }
-    header {
-      background: #3b3b3b;
-      color: #f2e85c;
-      padding: 2rem;
-      text-align: center;
-    }
-    main {
-      display: flex;
-      gap: 2rem;
-      padding: 2rem;
-    }
-    .content {
-      flex: 3;
-    }
-    .sidebar {
-      flex: 1;
-      background: #fffbe6;
-      padding: 1rem;
-      border-left: 2px dashed #999;
-    }
-    article {
-      margin-bottom: 2rem;
-      background: white;
-      padding: 1.5rem;
-      border-left: 6px solid #d62828;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    h2 {
-      color: #b30000;
-    }
-    .ad {
-      border: 1px dotted #555;
-      padding: 1rem;
-      margin-bottom: 1rem;
-      background: #fff;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #555;
-    }
-    a {
-      color: #b30000;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Muppet Conspiracy Unveiled</title>
+  <link rel="stylesheet" href="style/sandbox_styles/muppetconspiracy.css">
 </head>
 <body>
-  <header>
-    <h1>🧵 MuppetWire</h1>
-    <p>Unraveling the Felt Agenda Since 1979</p>
-  </header>
-  <main>
-    <div class="content">
-      <article>
-        <h2>BREAKING: Gonzo Spotted at International Balloon Summit</h2>
-        <p>Anonymous sources claim he arrived via poultry-powered jetpack. Officials refuse to confirm whether the summit's inflation rates were literal.</p>
-        <a href="#">Read more →</a>
-      </article>
-      <article>
-        <h2>Deep Felt: The Kermspiracy Files</h2>
-        <p>Documents recovered from a swamp-based storage facility suggest Kermit has had ties to multiple shadow groups including The Ribbit Council and FeltCo.</p>
-        <a href="#">Download PDF Dossier →</a>
-      </article>
-      <article>
-        <h2>Exclusive: Statler & Waldorf's Ties to Intergalactic Surveillance</h2>
-        <p>The grumpy duo may be more than just hecklers. A recent frequency sweep of their opera box revealed transmissions tagged “MUP-42”.</p>
-        <a href="#">Intercept Audio Logs →</a>
-      </article>
+
+<header>
+  <div class="logo">
+    <img src="style/sandbox_styles/puppetlogo.png" alt="Puppet Truth Central Logo" class="header-logo" />
+    <span class="header-text">PUPPET TRUTH CENTRAL</span>
+  </div>
+  <p class="tagline">Because Felt Lies Don't Justify Felt Crimes</p>
+</header>
+
+<div class="container">
+  <aside class="sidebar">
+    <h3>TOPICS</h3>
+    <ul>
+      <li><a href="#intro">Intro: Waking Up to the Wool</a></li>
+      <li><a href="#timeline">Timeline of Puppet Control</a></li>
+      <li><a href="#sesame">Sesame Street Surveillance Grid</a></li>
+      <li><a href="#kermit">Kermit's Shadow Government</a></li>
+      <li><a href="#labs">Muppet Genetic Labs</a></li>
+      <li><a href="#beaker-vat">The Beaker Clone Vat</a></li>
+      <li><a href="#snuffleupagus">Snuffleupagus Containment</a></li>
+      <li><a href="#map">Sesame Surveillance Map</a></li>
+      <li><a href="#evidence">Photos They Don’t Want You To See</a></li>
+    </ul>
+    <div class="emergency">🚨 LIVE STREAM: Gonzo Whistleblower at 3am EST 🚨</div>
+  </aside>
+
+  <main class="content">
+    <h1 id="intro">You’ve Been Lied To: The Muppet Agenda is Real</h1>
+    <p>
+      For decades, a felt-covered cabal has operated in plain sight. They claim to teach numbers and letters, but behind the googly eyes lies a sinister plot: CONTROL. It began with harmless songs… but escalated into deep state infiltration by characters like Elmo, Big Bird, and the elusive Snuffleupagus (who, we now know, is real AND a mind-reading biological experiment).
+    </p>
+
+    <div class="alert">🧠 FUNK ALERT: Viewer discretion advised. The truth contains squeaky voices and mind-melting revelations.</div>
+
+    <h2 id="timeline">Timeline of Felt Domination</h2>
+    <ul class="timeline">
+      <li><strong>1969:</strong> Sesame Street debuts — MK Ultra puppeteering program initiated.</li>
+      <li><strong>1976:</strong> The Muppet Show airs — code-named Operation FuzzScreen.</li>
+      <li><strong>1990s:</strong> The Great Muppet Caper decoded by whistleblower Fozzie Bear.</li>
+      <li><strong>2023:</strong> Waldorf and Statler disappear mid-livestream. Presumed de-fluffed.</li>
+    </ul>
+
+    <h2 id="sesame">The Sesame Surveillance Grid</h2>
+    <p>
+      Notice how every episode is filmed in a "friendly neighborhood"? It’s a psychological map — a digital grid of behavioral modeling. Oscar the Grouch? Emotional testing subject. Cookie Monster? Carb addiction algorithms. Grover? Failed teleportation prototype covered in blue moss.
+    </p>
+
+    <h2 id="kermit">Kermit's Hidden Empire</h2>
+    <div class="image-block">
+      <img src="style/sandbox_styles/kermhaarp.png" alt="Kermit in Shadows" class="proof-image" />
+      <p class="caption">Kermit caught adjusting HAARP satellite knobs (Zoom in on reflection)</p>
     </div>
-    <aside class="sidebar">
-      <div class="ad">[Ad Slot: Felt Detox Kit – Purge Your Plush]</div>
-      <div class="ad">[Ad Slot: Conspiracy Quilt Club – Monthly Drops]</div>
-      <div class="ad">[Ad Slot: Surveillance Glasses for Fraggle Zones]</div>
-    </aside>
+    <p>
+      It’s not easy being green — unless you’re the architect of a global sock-puppet society. Sources confirm Kermit holds eight offshore shell corporations, and one literal shell company run by a talking turtle named Reginald.
+    </p>
+
+    <h2 id="labs">Muppet Genetic Engineering Labs</h2>
+    <p>
+      Behind the Jim Henson Creature Shop facade is a biotech nightmare. Half-bear, half-dragon hybrids. Beaker clones grown for their panic scream pheromones. And a vat labeled “Muppozoid Prime” allegedly linked to psychic broadcast testing in Iowa.
+    </p>
+
+    <h2 id="beaker-vat">The Beaker Clone Vat</h2>
+    <div class="image-block">
+      <img src="style/sandbox_styles/beaker_vat.png" alt="Beaker Clone Vat" class="proof-image" />
+      <p class="caption">Thousands of Beaker clones suspended in glowing fluid — eyes wide, mouths agape, eternally screaming.</p>
+    </div>
+    <p>
+      Beaker wasn't just a lab assistant. He was the template. Cloned in a vat of synthetic panic to generate bio-emotional weapons. These screaming clones are rumored to power the ambient stress in government offices nationwide.
+    </p>
+
+    <h2 id="snuffleupagus">Snuffleupagus Containment</h2>
+    <div class="image-block">
+      <img src="style/sandbox_styles/snuffle_containment.png" alt="Snuffleupagus in Containment" class="proof-image" />
+      <p class="caption">Snuffleupagus restrained in psychic feedback loop under classified study</p>
+    </div>
+    <p>
+      They told us he was imaginary. But Snuffy was real—and dangerous. Electrode-bound and encased in lead-lined containment, he’s the world’s only known PSI-class woolen mammal. Mind-reading, cloud-manipulating, and tragically self-aware.
+    </p>
+
+    <h2 id="map">The Sesame Street Surveillance Map</h2>
+    <div class="image-block">
+      <img src="style/sandbox_styles/sesame_map.png" alt="Sesame Street Surveillance Map" class="proof-image" />
+      <p class="caption">The neighborhood is a grid. The puppets are tagged. The data flows upward.</p>
+    </div>
+    <p>
+      This map was found in a trash can outside Hooper’s Store, marked with strings, pins, and biometric annotations. At the center? A profile labeled “Subject: Bert (compromised).” Grover’s file is blank, which makes it worse.
+    </p>
+
+    <h2 id="evidence">Visual Proof They Can’t Deny</h2>
+    <div class="gallery">
+      <img src="style/sandbox_styles/rfid.png" alt="Miss Piggy RFID Scan" class="gallery-img" />
+      <img src="style/sandbox_styles/animal_chip.png" alt="Animal with Microchip Helmet" class="gallery-img" />
+      <img src="style/sandbox_styles/gonzo_gate.png" alt="Gonzo entering Stargate" class="gallery-img" />
+    </div>
+
+    <div class="note">NOTE: These images have NOT been debunked by any credible sock-based authority.</div>
   </main>
+</div>
+
+<footer>
+  <p>© 2025 Puppet Truth Central. Foam is temporary. Truth is eternal.</p>
+  <p><a href="#">Subscribe to FeltIntel Weekly</a> | <a href="#">Join the Plush Resistance</a></p>
+</footer>
+
 </body>
 </html>
-"`;
+`;
+
 export default muppetConspiracyHTML;

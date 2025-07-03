@@ -1,8 +1,9 @@
 const _PageDirectory = [
 	{
-		title: "Datafeed Automapper",
+		title: "Datafeed Automapper 2.0",
 		description:
 			"Upload and map product datafeeds automatically. Useful for quickly identifying field matches and handling common formatting inconsistencies.",
+		listArray: ["maps variant feeds:", "assigns new Attributes"],
 		route: "/automapper",
 		devOnly: false,
 		keyRequired: false,
@@ -20,6 +21,7 @@ const _PageDirectory = [
 		title: "Outage Estimate 2.0",
 		description:
 			"An updated version of the Outage Estimate, with more simplified logic, and easier setup.",
+		listArray: ["API Required"],
 		route: "/outage_estimate",
 		devOnly: true,
 		keyRequired: true,
@@ -36,6 +38,12 @@ const _PageDirectory = [
 		title: "Parrallel Pulse Report",
 		description:
 			"A comprehensive and modular report designed for parallel metrics analysis and historical comparison",
+		listArray: [
+			"Compare:",
+			"Month over Month",
+			"Week over Week",
+			"Products, Affiliate and overall summaries",
+		],
 		route: "/ParrallelPulse",
 		devOnly: false,
 		keyRequired: true,

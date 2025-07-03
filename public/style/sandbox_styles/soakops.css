@@ -1,0 +1,110 @@
+body {
+	font-family: "Segoe UI", sans-serif;
+	background: #e0f7fa;
+	margin: 0;
+	padding: 0;
+	color: #212121;
+}
+
+header {
+	background: #006064;
+	color: white;
+	padding-bottom: 5px;
+	text-align: center;
+}
+
+.header-logo {
+	height: 200px;
+}
+
+header h1 {
+	margin: 0;
+	font-size: 2.8rem;
+}
+
+header p {
+	font-size: 1.2rem;
+	opacity: 0.85;
+}
+
+.container {
+	display: flex;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.sidebar {
+	width: 25%;
+	padding-right: 20px;
+}
+
+.sidebar h3 {
+	border-bottom: 2px solid #00acc1;
+	padding-bottom: 5px;
+}
+
+.sidebar ul {
+	list-style: none;
+	padding-left: 0;
+}
+
+.sidebar li {
+	margin-bottom: 10px;
+}
+
+.content {
+	width: 75%;
+}
+
+.content h2 {
+	border-bottom: 2px solid #00acc1;
+	padding-bottom: 5px;
+	margin-top: 40px;
+}
+
+.product-box {
+	border: 2px dashed #00acc1;
+	padding: 15px;
+	margin: 20px 0;
+	background: #ffffff;
+	border-radius: 8px;
+	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-box img {
+	float: right;
+	max-width: 140px;
+	margin-left: 20px;
+	border-radius: 5px;
+}
+
+.ad-banner {
+	background: #b2ebf2;
+	text-align: center;
+	padding: 20px;
+	margin: 30px 0;
+	font-weight: bold;
+	border: 1px solid #00acc1;
+	border-radius: 6px;
+}
+
+footer {
+	background: #004d40;
+	color: white;
+	text-align: center;
+	padding: 20px;
+	margin-top: 40px;
+}
+
+a {
+	color: #00695c;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.note {
+	font-size: 0.9rem;
+	color: #555;
+	font-style: italic;
+}

@@ -11,7 +11,13 @@ const StylizedModal = ({
 	size = "lg",
 }) => {
 	return (
-		<Modal show={show} onHide={onHide} centered size={size}>
+		<Modal
+			show={show}
+			onHide={onHide}
+			centered
+			size={size}
+			dialogClassName="animated-modal"
+		>
 			<Modal.Header closeButton className="bg-dark text-white">
 				<Modal.Title>{title}</Modal.Title>
 			</Modal.Header>
