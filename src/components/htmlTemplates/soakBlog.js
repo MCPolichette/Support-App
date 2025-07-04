@@ -10,8 +10,8 @@ const soakOpsHTML = `<!DOCTYPE html>
 
 <header>
   <div class="logo">
-    <img src="/style/sandbox_styles/soakops.png" alt="Soak Ops Logo" class="header-logo" />
-     </div>
+   
+  </div>
   <p class="tagline">The Premier Guide to Aqua-Based Weaponry and Backyard Hydrowarfare</p>
 </header>
 

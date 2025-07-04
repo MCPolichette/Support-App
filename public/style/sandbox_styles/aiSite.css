@@ -1,0 +1,136 @@
+body {
+	font-family: Courier New, monospace;
+	margin: 0;
+	padding: 30px;
+	background-color: #111;
+	color: #eee;
+}
+h1.flicker {
+	animation: flicker 1.5s infinite alternate;
+	color: red;
+	text-align: center;
+	margin-top: 2rem;
+}
+@keyframes flicker {
+	0% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.4;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+#chatbot {
+	transition: left 0.5s cubic-bezier(0.63, -0.36, 0.29, 1.58),
+		top 0.5s cubic-bezier(0.63, -0.36, 0.29, 1.58);
+}
+.ai-image {
+	display: block;
+	width: 600px;
+	margin: 1rem auto;
+	border: 2px solid red;
+}
+
+.caption {
+	text-align: center;
+	font-style: italic;
+	margin-bottom: 2rem;
+}
+#chatbot-icon {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: #333;
+	color: white;
+	padding: 10px;
+	border-radius: 50%;
+	cursor: pointer;
+	font-size: 1.5rem;
+	z-index: 999;
+	animation: static-icon 1s infinite steps(2, end);
+	transition: box-shadow 0.3s;
+	box-shadow: 0 0 8px 2px #f00, 0 0 2px 1px #fff;
+}
+@keyframes static-icon {
+	0% {
+		filter: grayscale(0);
+	}
+	25% {
+		filter: grayscale(1) brightness(1.3);
+	}
+	50% {
+		filter: grayscale(0.6);
+	}
+	100% {
+		filter: grayscale(0);
+	}
+}
+#chatbot {
+	display: none;
+	position: fixed;
+	bottom: 80px;
+	right: 20px;
+	width: 320px;
+	background-color: #222;
+	border: 2px solid red;
+	border-radius: 8px;
+	padding: 1rem;
+	z-index: 1000;
+	box-shadow: 0 8px 32px #000b, 0 0 8px 2px #0ff7;
+	transition: box-shadow 0.5s, transform 0.3s;
+}
+#chatbot.moving {
+	transform: scale(1.08) rotate(-2deg) translateY(-20px);
+	box-shadow: 0 12px 32px #f00b, 0 0 24px 2px #0ff;
+}
+#closeChat:hover {
+	animation: shake 0.2s infinite alternate;
+}
+@keyframes shake {
+	0% {
+		transform: translateY(0);
+	}
+	100% {
+		transform: translateY(-4px);
+	}
+}
+.bot-msg {
+	margin-bottom: 0.5rem;
+	min-height: 1.3em;
+	animation: bot-in 0.8s;
+}
+@keyframes bot-in {
+	from {
+		opacity: 0;
+		transform: translateX(-30px) scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+#userInput {
+	width: 65%;
+	background: #333;
+	color: #eee;
+	border: 1px solid #f00;
+	border-radius: 4px;
+	padding: 4px;
+	margin-right: 4px;
+}
+#submitBtn {
+	background-color: red;
+	color: white;
+	border: none;
+	padding: 4px 14px;
+	border-radius: 4px;
+	cursor: pointer;
+	opacity: 1;
+	transition: opacity 0.3s;
+}
+#submitBtn:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}

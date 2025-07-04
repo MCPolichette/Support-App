@@ -4,12 +4,13 @@ import { Container, Row, Col, Card, Form, Tabs, Tab } from "react-bootstrap";
 import exampleHTML from "../components/htmlTemplates/EmptyExample";
 import soakOpsHTML from "../components/htmlTemplates/soakBlog";
 import muppetConspiracyHTML from "../components/htmlTemplates/MuppetBlog";
+import antiAI from "../components/htmlTemplates/AntiAI";
 
 const AdToolPlayground = () => {
 	const presets = {
 		example: exampleHTML,
 		"Soak Blog": soakOpsHTML,
-
+		AntiA1: antiAI,
 		MuppetWire: muppetConspiracyHTML,
 	};
 
@@ -40,7 +41,10 @@ const AdToolPlayground = () => {
 					>
 						<Card.Header>
 							<Tabs
-								style={{ backgroundColor: "lightgrey" }}
+								style={{
+									backgroundColor: "lightgrey",
+									fontSize: "14px",
+								}}
 								activeKey={activeTab}
 								onSelect={handleTabSelect}
 								id="html-tabs"
@@ -60,7 +64,7 @@ const AdToolPlayground = () => {
 									<Form.Control
 										style={{ fontSize: "0.85rem" }}
 										as="textarea"
-										rows={45}
+										rows={30}
 										value={htmlCode}
 										onChange={handleCodeChange}
 									/>
