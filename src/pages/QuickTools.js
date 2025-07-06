@@ -51,8 +51,7 @@ const QuickTools = () => {
 		},
 		{
 			title: "Affiliate Pop-up",
-			description:
-				"A quick link, to open the Affiliate information pop-up based on Affiliate ID. Most common Use Case is quick 2FA",
+			description: "pop up for 2FA.",
 			listArray: [
 				"requirements:",
 				"logged in",

@@ -8,10 +8,10 @@ import antiAI from "../components/htmlTemplates/AntiAI";
 
 const AdToolPlayground = () => {
 	const presets = {
-		example: exampleHTML,
-		"Soak Blog": soakOpsHTML,
-		AntiA1: antiAI,
-		MuppetWire: muppetConspiracyHTML,
+		"Example Site": exampleHTML,
+		"Example Review Blog": soakOpsHTML,
+		"Example News Site": muppetConspiracyHTML,
+		AIvAI: antiAI,
 	};
 
 	const [activeTab, setActiveTab] = useState("example");
@@ -30,7 +30,7 @@ const AdToolPlayground = () => {
 
 	return (
 		<Container fluid data-bs-theme="dark">
-			<Row className="my-4">
+			<Row className="my-4 mt-5">
 				<Col md={4}>
 					<Card
 						className="h-100 card-drop-in "

@@ -27,6 +27,7 @@ const soakOpsHTML = `<!DOCTYPE html>
       <li><a href="#mods">Absurd Mods</a></li>
       <li><a href="#faq">FAQs</a></li>
     </ul>
+    <script type="text/javascript" src="https://classic.avantlink.com/link.php?merchant_link_id=f136fb7a-15c2-4caf-8db3-7a5822773d48&amp;affiliate_id=d80726f7-b243-42d1-8467-15f3521562cc&amp;website_id=98cf33eb-248e-4c66-b168-4c6cf7ad5f4e"></script>
     <div class="ad-banner">💦 SPONSORED: Waterproof Tactical Capes – Because Style Doesn’t Stop at the Hose</div>
   </aside>
 
@@ -43,7 +44,7 @@ const soakOpsHTML = `<!DOCTYPE html>
       <p>Claiming a 40-ft direct stream, the HydroScope is ideal for sneak attacks from rooftops and behind rose bushes. Comes with bonus eyepatch and optional foghorn mount.</p>
       <a href="#">Check Price on WetMart</a>
     </div>
-
+<script type="text/javascript" src="//www.avantlink.com/product_ad_widget/paw.php?pawid=180189&amp;pw=77&amp;output=js"></script>
     <h2 id="tanks">2. Mega Water Tanks</h2>
     <div class="product-box">
       <img src="style/sandbox_styles/soak_tank.png" alt="Backpack Tank" class="product-img" />
@@ -89,7 +90,7 @@ const soakOpsHTML = `<!DOCTYPE html>
     <p><strong>Q: How many mods is too many mods?</strong><br/>A: If your water gun can no longer fit through the sliding door—maybe dial it back.</p>
 
     <p><strong>Q: What’s the most important upgrade?</strong><br/>A: Confidence. And maybe the back-mounted fog machine.</p>
-
+<script type="text/javascript" src="https://classic.avantlink.com/link.php?merchant_link_id=8df090da-2a72-48d6-a0e8-21ac2906681b&amp;affiliate_id=d80726f7-b243-42d1-8467-15f3521562cc&amp;website_id=98cf33eb-248e-4c66-b168-4c6cf7ad5f4e"></script>
     <div class="ad-banner">💧 FREE BONUS: Subscribe now for our exclusive eBook – *"21 Ambush Tactics That Soak"*</div>
   </main>
 </div>

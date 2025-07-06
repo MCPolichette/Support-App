@@ -84,7 +84,7 @@ const LinkCard = ({
 	};
 
 	return (
-		<div className="col-12 col-md-6 col-lg-4 mb-4">
+		<div className="col-12 col-md-6 col-lg-4 col-xl-3 mb-4">
 			<Card
 				className="card-drop-in bg-light-subtle transition-shadow my-card h-100 position-relative"
 				style={{
@@ -92,20 +92,20 @@ const LinkCard = ({
 					animationName: direction,
 				}}
 			>
-				<div className="card-body d-flex flex-column justify-content-between">
+				<div className="card-body  d-flex flex-column justify-content-between">
 					<div>
 						<h5 className="card-title">{title}</h5>
 						{dev && (
-							<h5 className="mt-1 text-muted">
+							<h6 className="mt-1 text-muted">
 								<Badge bg="warning" text="dark">
 									Not published yet.
 								</Badge>
-							</h5>
+							</h6>
 						)}
-						<p className="card-text">{text}</p>
+						<p className="">{text}</p>
 						<ul>
 							{list.map((item) => (
-								<li>◾{item}</li>
+								<li className="">◾{item}</li>
 							))}
 						</ul>
 					</div>
