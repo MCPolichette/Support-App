@@ -9,6 +9,11 @@ const exampleHTML = `<!DOCTYPE html>
 <body>
   <h1>Welcome to Chetti.tools' Example HTML</h1>
   <p>Paste HTML and Javascript into the text box to the right</p>
+  <ul> <li>
+      <a href="https://avantlink.com" >a link to AvantLink.com </a>
+  </li></ul>
+
+  
 
   <h2>Why This Site Exists</h2>
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>

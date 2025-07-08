@@ -62,6 +62,7 @@ const ColumnMapTable = ({
 	hideTools,
 	classNames,
 }) => {
+	console.log(tableMap, table, limit, topperText, id, hideTools, classNames);
 	const [displayedRows, setDisplayedRows] = useState(
 		table.slice(0, setRows(limit, table))
 	);

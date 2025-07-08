@@ -19,13 +19,13 @@ const soakOpsHTML = `<!DOCTYPE html>
   <aside class="sidebar">
     <h3>Contents</h3>
     <ul>
-      <li><a href="#intro">Intro</a></li>
-      <li><a href="#barrels">Long-Range Nozzles</a></li>
-      <li><a href="#tanks">Mega Water Tanks</a></li>
-      <li><a href="#tactics">Tactical Goggles</a></li>
-      <li><a href="#slingshots">Surprise Water Slingshots</a></li>
-      <li><a href="#mods">Absurd Mods</a></li>
-      <li><a href="#faq">FAQs</a></li>
+      <li><a href="https://avantlink.com">Intro</a></li>
+      <li><a href=https://avantlink.com">Long-Range Nozzles</a></li>
+      <li><a href="https://avantlink.com">Mega Water Tanks</a></li>
+      <li><a href="https://avantlink.com">Tactical Goggles</a></li>
+      <li><a href="https://avantlink.com">Surprise Water Slingshots</a></li>
+      <li><a href="https://avantlink.com">Absurd Mods</a></li>
+      <li><a href="https://avantlink.com">FAQs</a></li>
     </ul>
     <script type="text/javascript" src="https://classic.avantlink.com/link.php?merchant_link_id=f136fb7a-15c2-4caf-8db3-7a5822773d48&amp;affiliate_id=d80726f7-b243-42d1-8467-15f3521562cc&amp;website_id=98cf33eb-248e-4c66-b168-4c6cf7ad5f4e"></script>
     <div class="ad-banner">💦 SPONSORED: Waterproof Tactical Capes – Because Style Doesn’t Stop at the Hose</div>
@@ -42,7 +42,7 @@ const soakOpsHTML = `<!DOCTYPE html>
       <img src="style/sandbox_styles/soak_barrel.png" alt="Pressure Nozzle" class="product-img" />
       <h3>HydroScope Precision Nozzle</h3>
       <p>Claiming a 40-ft direct stream, the HydroScope is ideal for sneak attacks from rooftops and behind rose bushes. Comes with bonus eyepatch and optional foghorn mount.</p>
-      <a href="#">Check Price on WetMart</a>
+      <a href="https://avantlink.com">Check Price on WetMart</a>
     </div>
 <script type="text/javascript" src="//www.avantlink.com/product_ad_widget/paw.php?pawid=180189&amp;pw=77&amp;output=js"></script>
     <h2 id="tanks">2. Mega Water Tanks</h2>
@@ -50,7 +50,7 @@ const soakOpsHTML = `<!DOCTYPE html>
       <img src="style/sandbox_styles/soak_tank.png" alt="Backpack Tank" class="product-img" />
       <h3>HydraBack 3000 Reservoir Pack</h3>
       <p>Why reload when you can wear 3 gallons on your spine? Warning: not recommended for children, weak shoulders, or clumsy uncles.</p>
-      <a href="#">View on AquaSupply</a>
+      <a href="https://avantlink.com">View on AquaSupply</a>
     </div>
 
     <h2 id="tactics">3. Tactical Goggles</h2>
@@ -58,7 +58,7 @@ const soakOpsHTML = `<!DOCTYPE html>
       <img src="style/sandbox_styles/soak_goggles.png" alt="Goggles" class="product-img" />
       <h3>SplashShield X5 Optics</h3>
       <p>Protect your vision while looking like you're entering a post-apocalyptic kiddie pool. Built-in squirt sensor alerts you to incoming streams with lights and dramatic beeps.</p>
-      <a href="#">Read Reviews on WetGear Elite</a>
+      <a href="https://avantlink.com">Read Reviews on WetGear Elite</a>
     </div>
 
     <h2 id="slingshots">4. Surprise Water Slingshots</h2>
@@ -66,7 +66,7 @@ const soakOpsHTML = `<!DOCTYPE html>
       <img src="style/sandbox_styles/soak_slingshot.png" alt="Slingshot" class="product-img" />
       <h3>The SoakShot Viper</h3>
       <p>This thing launches sponge bombs over fences with disturbing accuracy. It's like a water balloon trebuchet you can hide in your cargo shorts.</p>
-      <a href="#">Launch Now at LiquidLobbers.com</a>
+      <a href="https://avantlink.com">Launch Now at LiquidLobbers.com</a>
     </div>
 
     <h2 id="mods">5. Absurd Mods That Actually Work</h2>
@@ -74,14 +74,14 @@ const soakOpsHTML = `<!DOCTYPE html>
       <img src="style/sandbox_styles/soak_chainsaw.png" alt="Water Gun Chainsaw" class="product-img" />
       <h3>BubbleBlade Bayonet</h3>
       <p>A plastic chainsaw attachment that spins and dispenses soap suds. Terrifyingly useless. Hilariously effective in close combat. A crowd favorite.</p>
-      <a href="#">Slice the Foam</a>
+      <a href="https://avantlink.com">Slice the Foam</a>
     </div>
 
     <div class="product-box">
       <img src="style/sandbox_styles/soak_sandals.png" alt="Flip Flops" class="product-img" />
       <h3>Flip-N-Squirt Tactical Sandals</h3>
       <p>Each sandal conceals a pressurized toe-mounted squirt nozzle. Just curl your big toe. Great for distraction shots or wild dance moves.</p>
-      <a href="#">Step into SoakMode</a>
+      <a href="https://avantlink.com">Step into SoakMode</a>
     </div>
 
     <h2 id="faq">FAQs</h2>

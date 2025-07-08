@@ -1,5 +1,5 @@
 body {
-	background-color: rgb(117, 117, 117);
+	background-color: rgb(93, 91, 91) !important;
 	background-image: url(../style/avantlink-ribbon.svg);
 	height: 100vh;
 	background-position: right;
@@ -7,6 +7,7 @@ body {
 	background-size: cover;
 	background-attachment: fixed;
 	font-family: Roboto;
+	color: #333333;
 }
 button.nav-link {
 	color: black;
@@ -27,7 +28,7 @@ h6 {
 .my-card {
 	box-shadow: 7px 7px 5px rgb(6, 18, 128);
 	transition: box-shadow 0.3s ease;
-	font-size: 80%;
+	font-size: 95%;
 }
 .testcolors {
 	color: rgb(103, 103, 169);

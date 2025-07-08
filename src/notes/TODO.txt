@@ -2,23 +2,19 @@ Small reference notes for future project
 
 merchant test link format http://tracking.avantlink.com/docs/order.php?mi=[MERCHANT_ID]&em=[EMAIL]
 
-
-
-
-
-
-
-
-
-
 List of things to accomplish. 
 -To do  X DONE
 =======================
 
 -Finish Outage estimate
+    -Allow the baseline selection to CHANGE outage period as well. 
+        -update text to explain this.
     -final tables for Website performance.
         with ability to change affiliate totals and math to accomplish as much. AND remove affiliates from the array... if necessary,
     -printout as clean pdf
     -print out as clean batch Sale doc.
+
+
+
 - quick merchant test link. opens in new tab.
 
