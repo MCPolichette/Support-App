@@ -10,8 +10,8 @@ const AdToolPlayground = () => {
 	const presets = {
 		"Example Site": exampleHTML,
 		"Example Review Blog": soakOpsHTML,
-		"Example News Site": muppetConspiracyHTML,
-		AIvAI: antiAI,
+		// "Example News Site": muppetConspiracyHTML,
+		// AIvAI: antiAI,
 	};
 
 	const [activeTab, setActiveTab] = useState("example");
