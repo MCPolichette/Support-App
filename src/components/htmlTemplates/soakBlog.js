@@ -19,13 +19,13 @@ const soakOpsHTML = `<!DOCTYPE html>
   <aside class="sidebar">
     <h3>Contents</h3>
     <ul>
-      <li><a href="#inhttps://avantlink.comro">Intro</a></li>
-      <li><a href="#barrhttps://avantlink.comls">Long-Range Nozzles</a></li>
-      <li><a href="#tahttps://avantlink.comks">Mega Water Tanks</a></li>
-      <li><a href="#tacthttps://avantlink.comcs">Tactical Goggles</a></li>
-      <li><a href="#slingshhttps://avantlink.comts">Surprise Water Slingshots</a></li>
-      <li><a href="#mhttps://avantlink.comds">Absurd Mods</a></li>
-      <li><a href="#https://avantlink.comaq">FAQs</a></li>
+      <li><a href="https://avantlink.com">Intro</a></li>
+      <li><a href=https://avantlink.com">Long-Range Nozzles</a></li>
+      <li><a href="https://avantlink.com">Mega Water Tanks</a></li>
+      <li><a href="https://avantlink.com">Tactical Goggles</a></li>
+      <li><a href="https://avantlink.com">Surprise Water Slingshots</a></li>
+      <li><a href="https://avantlink.com">Absurd Mods</a></li>
+      <li><a href="https://avantlink.com">FAQs</a></li>
     </ul>
     <script type="text/javascript" src="https://classic.avantlink.com/link.php?merchant_link_id=f136fb7a-15c2-4caf-8db3-7a5822773d48&amp;affiliate_id=d80726f7-b243-42d1-8467-15f3521562cc&amp;website_id=98cf33eb-248e-4c66-b168-4c6cf7ad5f4e"></script>
     <div class="ad-banner">💦 SPONSORED: Waterproof Tactical Capes – Because Style Doesn’t Stop at the Hose</div>
