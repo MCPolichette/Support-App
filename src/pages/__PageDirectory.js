@@ -17,22 +17,6 @@ const _PageDirectory = [
 		keyRequired: false,
 		listArray: ["UTMs", "FTP", "IBC verification", "etc..."],
 	},
-	{
-		title: "Outage Estimate 2.0",
-		description:
-			"An updated version of the Outage Estimate, with more simplified logic, and easier setup.",
-		listArray: ["API Required"],
-		route: "/outage_estimate",
-		devOnly: true,
-		keyRequired: true,
-	},
-	{
-		title: "Recursive Link Crawler",
-		description: "work in progress. ",
-		route: "/link-detector",
-		devOnly: true,
-		keyRequired: true,
-	},
 
 	{
 		title: "Parrallel Pulse Report",
@@ -54,6 +38,27 @@ const _PageDirectory = [
 		route: "/AdTools",
 		devOnly: false,
 		keyRequired: false,
+	},
+	{
+		title: "Outage Estimate 2.0",
+		description:
+			"An updated version of the Outage Estimate, with more simplified logic, and easier setup.",
+		listArray: [
+			"API Required",
+			"General Structure up",
+			"Math is still incomplete",
+			"custom Tools, and overall display incomplete",
+		],
+		route: "/outage_estimate",
+		devOnly: true,
+		keyRequired: true,
+	},
+	{
+		title: "Recursive Link Crawler",
+		description: "work in progress. ",
+		route: "/link-detector",
+		devOnly: true,
+		keyRequired: true,
 	},
 ];
 

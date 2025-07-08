@@ -94,7 +94,7 @@ const LinkCard = ({
 			>
 				<div className="card-body  d-flex flex-column justify-content-between">
 					<div>
-						<h5 className="card-title">{title}</h5>
+						<h6 className="card-title">{title}</h6>
 						{dev && (
 							<h6 className="mt-1 text-muted">
 								<Badge bg="warning" text="dark">
