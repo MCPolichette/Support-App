@@ -41,7 +41,7 @@ const MapModal = ({ mapping = [], type, delimiter }) => {
 	};
 
 	return (
-		<div className="p-4">
+		<div className="p-1">
 			<Row>
 				<h4>"DELIMITER: " {delimiter}</h4>
 				<hr></hr>

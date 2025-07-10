@@ -32,7 +32,7 @@ const AddAttribute = ({ onConfirm, mapping = [], header }) => {
 	}
 
 	return (
-		<Row className="align-items-end mt-4">
+		<Row className="align-items-end ">
 			<Col md={6}>
 				{!nextAttr ? (
 					<Alert variant="danger">

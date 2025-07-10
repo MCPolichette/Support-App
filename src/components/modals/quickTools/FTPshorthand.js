@@ -58,7 +58,7 @@ const FTPshorthand = () => {
 	};
 
 	return (
-		<Container className="mt-4">
+		<Container className="">
 			<div
 				style={{
 					minHeight: "700px",

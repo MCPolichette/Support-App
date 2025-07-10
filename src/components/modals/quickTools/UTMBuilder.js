@@ -41,7 +41,7 @@ const UTMBuilder = () => {
 	};
 
 	return (
-		<div className="p-4">
+		<div className="">
 			<Row>
 				<Col md={7}>
 					<h4>UTM Builder</h4>

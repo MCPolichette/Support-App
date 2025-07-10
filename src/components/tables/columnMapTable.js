@@ -60,9 +60,8 @@ const ColumnMapTable = ({
 	topperText,
 	id,
 	hideTools,
-	classNames,
+	classes,
 }) => {
-	console.log(tableMap, table, limit, topperText, id, hideTools, classNames);
 	const [displayedRows, setDisplayedRows] = useState(
 		table.slice(0, setRows(limit, table))
 	);
@@ -89,13 +88,7 @@ const ColumnMapTable = ({
 			{displayTable ? (
 				<div>
 					{title && <h5>{title}</h5>}
-					<Table
-						striped
-						bordered
-						hover
-						size="sm"
-						classNames={classNames}
-					>
+					<Table striped bordered hover size="sm" className={classes}>
 						<thead>
 							<tr className="blacktop">
 								{tableMap.map((col, idx) =>
@@ -106,6 +99,7 @@ const ColumnMapTable = ({
 											style={{ position: "relative" }}
 										>
 											<span
+												className="d-print-none"
 												style={{
 													position: "absolute",
 													top: 0,

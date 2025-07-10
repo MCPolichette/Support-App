@@ -15,9 +15,9 @@ const getSettings = () => {
 const storageSettings =
 	JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
 const showApiTools = storageSettings.validKey;
-const visiblePages = _PageDirectory.filter(
-	(page) => !page.keyRequired || showApiTools
-);
+const visiblePages = _PageDirectory
+	.filter((page) => !page.keyRequired || showApiTools)
+	.slice(2);
 const AppNavbar = () => {
 	const settings = getSettings();
 	const [modalOpen, setModalOpen] = useState(false);
@@ -29,12 +29,14 @@ const AppNavbar = () => {
 			fixed="top"
 			className="px-3"
 		>
-			<Navbar.Brand as={Link} to="/">
-				<b>Chetti.Tools Support App</b>
+			<Navbar.Brand>
+				<b>Chetti.Tools Support-App</b>
 			</Navbar.Brand>
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />
 			<Navbar.Collapse id="basic-navbar-nav">
 				<Nav className="me-auto">
+					<Nav.Link href="/">Home</Nav.Link>
+					<Nav.Link href="/more_tools">QuickTools</Nav.Link>
 					<NavDropdown title="Tools" id="tools-dropdown">
 						{visiblePages.map((page, index) => (
 							<NavDropdown.Item

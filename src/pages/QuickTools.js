@@ -71,12 +71,15 @@ const QuickTools = () => {
 		<div className=" container container-fluid  d-flex flex-column min-vh-50 justify-content-center align-items-center">
 			<Container
 				className="container mt-4 shadow callout-info card-drop-in "
-				style={{ backgroundColor: "lightgrey", padding: "2rem" }}
+				style={{
+					backgroundColor: "lightgrey",
+					padding: "2rem",
+				}}
 			>
 				<div className="row">
-					<h1 className="mb-4">
+					<h5 className="mb-4">
 						<b>Quick Tools!</b>
-					</h1>
+					</h5>
 				</div>
 				<div className="row">
 					{visibletools.map((tool, index) => (

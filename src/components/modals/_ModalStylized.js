@@ -21,7 +21,7 @@ const StylizedModal = ({
 			<Modal.Header closeButton className="bg-dark text-white">
 				<Modal.Title>{title}</Modal.Title>
 			</Modal.Header>
-			<Modal.Body className="bg-light p-4 rounded shadow-sm">
+			<Modal.Body className="bg-light  rounded shadow-sm">
 				{children}
 			</Modal.Body>
 			{footer !== false && (

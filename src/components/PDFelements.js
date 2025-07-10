@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import StylizedModal from "../components/modals/_ModalStylized";
-import SettingsModal from "./modals/SettingsModal";
 import {
 	Alert,
 	Row,
@@ -36,6 +34,7 @@ export const FloatingCenterButton = ({ onClick, label = "Download PDF" }) => {
 				bottom: "1em",
 				right: "1.8em",
 				width: "200px",
+				zIndex: 100,
 			}}
 			className="p-3 rounded transition-shadow my-card"
 		>

@@ -176,7 +176,7 @@ const SettingsModal = (keyRequired) => {
 	};
 
 	return (
-		<div className="p-4 bg-white border rounded shadow-sm">
+		<div className="p-1 bg-white border rounded shadow-sm">
 			<h5 className="mb-3">Chetti.Tools Settings</h5>
 			<h6 className="mt-3">API Key</h6>
 			{editKey ? (

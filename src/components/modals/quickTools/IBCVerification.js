@@ -142,7 +142,7 @@ const IBCVerification = () => {
 	};
 	console.log(stage);
 	return (
-		<Container className="mt-4">
+		<Container className="mt-0">
 			<Row>
 				<Col md={12}>
 					<MerchantAndNetworkInput
