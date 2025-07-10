@@ -99,6 +99,7 @@ const ColumnMapTable = ({
 											style={{ position: "relative" }}
 										>
 											<span
+												className="d-print-none"
 												style={{
 													position: "absolute",
 													top: 0,

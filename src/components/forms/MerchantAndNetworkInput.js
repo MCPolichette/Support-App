@@ -14,14 +14,12 @@ const MerchantAndNetworkInupt = ({
 }) => {
 	return (
 		<Row className="align-items-end mb-3">
-			{" "}
-			<hr />
 			<h4>{title}</h4>
 			<Col md={5}>
 				<InputGroup className="mb-2">
 					<Form.Label>
 						<h5>
-							<strong>Merchant:_ </strong>
+							<strong className="m-2">Merchant:</strong>
 						</h5>
 					</Form.Label>
 					{selectedMerchant && (

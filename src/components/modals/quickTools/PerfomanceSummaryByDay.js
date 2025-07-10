@@ -59,6 +59,9 @@ const PerformanceSummaryByDay = ({
 		sales: 0,
 		numOfSales: 0,
 	});
+	const testfunction = () => {
+		console.log("outage dates");
+	};
 	function runComparison(bDates) {
 		setGraphs(
 			<PerformanceSummaryByTimeGraph
@@ -151,6 +154,7 @@ const PerformanceSummaryByDay = ({
 		);
 	}
 	async function runDayReport(newStartDate) {
+		setStage("loading");
 		const today = new Date();
 		const newEndDate = new Date();
 		const todayMidnight = new Date();
@@ -218,15 +222,30 @@ const PerformanceSummaryByDay = ({
 			<Row>
 				{stage === "input" && (
 					<Col md={12}>
+						<h3>Performance Summary by Day Report</h3>
 						<MerchantAndNetworkInput
 							selectedMerchant={merchantId}
 							selectedNetwork={network}
 							setSelectedMerchant={setMerchantId}
 							setSelectedNetwork={setNetwork}
 						/>
+						<Col sm={8}>
+							<h5>Select Outage period</h5>{" "}
+							<DateRangePicker
+								startDate={startDate}
+								endDate={endDate}
+								onStartChange={setStartDate}
+								onEndChange={setEndDate}
+								otherFunction={testfunction}
+							/>
+						</Col>
 						{merchantId !== "" && (
 							<Stack>
-								<Button>Run Product Report API</Button>
+								<label>
+									Run API for selected dates, to determin
+									outage
+								</label>
+								<Button>Run API</Button>
 							</Stack>
 						)}
 						<hr />
@@ -269,6 +288,23 @@ const PerformanceSummaryByDay = ({
 							{summaries}
 						</Col>
 						<Col sm={4}>
+							<Alert variant="secondary" className="small">
+								<h4> Outage Period</h4>
+								<p>
+									Possible to change outage dates, if the
+									reports show a different value
+								</p>
+								<Row>
+									<h4>Update Outage Period</h4>
+									<DateRangePicker
+										startDate={startDate}
+										endDate={endDate}
+										onStartChange={setStartDate}
+										onEndChange={setEndDate}
+										otherFunction={updateGraphData}
+									/>
+								</Row>
+							</Alert>
 							<Alert variant="success" className="small">
 								<h4>Choosing Baseline Period</h4>
 								<p>

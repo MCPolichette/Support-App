@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { TableTopper } from "../../components/tables/tableExtras";
-import { build_Outage_Estimate_Table } from "./outageLogic";
+import { build_Outage_Estimate_Table, SummaryReportTable } from "./outageLogic";
 import { formatNumber } from "../../utils/conversions";
 import LimitTableRows from "../../components/buttons_and_dropdowns/LimitTableRows";
 
@@ -27,6 +27,7 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 			"percent"
 		),
 	});
+
 	const aov = formatNumber(baseSummary["Average Sale Amount"], "dollar");
 	console.log(baseSummary);
 	const [aovChoice, setAovChoice] = useState("Affiliate");
@@ -72,9 +73,8 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 		setAffiliateCount(newLimit);
 		updateTable(newLimit);
 	}
-	function updateTable(count) {
+	function updateTable() {
 		build_Outage_Estimate_Table({
-			affiliateCount: count,
 			outageReport: outagePerformance,
 			baselineReport: basePerformance,
 			discrepency: discrepency,
@@ -87,36 +87,10 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 		updateTable(affiliateCount);
 	}
 	if (summaryTable === "") {
-		setSummaryTable({
-			headers: [
-				{ label: "Summary:", type: "string" },
-				{ label: "Clicks", type: "int" },
-				{ label: "Sales", type: "dollar" },
-				{ label: "Average Order Amt (AOV)", type: "dollar" },
-				{ label: "Number of Sales", type: "int" },
-				{
-					label: "Conversion Rate",
-					type: "percent",
-				},
-			],
-			table: [
-				[
-					"Baseline Period",
-					baseSummary["Click Throughs"],
-					baseSummary["Sales"],
-					baseSummary["Average Sale Amount"],
-					baseSummary["# of Sales"],
-					baseSummary["Conversion Rate"],
-				],
-				[
-					"Outage Period",
-					outageSummary["Click Throughs"],
-					outageSummary["Sales"],
-					outageSummary["# of Sales"],
-					outageSummary["Average Sale Amount"],
-					outageSummary["Conversion Rate"],
-				],
-			],
+		SummaryReportTable({
+			setSummaryTable,
+			baseSummary,
+			outageSummary,
 		});
 	}
 	console.log("IMPORTANT ", affiliateCount);
@@ -131,13 +105,15 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 				/>
 				<Row className="mb-4 border-bottom pb-3">
 					<Col md={4}>
-						<h3>Outage Estimate Report</h3>
-						<li>
-							<strong> {merchantName}</strong>
-						</li>
-						<li>
-							<strong>Merchant ID: {mid}:</strong>
-						</li>
+						<h3>
+							<strong>
+								{" "}
+								{merchantName}
+								{"   "}
+								{mid}
+							</strong>
+						</h3>
+
 						<li>
 							<strong>Outage Dates:</strong>
 							<ul>
@@ -151,7 +127,9 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 							</ul>
 						</li>
 						<li>
-							<strong>Baseline AOV: {aov}</strong>
+							<strong>Baseline AOV: </strong>
+							{"  "}
+							{aov}
 						</li>
 						<li>
 							<strong>Baseline avg Commission Rates:</strong>
@@ -204,18 +182,18 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 							<p>
 								<strong>Affiliate Commission:</strong>
 								{"    $"}
-								{estimatedTotals.aCommissionTotal.toFixed(2)}
+								{formatNumber(estimatedTotals.aCommissionTotal)}
 							</p>
 							<p>
 								<strong>Network Commission:</strong>
 								{"    $"}
-								{estimatedTotals.nCommissionTotal.toFixed(2)}
+								{formatNumber(estimatedTotals.nCommissionTotal)}
 							</p>
 							<hr />
 							<p>
 								<strong>Total:</strong>
 								{"    $"}
-								{estimatedTotals.overallTotal.toFixed(2)}
+								{formatNumber(estimatedTotals.overallTotal)}
 							</p>
 						</Card>
 					</Col>

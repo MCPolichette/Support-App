@@ -1,5 +1,41 @@
+export const SummaryReportTable = ({
+	setSummaryTable,
+	baseSummary,
+	outageSummary,
+}) => {
+	setSummaryTable({
+		headers: [
+			{ label: "Summary:", type: "string" },
+			{ label: "Clicks", type: "int" },
+			{ label: "Sales", type: "dollar" },
+			{ label: "Average Order Amt (AOV)", type: "dollar" },
+			{ label: "Number of Sales", type: "int" },
+			{
+				label: "Conversion Rate",
+				type: "percent",
+			},
+		],
+		table: [
+			[
+				"Baseline Period",
+				baseSummary["Click Throughs"],
+				baseSummary["Sales"],
+				baseSummary["Average Sale Amount"],
+				baseSummary["# of Sales"],
+				baseSummary["Conversion Rate"],
+			],
+			[
+				"Outage Period",
+				outageSummary["Click Throughs"],
+				outageSummary["Sales"],
+				outageSummary["# of Sales"],
+				outageSummary["Average Sale Amount"],
+				outageSummary["Conversion Rate"],
+			],
+		],
+	});
+};
 export const build_Outage_Estimate_Table = ({
-	affiliateCount,
 	outageReport,
 	baselineReport,
 	discrepency,
@@ -7,7 +43,7 @@ export const build_Outage_Estimate_Table = ({
 	setEstimatedTotals,
 	aovChoice,
 }) => {
-	console.log(affiliateCount, "RUNNING THE BUILD OUTAGE ESTIMATE TABLE");
+	console.log("RUNNING THE BUILD OUTAGE ESTIMATE TABLE");
 	const headers = [
 		{ label: "Affiliate Website ID", type: "string" },
 		{ label: "Website Name", type: "string" },
@@ -32,10 +68,10 @@ export const build_Outage_Estimate_Table = ({
 	};
 	let totalClicks = 0;
 
-	for (let j = 0; j < affiliateCount; j++) {
+	for (let j = 0; j < outageReport.length; j++) {
 		totalClicks = totalClicks + Number(outageReport[j]["Click Throughs"]);
 	}
-	for (let i = 0; i < affiliateCount; i++) {
+	for (let i = 0; i < outageReport.length; i++) {
 		const match =
 			baselineReport[i] && typeof baselineReport[i] === "object"
 				? baselineReport[i]
@@ -79,8 +115,8 @@ export const build_Outage_Estimate_Table = ({
 	totals.cRate = totals.aCommissionTotal / totals.salesTotal;
 	totals.nRate = totals.nCommissionTotal / totals.salesTotal;
 	const results = { headers, table };
-	setOutageTable(results);
-	setEstimatedTotals(totals);
 
+	setEstimatedTotals(totals);
+	setOutageTable(results);
 	return;
 };
