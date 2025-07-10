@@ -24,9 +24,27 @@ h5 {
 h6 {
 	font-weight: bold;
 }
+@keyframes subtle-flash {
+	0% {
+		opacity: 1;
+	}
+	1% {
+		opacity: 0.5;
+	}
+	2% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.flashy-button {
+	animation: subtle-flash 30s infinite;
+}
 
 .my-card {
-	box-shadow: 7px 7px 5px rgb(6, 18, 128);
+	box-shadow: 7px 7px 5px rgb(57, 58, 73);
 	transition: box-shadow 0.3s ease;
 	font-size: 95%;
 }
@@ -34,7 +52,7 @@ h6 {
 	color: rgb(103, 103, 169);
 }
 .my-card:hover {
-	box-shadow: 10px 10px 5px;
+	box-shadow: 10px 10px 5px rgb(36, 37, 51);
 }
 
 #productsRow {
