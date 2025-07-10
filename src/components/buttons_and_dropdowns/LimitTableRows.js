@@ -27,7 +27,7 @@ const LimitTableRows = ({
 		const dropDownOptions = dropdownarray(table.length);
 		return (
 			<div className="position-relative d-print-none">
-				{displayTable ? (
+				{displayTable === true && (
 					<Badge
 						size="sm"
 						className="position-absolute   "
@@ -44,7 +44,8 @@ const LimitTableRows = ({
 					>
 						Hide Table
 					</Badge>
-				) : (
+				)}
+				{displayTable === false && (
 					<Badge
 						pill
 						bg="warning"
@@ -54,7 +55,6 @@ const LimitTableRows = ({
 						Click Here to Display {title}
 					</Badge>
 				)}
-
 				{dropDownOptions && (
 					<Dropdown
 						as={ButtonGroup}

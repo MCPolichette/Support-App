@@ -14,7 +14,7 @@ const AdToolPlayground = () => {
 		// AIvAI: antiAI,
 	};
 
-	const [activeTab, setActiveTab] = useState("example");
+	const [activeTab, setActiveTab] = useState("example Site");
 	const [htmlCode, setHtmlCode] = useState(presets[activeTab]);
 	const [iframeKey, setIframeKey] = useState(0); // to force reload iframe
 

@@ -120,14 +120,11 @@ const OutageEstimate = () => {
 	};
 
 	return (
-		<div className="position-relative card-drop-in ">
-			<Button onClick={() => setReportingStage("baseline")}>
-				set to start
-			</Button>
+		<div>
 			{reportingStage === "baseline" && (
-				<Container className="shadow-sm p-4 bg-white border rounded ">
+				<Container className="shadow-sm p-4 bg-white border rounded mt-5">
 					<Row>
-						<h1>Outage Estimate 2.0</h1>
+						<h3>Outage Estimate 2.0</h3>
 						<MerchantAndNetworkInupt
 							title="Fill in the Merchant Id and Network to begin"
 							selectedMerchant={selectedMerchant}
@@ -213,11 +210,11 @@ const OutageEstimate = () => {
 									"_" +
 									startDate +
 									"-" +
-									endDate
+									endDate,
+								"portrait"
 							)
 						}
 					/>
-
 					<Row id="report_pdf">
 						<OutageReport
 							reportList={""}
@@ -228,11 +225,6 @@ const OutageEstimate = () => {
 							baselineDates={previousDates}
 						/>
 					</Row>
-					<hr
-						style={{
-							height: "10em",
-						}}
-					/>
 				</Container>
 			)}
 			<StylizedModal

@@ -5,7 +5,8 @@ function waitForRender(ms = 300) {
 	return new Promise((res) => setTimeout(res, ms));
 }
 
-export async function generatePDF(fileName) {
+export async function generatePDF(fileName, layout = "landscape") {
+	console.log("pdf print triggered");
 	const element = document.getElementById("report_pdf");
 	if (!element) return console.error("Missing #report_pdf element");
 
@@ -23,11 +24,9 @@ export async function generatePDF(fileName) {
 
 	// Restore hidden elements
 	hiddenEls.forEach((el) => (el.hidden = false));
-
-	const pdf = new jsPDF("landscape", "pt", "a4");
+	const pdf = new jsPDF(layout, "pt", "a4");
 	const pageHeight = pdf.internal.pageSize.getHeight();
 	const pageWidth = pdf.internal.pageSize.getWidth();
-
 	const imgHeight = canvas.height;
 	const imgWidth = canvas.width;
 	const scale = pageWidth / imgWidth;

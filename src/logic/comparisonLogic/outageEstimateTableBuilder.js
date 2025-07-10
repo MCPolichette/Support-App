@@ -3,11 +3,14 @@ import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { TableTopper } from "../../components/tables/tableExtras";
 import { build_Outage_Estimate_Table } from "./outageLogic";
+import { formatNumber } from "../../utils/conversions";
+import LimitTableRows from "../../components/buttons_and_dropdowns/LimitTableRows";
 
 const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 	const getReport = (text) => {
 		return reports[text];
 	};
+	console.log(reports);
 	const baseSummary = getReport("Performance_Summary_previous")?.[0];
 	const [summaryTable, setSummaryTable] = useState("");
 	const [estimatedTotals, setEstimatedTotals] = useState({
@@ -15,25 +18,46 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 		nCommissionTotal: 0,
 		overallTotal: 0,
 		salesTotal: 0,
-		nRate: "",
-		cRate: "",
+		nRate: formatNumber(
+			baseSummary["Commission"] / baseSummary["Sales"],
+			"percent"
+		),
+		cRate: formatNumber(
+			baseSummary["Network Commissions"] / baseSummary["Sales"],
+			"percent"
+		),
 	});
-	const [avgCommRate, setAvgCommRate] = useState("");
-	const [networkRate, setNetworkRate] = useState("");
-	const websiteBasePerformance = getReport(
+	const aov = formatNumber(baseSummary["Average Sale Amount"], "dollar");
+	console.log(baseSummary);
+	const [aovChoice, setAovChoice] = useState("Affiliate");
+	const [affiliateCount, setAffiliateCount] = useState(15);
+	const outagePerformance = getReport(
+		"Performance_Summary_By_Affiliate_Website_current"
+	)
+		.sort((a, b) => b["Click Throughs"] - a["Click Throughs"])
+		.slice(0, affiliateCount);
+	const basePerformance = getReport(
 		"Performance_Summary_By_Affiliate_Website_previous"
 	);
-	const [affiliateCount, setAffiliateAccount] = useState(20);
+
 	const outageSummary = getReport("Performance_Summary_current")?.[0];
 	const merchantName = outageSummary["Merchant"];
-
+	const baselineRates = {
+		nRate: formatNumber(
+			Number(baseSummary["Commissions"]) / Number(baseSummary["Sales"]),
+			"percent"
+		),
+		cRate: formatNumber(
+			Number(baseSummary["Network Commissions"]) /
+				Number(baseSummary["Sales"]),
+			"percent"
+		),
+	};
 	const [outageTable, setOutageTable] = useState({
 		headers: [],
 		table: [],
 	});
 	const pdfRef = useRef(); // Use with html2canvas/jspdf or react-to-print
-	console.log("IMPORTANT", outageTable);
-
 	const estimatedSales =
 		outageSummary["Click Throughs"] *
 		baseSummary["Average Sale Amount"] *
@@ -42,27 +66,30 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 	const reportTitle = (text, dates) => {
 		return text + " " + dates;
 	};
-	function updateTable() {
+	function changeAffiliates(array) {
+		const newLimit = array.length;
+		console.log("LIMIT", newLimit);
+		setAffiliateCount(newLimit);
+		updateTable(newLimit);
+	}
+	function updateTable(count) {
 		build_Outage_Estimate_Table({
-			affiliateCount: affiliateCount,
-			outageReport: websiteBasePerformance,
-			baselineReport: getReport(
-				"Performance_Summary_By_Affiliate_Website_current"
-			),
+			affiliateCount: count,
+			outageReport: outagePerformance,
+			baselineReport: basePerformance,
 			discrepency: discrepency,
 			setOutageTable,
 			setEstimatedTotals,
-			setAvgCommRate,
-			setNetworkRate,
+			aovChoice,
 		});
 	}
 	if (outageTable.table.length === 0) {
-		updateTable();
+		updateTable(affiliateCount);
 	}
 	if (summaryTable === "") {
 		setSummaryTable({
 			headers: [
-				{ label: "TimeLine", type: "string" },
+				{ label: "Summary:", type: "string" },
 				{ label: "Clicks", type: "int" },
 				{ label: "Sales", type: "dollar" },
 				{ label: "Average Order Amt (AOV)", type: "dollar" },
@@ -92,6 +119,7 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 			],
 		});
 	}
+	console.log("IMPORTANT ", affiliateCount);
 
 	return (
 		<Container className="container pt-0">
@@ -105,55 +133,62 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 					<Col md={4}>
 						<h3>Outage Estimate Report</h3>
 						<li>
-							<strong>Merchant:</strong>
-							{"    "} {merchantName}
+							<strong> {merchantName}</strong>
 						</li>
 						<li>
-							<strong>Program ID:</strong>
-							{"    "} {mid}
+							<strong>Merchant ID: {mid}:</strong>
 						</li>
 						<li>
 							<strong>Outage Dates:</strong>
-							{"    "}
-							{outageDates.dateRange}
+							<ul>
+								<li>{outageDates.dateRange}</li>
+							</ul>
 						</li>
 						<li>
 							<strong>Baseline Dates:</strong>
-							{"    "}
-							{baselineDates.dateRange}
+							<ul>
+								<li>{baselineDates.dateRange}</li>
+							</ul>
 						</li>
 						<li>
-							<strong>Affiliate Commission:</strong>
-							{"    "}
-							{estimatedTotals.cRate}
+							<strong>Baseline AOV: {aov}</strong>
 						</li>
 						<li>
-							<strong>Network Commission:</strong>
-							{"    "} {estimatedTotals.nRate}
+							<strong>Baseline avg Commission Rates:</strong>
+							<ul>
+								<li>Affiliates: {baselineRates.cRate}</li>
+								<li>Network: {baselineRates.nRate}</li>
+							</ul>
 						</li>
-						<Card body className="text-end">
-							<h5>Performance Comparison</h5>
-							<ColumnMapTable
-								id={mid}
-								hideTools={true}
-								classNames="standard"
-								tableMap={summaryTable.headers}
-								table={summaryTable.table}
-								limit={3}
-							/>
-						</Card>
+						<h5 className="mt-3">Performance Comparison</h5>
+						<ColumnMapTable
+							id={mid}
+							hideTools={true}
+							classes="standard"
+							tableMap={summaryTable.headers}
+							table={summaryTable.table}
+							limit={3}
+						/>
 					</Col>
 					<Col className="text-end" md={8}>
 						{Graphs}
 					</Col>
 				</Row>
-				{/* Top Affiliates Table Placeholder */}
+
 				<Row className="mb-4">
 					<Col>
+						<LimitTableRows
+							hidden={false}
+							displayTable={"Null"}
+							displayedRows={affiliateCount}
+							table={outagePerformance}
+							setDisplayedRows={changeAffiliates}
+							title={"title"}
+						/>
 						<ColumnMapTable
 							id={mid}
 							hideTools={true}
-							classNames="standard"
+							classes="standard"
 							tableMap={outageTable.headers}
 							table={outageTable.table}
 							limit={affiliateCount}

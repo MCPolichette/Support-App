@@ -5,8 +5,7 @@ export const build_Outage_Estimate_Table = ({
 	discrepency,
 	setOutageTable,
 	setEstimatedTotals,
-	setAvgCommRate,
-	setNetworkRate,
+	aovChoice,
 }) => {
 	console.log(affiliateCount, "RUNNING THE BUILD OUTAGE ESTIMATE TABLE");
 	const headers = [
@@ -32,11 +31,9 @@ export const build_Outage_Estimate_Table = ({
 		cRate: "",
 	};
 	let totalClicks = 0;
-	const SortedByClicks = outageReport.sort(
-		(a, b) => b["Click Throughs"] - a["Click Throughs"]
-	);
+
 	for (let j = 0; j < affiliateCount; j++) {
-		totalClicks = totalClicks + Number(SortedByClicks[j]["Click Throughs"]);
+		totalClicks = totalClicks + Number(outageReport[j]["Click Throughs"]);
 	}
 	for (let i = 0; i < affiliateCount; i++) {
 		const match =
@@ -44,26 +41,26 @@ export const build_Outage_Estimate_Table = ({
 				? baselineReport[i]
 				: {};
 		const aCommission =
-			Number(SortedByClicks[i]["Commissions"]) /
-			Number(SortedByClicks[i]["Sales"]);
+			Number(outageReport[i]["Commissions"]) /
+			Number(outageReport[i]["Sales"]);
 		const nCommission =
-			Number(SortedByClicks[i]["Network Commissions"]) /
-			Number(SortedByClicks[i]["Sales"]);
+			Number(outageReport[i]["Network Commissions"]) /
+			Number(outageReport[i]["Sales"]);
 		const clickPercentage =
-			(Number(SortedByClicks[i]["Click Throughs"]) / totalClicks) * 100;
+			(Number(outageReport[i]["Click Throughs"]) / totalClicks) * 100;
 		const estimatedAOV =
-			Number(SortedByClicks[i]["Conversion Rate"]) *
-			Number(SortedByClicks[i]["Click Throughs"]) *
-			Number(SortedByClicks[i]["Average Sale Amount"]);
-		const estimateOnClicks = clickPercentage * discrepency;
+			Number(outageReport[i]["Conversion Rate"]) *
+			Number(outageReport[i]["Click Throughs"]) *
+			Number(outageReport[i]["Average Sale Amount"]);
+		const estimateOnClicks = (clickPercentage * discrepency) / 100;
 		const averageEstimate = (estimatedAOV + estimateOnClicks) / 2;
 		table.push([
-			SortedByClicks[i]["Affiliate Id"],
-			SortedByClicks[i]["Affiliate Website Name"],
-			Number(SortedByClicks[i]["Click Throughs"]),
+			outageReport[i]["Affiliate Id"],
+			outageReport[i]["Affiliate Website Name"],
+			Number(outageReport[i]["Click Throughs"]),
 			clickPercentage,
-			Number(SortedByClicks[i]["Average Sale Amount"]),
-			Number(SortedByClicks[i]["Conversion Rate"]),
+			Number(outageReport[i]["Average Sale Amount"]),
+			Number(outageReport[i]["Conversion Rate"]),
 			estimatedAOV,
 			estimateOnClicks,
 			averageEstimate,
@@ -76,7 +73,7 @@ export const build_Outage_Estimate_Table = ({
 		totals.nCommissionTotal =
 			totals.nCommissionTotal + averageEstimate * nCommission;
 		totals.salesTotal =
-			totals.salesTotal + Number(SortedByClicks[i]["Sales"]);
+			totals.salesTotal + Number(outageReport[i]["Sales"]);
 		totals.overallTotal = totals.aCommissionTotal + totals.nCommissionTotal;
 	}
 	totals.cRate = totals.aCommissionTotal / totals.salesTotal;
