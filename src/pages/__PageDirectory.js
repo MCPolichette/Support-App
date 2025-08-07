@@ -40,6 +40,15 @@ const _PageDirectory = [
 		keyRequired: false,
 	},
 	{
+		title: "Fraud Finder",
+		description:
+			"An updated version of the Outage Estimate, with more simplified logic, and easier setup.",
+		listArray: ["CATCHING FRAUDSTESR"],
+		route: "/fraud",
+		devOnly: true,
+		keyRequired: true,
+	},
+	{
 		title: "Outage Estimate 2.0",
 		description:
 			"An updated version of the Outage Estimate, with more simplified logic, and easier setup.",
