@@ -2,7 +2,11 @@ import React, { useRef, useState } from "react";
 import { Row, Col, Card, Container, Button } from "react-bootstrap";
 import ColumnMapTable from "../../components/tables/columnMapTable";
 import { TableTopper } from "../../components/tables/tableExtras";
-import { build_Outage_Estimate_Table, SummaryReportTable } from "./outageLogic";
+import {
+	build_Outage_Estimate_Table,
+	outagePerformance,
+	SummaryReportTable,
+} from "./outageLogic";
 import { formatNumber } from "../../utils/conversions";
 import LimitTableRows from "../../components/buttons_and_dropdowns/LimitTableRows";
 
@@ -10,8 +14,19 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 	const getReport = (text) => {
 		return reports[text];
 	};
-	console.log(reports);
+	const outageSummary = getReport("Performance_Summary_current")?.[0];
 	const baseSummary = getReport("Performance_Summary_previous")?.[0];
+	const estimatedSales =
+		outageSummary["Click Throughs"] *
+		baseSummary["Average Sale Amount"] *
+		baseSummary["Conversion Rate"];
+	const discrepancy = estimatedSales - outageSummary["Sales"];
+	const [aovChoice, setAovChoice] = useState("Affiliate");
+	const [affiliateCount, setAffiliateCount] = useState(20);
+	const [affiliateTable, setAffiliateTable] = useState(
+		outagePerformance(reports, affiliateCount, discrepancy)
+	);
+
 	const [summaryTable, setSummaryTable] = useState("");
 	const [estimatedTotals, setEstimatedTotals] = useState({
 		aCommissionTotal: 0,
@@ -30,18 +45,11 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 
 	const aov = formatNumber(baseSummary["Average Sale Amount"], "dollar");
 	console.log(baseSummary);
-	const [aovChoice, setAovChoice] = useState("Affiliate");
-	const [affiliateCount, setAffiliateCount] = useState(15);
-	const outagePerformance = getReport(
-		"Performance_Summary_By_Affiliate_Website_current"
-	)
-		.sort((a, b) => b["Click Throughs"] - a["Click Throughs"])
-		.slice(0, affiliateCount);
+
 	const basePerformance = getReport(
 		"Performance_Summary_By_Affiliate_Website_previous"
 	);
 
-	const outageSummary = getReport("Performance_Summary_current")?.[0];
 	const merchantName = outageSummary["Merchant"];
 	const baselineRates = {
 		nRate: formatNumber(
@@ -59,11 +67,7 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 		table: [],
 	});
 	const pdfRef = useRef(); // Use with html2canvas/jspdf or react-to-print
-	const estimatedSales =
-		outageSummary["Click Throughs"] *
-		baseSummary["Average Sale Amount"] *
-		baseSummary["Conversion Rate"];
-	const discrepency = estimatedSales - outageSummary["Sales"];
+
 	const reportTitle = (text, dates) => {
 		return text + " " + dates;
 	};
@@ -74,17 +78,17 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 		updateTable(newLimit);
 	}
 	function updateTable() {
-		build_Outage_Estimate_Table({
-			outageReport: outagePerformance,
-			baselineReport: basePerformance,
-			discrepency: discrepency,
-			setOutageTable,
-			setEstimatedTotals,
-			aovChoice,
-		});
+		// build_Outage_Estimate_Table({
+		// 	outageReport: outagePerformance,
+		// 	baselineReport: basePerformance,
+		// 	discrepency: discrepency,
+		// 	setOutageTable,
+		// 	setEstimatedTotals,
+		// 	aovChoice,
+		// });
 	}
 	if (outageTable.table.length === 0) {
-		updateTable(affiliateCount);
+		updateTable();
 	}
 	if (summaryTable === "") {
 		SummaryReportTable({
@@ -152,7 +156,6 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 						{Graphs}
 					</Col>
 				</Row>
-
 				<Row className="mb-4">
 					<Col>
 						<LimitTableRows
@@ -166,7 +169,7 @@ const OutageReport = ({ mid, reports, outageDates, baselineDates, Graphs }) => {
 						<ColumnMapTable
 							id={mid}
 							hideTools={true}
-							classes="standard"
+							classes=""
 							tableMap={outageTable.headers}
 							table={outageTable.table}
 							limit={affiliateCount}

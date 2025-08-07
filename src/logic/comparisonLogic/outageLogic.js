@@ -35,6 +35,60 @@ export const SummaryReportTable = ({
 		],
 	});
 };
+export function outagePerformance(reports, limit) {
+	const tableArray = reports[
+		"Performance_Summary_By_Affiliate_Website_current"
+	]
+		.sort((a, b) => {
+			return parseFloat(b["Click Throughs"] - a["Click Throughs"]);
+		})
+		.slice(0, limit);
+	console.log(tableArray);
+	const baseData =
+		reports["Performance_Summary_By_Affiliate_Website_previous"];
+	let totalSales = 0;
+	let totalClicks = 0;
+	const row = [];
+	const troubleAffs = [];
+	Object.entries(tableArray).forEach(([i, webAff]) => {
+		if (!webAff || typeof webAff != "object") return;
+		totalClicks = totalClicks + webAff["Click Throughs"];
+		totalClicks = totalSales + webAff["Sales"];
+		const websiteId = webAff["Website Id"];
+		const match = baseData.find((row) => row["Website Id"] === websiteId);
+		if (!match) {
+			webAff.error = "Made No Sales during the Base Period";
+			troubleAffs.push(webAff);
+			console.log(webAff);
+			return;
+		}
+		console.log(match["Sales"] || "0");
+		const aCommission =
+			Number(webAff["Commissions"]) / Number(webAff["Sales"]);
+		const nCommission =
+			Number(webAff["Network Commissions"]) / Number(webAff["Sales"]);
+		const clickPercentage =
+			(Number(webAff["Click Throughs"]) / totalClicks) * 100;
+		const estimatedAOV =
+			Number(webAff["Conversion Rate"]) *
+			Number(webAff["Click Throughs"]) *
+			Number(webAff["Average Sale Amount"]);
+		row.push({
+			AffId: webAff["Affiliate Id"],
+			webId: webAff["Website Id"],
+			webName: webAff["Affiliate Website Name"],
+			oClicks: webAff["Click Throughs"],
+			bClicks: match["Click Throughs"] || "0",
+			oSales: webAff["Sales"],
+			bSales: match["Sales"],
+			conversionRate: Number(webAff["Conversion Rate"]),
+			commissions: Number(webAff["Sales"]),
+			aov: Number(webAff["Average Sale Amount"]),
+		});
+	});
+	console.log(row);
+}
+
 export const build_Outage_Estimate_Table = ({
 	outageReport,
 	baselineReport,
