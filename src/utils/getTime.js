@@ -8,12 +8,20 @@ export function getDefaultStartDate(option = "last7days") {
 			date.setMonth(date.getMonth() - 0);
 			date.setDate(1);
 			break;
+		case "30days":
+			date.setDate(date.getDate() - 30);
+			break;
+		case "14days":
+			date.setDate(date.getDate() - 14);
+			break;
+		case "60days":
+			date.setDate(date.getDate() - 60);
+			break;
 		case "last7days":
 		default:
 			date.setDate(date.getDate() - 7);
 			break;
 	}
-
 	return date.toISOString().split("T")[0];
 }
 

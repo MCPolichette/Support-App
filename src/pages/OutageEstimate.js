@@ -36,7 +36,6 @@ const OutageEstimate = () => {
 	////FOR TESTING  REMOVE AND REPLACE WITH COMMENTED OUT STUFF ABOVE
 	//
 	//
-	console.log(startDate, endDate);
 	const [previousPeriodStart, setPreviousPeriodStart] = useState(
 		getLastYearSameWeek(startDate, endDate).start
 	);

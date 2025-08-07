@@ -15,6 +15,7 @@ import QuickTools from "./pages/QuickTools.js";
 import ParrallelPulseReport from "./pages/ParrallelPulseReport.js";
 import OutageEstimate from "./pages/OutageEstimate.js";
 import AdToolPlayground from "./pages/AdToolPlayground.jsx";
+import FraudReport from "./pages/FraudReport.js";
 import { NoApiKey } from "./components/Elements/NoAPIKey.js";
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
 				<Route path="/more_tools" element={<QuickTools />} />
 				<Route path="/outage_estimate" element={<OutageEstimate />} />
 				<Route path="/adTools" element={<AdToolPlayground />} />
+				<Route path="/fraud" element={<FraudReport />} />
 
 				<Route
 					path="/ParrallelPulse"

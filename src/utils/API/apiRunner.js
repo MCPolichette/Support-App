@@ -3,6 +3,7 @@ import { getSettings } from "./_AdminApiModules";
 
 export async function runAPI(params, API_KEY, merchantId, network) {
 	const settings = getSettings();
+	console.log(params);
 	const {
 		report_id,
 		startDate,
@@ -33,7 +34,7 @@ export async function runAPI(params, API_KEY, merchantId, network) {
 		`&affiliate_group_id=${affiliate_group_id}` +
 		`&report_id=${report_id}` +
 		`&output=json${networkParam}`;
-
+	console.log(url);
 	try {
 		const response = await fetch(url);
 		if (!response.ok) throw new Error("API returned error status");
