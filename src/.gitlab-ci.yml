@@ -1,0 +1,15 @@
+image: node:16
+
+stages:
+    - deploy
+
+pages:
+    script:
+        - npm install
+        - npm run build
+        - mv build public
+    artifacts:
+        paths:
+            - public
+    only:
+        - main # or the branch you want to deploy from
