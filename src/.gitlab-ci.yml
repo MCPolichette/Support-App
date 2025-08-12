@@ -4,6 +4,7 @@ stages:
     - deploy
 
 pages:
+    stage: deploy
     script:
         - npm install
         - npm run build
@@ -12,4 +13,4 @@ pages:
         paths:
             - public
     only:
-        - main # or the branch you want to deploy from
+        - main
