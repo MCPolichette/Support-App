@@ -21,7 +21,7 @@ export async function runAPI(params, API_KEY, merchantId, network) {
 	});
 
 	const networkParam = getNetworkParam(networkCode);
-
+	console.log(API_KEY);
 	const url =
 		`https://classic.avantlink.com/api.php?module=AdminReport` +
 		`&auth_key=${API_KEY}` +
@@ -39,6 +39,7 @@ export async function runAPI(params, API_KEY, merchantId, network) {
 		const response = await fetch(url);
 		if (!response.ok) throw new Error("API returned error status");
 		const json = await response.json();
+		console.log(json);
 
 		return json;
 	} catch (error) {
