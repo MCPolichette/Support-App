@@ -5,3 +5,9 @@ PAGES I want to add to the tool list.
 2. outage estimate
 3. advanced reports
 4. 
+
+
+
+
+
+https://classic.avantlink.com/api.php?module=AdminReport&auth_key=undefined&merchant_id=0&merchant_parent_id=0&affiliate_id=0&website_id=0&date_begin=2025-11-21&date_end=2025-11-27&affiliate_group_id=0&report_id=15&output=json
