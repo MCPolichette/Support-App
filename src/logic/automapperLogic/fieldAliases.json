@@ -113,7 +113,7 @@
 		"valueTitle": "Subcategory"
 	},
 	{
-		"fieldName": "strThumbnailURL",
+		"fieldName": "strThumbnailImage",
 		"valueTitle": "Thumbnail URL",
 		"valueType": "url",
 		"required": false,

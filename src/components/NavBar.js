@@ -36,7 +36,7 @@ const AppNavbar = () => {
 			<Navbar.Collapse id="basic-navbar-nav">
 				<Nav className="me-auto">
 					<Nav.Link href="/">Home</Nav.Link>
-					<Nav.Link href="/more_tools">QuickTools</Nav.Link>
+					<Nav.Link href="/#/more_tools">QuickTools</Nav.Link>
 					<NavDropdown title="Tools" id="tools-dropdown">
 						{visiblePages.map((page, index) => (
 							<NavDropdown.Item
