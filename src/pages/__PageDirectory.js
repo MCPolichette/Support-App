@@ -8,15 +8,6 @@ const _PageDirectory = [
 		devOnly: false,
 		keyRequired: false,
 	},
-	{
-		title: "Quick Tools ",
-		description:
-			"A series of quick conversion tools for DB queries, and other regular calculations.",
-		route: "/more_tools",
-		devOnly: false,
-		keyRequired: false,
-		listArray: ["UTMs", "FTP", "IBC verification", "etc..."],
-	},
 
 	{
 		title: "Parrallel Pulse Report",
@@ -29,6 +20,7 @@ const _PageDirectory = [
 			"Products, Affiliate and overall summaries",
 		],
 		route: "/ParrallelPulse",
+		category: "reports",
 		devOnly: false,
 		keyRequired: true,
 	},
@@ -44,6 +36,7 @@ const _PageDirectory = [
 		description: "Report built for Mark K",
 		listArray: ["Mark K "],
 		route: "/MarkK",
+		category: "reports",
 		devOnly: true,
 		keyRequired: true,
 	},
@@ -58,13 +51,14 @@ const _PageDirectory = [
 			"custom Tools, and overall display incomplete",
 		],
 		route: "/outage_estimate",
+		category: "reports",
 		devOnly: true,
 		keyRequired: true,
 	},
 	{
 		title: "Recursive Link Crawler",
 		description: "work in progress. ",
-		route: "/link-detector",
+		route: "/website_scanner",
 		devOnly: true,
 		keyRequired: true,
 	},

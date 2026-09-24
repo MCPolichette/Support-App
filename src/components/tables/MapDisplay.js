@@ -75,7 +75,7 @@ const MapDisplay = ({
 													<Dropdown.Item
 														onClick={() =>
 															onOverride(
-																row.header,
+																row.columnIndex,
 																"",
 																{
 																	valueTitle:
@@ -90,9 +90,10 @@ const MapDisplay = ({
 														(field, i) => (
 															<Dropdown.Item
 																key={i}
+														disabled={!!field.fieldName && mapping.some(other => other.columnIndex !== row.columnIndex && other.fieldName === field.fieldName)}
 																onClick={() =>
 																	onOverride(
-																		row.header,
+																		row.columnIndex,
 																		field.fieldName
 																	)
 																}
@@ -104,6 +105,7 @@ const MapDisplay = ({
 																{
 																	field.valueTitle
 																}
+																{field.fieldName && mapping.some(other => other.columnIndex !== row.columnIndex && other.fieldName === field.fieldName) ? " (already assigned)" : ""}
 															</Dropdown.Item>
 														)
 													)}
@@ -129,7 +131,7 @@ const MapDisplay = ({
 														onClick={() =>
 															newAtt(
 																"attribute",
-																row.header
+																row.columnIndex
 															)
 														}
 													>

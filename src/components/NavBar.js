@@ -1,77 +1,37 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import _PageDirectory from "../pages/__PageDirectory";
-import StylizedModal from "../components/modals/_ModalStylized";
+import { Link, NavLink } from "react-router-dom";
+import { Navbar, Nav, NavDropdown, Badge } from "react-bootstrap";
+import pages from "../pages/__PageDirectory";
+import StylizedModal from "./modals/_ModalStylized";
 import SettingsModal from "./modals/SettingsModal";
-import { Navbar, Nav, NavDropdown, Alert, Badge } from "react-bootstrap";
-const getSettings = () => {
-	try {
-		const raw = localStorage.getItem("ChettiToolsSettings");
-		return raw ? JSON.parse(raw) : {};
-	} catch {
-		return {};
-	}
-};
-const storageSettings =
-	JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
-const showApiTools = storageSettings.validKey;
-const visiblePages = _PageDirectory
-	.filter((page) => !page.keyRequired || showApiTools)
-	.slice(2);
-const AppNavbar = () => {
-	const settings = getSettings();
-	const [modalOpen, setModalOpen] = useState(false);
-	return (
-		<Navbar
-			bg="dark"
-			variant="dark"
-			expand="lg"
-			fixed="top"
-			className="px-3"
-		>
-			<Navbar.Brand>
-				<b>Chetti.Tools Support-App</b>
-			</Navbar.Brand>
-			<Navbar.Toggle aria-controls="basic-navbar-nav" />
-			<Navbar.Collapse id="basic-navbar-nav">
-				<Nav className="me-auto">
-					<Nav.Link href="/">Home</Nav.Link>
-					<Nav.Link href="/#/more_tools">QuickTools</Nav.Link>
-					<NavDropdown title="Tools" id="tools-dropdown">
-						{visiblePages.map((page, index) => (
-							<NavDropdown.Item
-								as={Link}
-								to={page.route}
-								key={index}
-							>
-								{page.title}
-							</NavDropdown.Item>
-						))}
-						<NavDropdown.Divider />
-						<NavDropdown.Item onClick={() => setModalOpen(true)}>
-							Update Settings
-						</NavDropdown.Item>
-					</NavDropdown>
-				</Nav>
-			</Navbar.Collapse>
-			{settings.admin && (
-				<Alert variant="info">
-					<Badge bg="success" className="me-2">
-						Verified Admin Key
-					</Badge>
-					You have admin privileges.
-				</Alert>
-			)}
 
-			<StylizedModal
-				show={modalOpen}
-				onHide={() => setModalOpen(false)}
-				title="Update Settings"
-			>
-				<SettingsModal />
+const AppNavbar = ({ settings, onSettingsChange }) => {
+	const [modalOpen, setModalOpen] = useState(false);
+	const reports = pages.filter(page => page.category === "reports" &&
+		(!page.devOnly || settings.showDev) && (!page.keyRequired || settings.validKey));
+	const closeSettings = () => { setModalOpen(false); onSettingsChange(); };
+	return (
+		<>
+			<Navbar bg="dark" variant="dark" expand="lg" sticky="top" className="px-3" collapseOnSelect>
+				<Navbar.Brand as={Link} to="/">Chetti.Tools</Navbar.Brand>
+				<Navbar.Toggle aria-controls="main-navigation" />
+				<Navbar.Collapse id="main-navigation">
+					<Nav className="me-auto">
+						<Nav.Link as={NavLink} to="/" end eventKey="home">Home</Nav.Link>
+						<NavDropdown title="Reports" id="reports-menu">
+							{reports.map(page => <NavDropdown.Item as={Link} to={page.route} key={page.route} eventKey={page.route}>{page.title}</NavDropdown.Item>)}
+							{!settings.validKey && <NavDropdown.Item onClick={() => setModalOpen(true)}>Add API key in Settings</NavDropdown.Item>}
+						</NavDropdown>
+						<Nav.Link as={NavLink} to="/automapper" eventKey="automapper">Automapper</Nav.Link>
+						<Nav.Link as="button" onClick={() => setModalOpen(true)}>Settings</Nav.Link>
+					</Nav>
+					{settings.validKey && <Badge bg="secondary">API key configured</Badge>}
+				</Navbar.Collapse>
+			</Navbar>
+			<StylizedModal show={modalOpen} onHide={closeSettings} title="Settings">
+				{modalOpen && <SettingsModal />}
 			</StylizedModal>
-		</Navbar>
+		</>
 	);
 };
-
 export default AppNavbar;

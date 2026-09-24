@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Container } from "react-bootstrap";
+import React from "react";
 import FTPshorthand from "../components/modals/quickTools/FTPshorthand";
 import IBCVerification from "../components/modals/quickTools/IBCVerification";
 import UTMBuilder from "../components/modals/quickTools/UTMBuilder";
@@ -7,12 +6,8 @@ import DownloadXMLTool from "../components/modals/quickTools/DownloadXMLTool";
 
 import LinkCard from "../components/cards/LinkCard";
 
-const QuickTools = () => {
-	const settings =
-		JSON.parse(localStorage.getItem("ChettiToolsSettings")) || {};
-
-	const [showApiTools] = useState(settings.validKey || false);
-	console.log(showApiTools);
+const QuickTools = ({ settings }) => {
+	const showApiTools = settings.validKey;
 	const tools_list = [
 		{
 			title: "FTP conversion tools",
@@ -64,39 +59,16 @@ const QuickTools = () => {
 		},
 	];
 	const visibletools = tools_list.filter(
-		(tool) => !tool.keyRequired || showApiTools
+		(tool) => !tool.apiRequired || showApiTools
 	);
 
 	return (
-		<div className=" container container-fluid  d-flex flex-column min-vh-50 justify-content-center align-items-center">
-			<Container
-				className="container mt-4 shadow callout-info card-drop-in "
-				style={{
-					backgroundColor: "lightgrey",
-					padding: "2rem",
-				}}
-			>
-				<div className="row">
-					<h5 className="mb-4">
-						<b>Quick Tools!</b>
-					</h5>
-				</div>
-				<div className="row">
-					{visibletools.map((tool, index) => (
-						<LinkCard
-							key={index}
-							title={tool.title}
-							text={tool.description}
-							modal={tool.modal}
-							index={index}
-							cardInput={tool.cardInput}
-							list={tool.listArray}
-						/>
-					))}
-				</div>
-			</Container>{" "}
+		<div className="row">
+			{visibletools.map(tool => (
+				<LinkCard key={tool.title} title={tool.title} text={tool.description}
+					modal={tool.modal} cardInput={tool.cardInput} list={tool.listArray} />
+			))}
 		</div>
 	);
 };
-
 export default QuickTools;
