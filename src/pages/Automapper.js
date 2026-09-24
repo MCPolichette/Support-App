@@ -5,8 +5,7 @@ import MapDisplay from "../components/tables/MapDisplay.js";
 import { Container, Row, Col } from "react-bootstrap";
 //logic
 import { autoMapperWarningHandler } from "../logic/automapperLogic/automapperWarningHandler.js";
-import autoMapHeaders from "../logic/automapperLogic/mappingEngine.js";
-import fieldAliases from "../logic/automapperLogic/fieldAliases.json";
+import autoMapHeaders, { assignField } from "../logic/automapperLogic/mappingEngine.js";
 //modals
 import StylizedModal from "../components/modals/_ModalStylized.js";
 import MapModal from "../components/modals/MapModal";
@@ -30,33 +29,10 @@ const Automapper = () => {
 	};
 	const closeModal = () => setModalType(null);
 	const [activeHeader, setActiveHeader] = useState("");
-	const handleOverride = (header, newFieldName, custom = {}) => {
-		const field = fieldAliases.find(
-			(f) => f.fieldName === newFieldName
-		) || {
-			fieldName: newFieldName,
-			valueTitle: custom.valueTitle || newFieldName,
-			variant: "",
-		};
-
-		const newMapping = mappingResults.mapping.map((m) =>
-			m.header === header
-				? {
-						...m,
-						fieldName: field.fieldName,
-						valueTitle: custom.valueTitle || field.valueTitle,
-						variant: field.variant,
-						manual: true,
-						score: "NA",
-				  }
-				: m
-		);
-
+	const handleOverride = (columnIndex, newFieldName, custom = {}) => {
+		const newMapping = assignField(mappingResults.mapping, columnIndex, newFieldName, custom);
 		setNotesAndWarnings(autoMapperWarningHandler(newMapping));
-		setMappingResults({
-			...mappingResults,
-			mapping: newMapping,
-		});
+		setMappingResults({ ...mappingResults, mapping: newMapping });
 	};
 
 	const documentData = feedfile.fileData;
@@ -69,14 +45,14 @@ const Automapper = () => {
 		if (file) {
 			file_reader(event.target).then((parsed) => {
 				const { headers, sampleRows } = parsed;
-				const { mapped, warnings } = autoMapHeaders(
+				const { mapped } = autoMapHeaders(
 					headers,
 					sampleRows
 				);
 
 				setMappingResults({
 					mapping: mapped,
-					warnings: warnings,
+					warnings: [],
 					allHeaders: headers,
 				});
 				setNotesAndWarnings(autoMapperWarningHandler(mapped));
@@ -212,9 +188,9 @@ const Automapper = () => {
 				)}
 				{modalType === "attribute" && (
 					<AddAttribute
-						onConfirm={handleOverride}
+						onConfirm={(_, fieldName, custom) => handleOverride(activeHeader, fieldName, custom)}
 						mapping={mappingResults.mapping}
-						header={activeHeader}
+						header={mappingResults.mapping[activeHeader]?.header}
 					/>
 				)}
 			</StylizedModal>

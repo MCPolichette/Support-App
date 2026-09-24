@@ -25,6 +25,7 @@ const MarkKalbachReport = () => {
 	const [warningReport, setWarningReport] = useState([]);
 	const [minimumID, setMinimumID] = useState(300000);
 	const [minimumSaleAvg, setMinimumSaleAvg] = useState(35);
+	const [outlierBenchmark, setOutlierBenchmark] = useState(2000);
 	//Static Consts
 	const settings = getSettings();
 
@@ -81,7 +82,7 @@ const MarkKalbachReport = () => {
 			const merchantName = o["Merchant"];
 			const orderId = o["Order Id"];
 			const amount = Number.parseFloat(o["Transaction Amount"]).toFixed(
-				2
+				2,
 			);
 
 			if (!byMerchant[merchantId]) {
@@ -117,7 +118,7 @@ const MarkKalbachReport = () => {
 				endDate,
 			},
 			settings.key,
-			[merchantId] // note: array as your signature shows
+			[merchantId], // note: array as your signature shows
 		);
 
 		const orderIds = (res || []).map((r) => r["Order Id"]).filter(Boolean);
@@ -126,6 +127,7 @@ const MarkKalbachReport = () => {
 	}
 
 	const runMarkKReport = async (e) => {
+		//TODO set update this to be its own seperate script file.
 		const settings = await getSettings();
 		setLoading(true);
 		console.log(startDate, endDate);
@@ -141,7 +143,7 @@ const MarkKalbachReport = () => {
 				merchantId: 0,
 			},
 			settings.key,
-			"NULL"
+			"NULL",
 		);
 
 		try {
@@ -192,7 +194,7 @@ const MarkKalbachReport = () => {
 						affiliate_id: affiliate_Id,
 					},
 					settings.key,
-					"NULL"
+					"NULL",
 				);
 				// TODO
 				console.log(`Result for Affiliate ID ${affiliate_Id}:`, result);
@@ -247,7 +249,7 @@ const MarkKalbachReport = () => {
 						await Promise.all(
 							merchants.map(async (m) => {
 								const entries = Array.from(
-									m.amountCounts.entries()
+									m.amountCounts.entries(),
 								)
 									.filter(([, count]) => count >= 2)
 									.sort((a, b) => b[1] - a[1]);
@@ -282,7 +284,7 @@ const MarkKalbachReport = () => {
 								// accumulate total orders (count of all amounts)
 								totalOrderCount += entries.reduce(
 									(sum, [, count]) => sum + count,
-									0
+									0,
 								);
 
 								return (
@@ -334,7 +336,7 @@ const MarkKalbachReport = () => {
 										</div>
 									</div>
 								);
-							})
+							}),
 						)
 					).filter(Boolean);
 
@@ -377,7 +379,266 @@ const MarkKalbachReport = () => {
 			console.log("Review List:", reviewList);
 		} catch (err) {
 			setError(
-				"Error while processing the file. Check format or console for debug info."
+				"Error while processing the file. Check format or console for debug info.",
+			);
+			console.error(err);
+		}
+		setStage("report");
+	};
+	const runOutlierReport = async (e) => {
+		//TODO set update this to be its own seperate script file.
+		const settings = await getSettings();
+		setLoading(true);
+		console.log(startDate, endDate);
+		const currentDates = getReportTexts(startDate, endDate);
+		const mList = [];
+		const warningData = [];
+		const normalFormatCache = {};
+		const affList = await runAPI(
+			{
+				report_id: 15,
+				startDate: getDefaultStartDate("last30days"),
+				endDate,
+				merchantId: 0,
+			},
+			settings.key,
+			"NULL",
+		);
+
+		try {
+			const filtered = affList.filter((row) => {
+				const affId = parseInt(row["Affiliate Id"]);
+				const numSales = parseFloat(row["# of Sales"]);
+				const tags = row["Affiliate Tags"] || "";
+				const inExclusionList = exclusionList.includes(affId);
+				const avgSale = parseFloat(row["Average Sale Amount"]);
+				const recruited = tags
+					.trim()
+					.startsWith("Affiliate Recruiting");
+
+				return (
+					!isNaN(affId) &&
+					affId >= minimumID &&
+					!isNaN(numSales) &&
+					numSales > 1 &&
+					!isNaN(avgSale) &&
+					avgSale > minimumSaleAvg &&
+					!inExclusionList &&
+					(!excludeRecruited || !recruited)
+				);
+			});
+			const trimmed = filtered.map((row) => ({
+				Affiliate_Id: row["Affiliate Id"],
+				Affiliate: row["Affiliate"],
+				Affiliate_Name: row["Affiliate Name"],
+				Click_Throughs: row["Click Throughs"],
+				Sales: row["Sales"],
+				Num_Sales: row["# of Sales"],
+				Conversion_Rate: row["Conversion Rate"],
+				Average_Sale_Amount: row["Average Sale Amount"],
+			}));
+
+			setError(null);
+			const warningList = {};
+			const reviewList = {};
+
+			for (let i = 0; i < trimmed.length; i++) {
+				const affiliate_Id = trimmed[i].Affiliate_Id;
+				const affiliate_Name = trimmed[i].Affiliate_Name;
+				const result = await runAPI(
+					{
+						report_id: 8,
+						startDate: startDate,
+						endDate: endDate,
+						affiliate_id: affiliate_Id,
+					},
+					settings.key,
+					"NULL",
+				);
+				// TODO
+				console.log(`Result for Affiliate ID ${affiliate_Id}:`, result);
+				const merchantMap = {};
+
+				//AFFAPIRETURN
+				result.forEach((order) => {
+					const merchantId = order["Merchant Id"];
+					if (!mList.includes(merchantId)) {
+						mList.push(merchantId);
+					}
+
+					const amount = parseFloat(order["Transaction Amount"]);
+					const itemCount = parseInt(order["Item Count"]);
+					const orderId = order["Order Id"];
+
+					if (!merchantMap[merchantId]) {
+						merchantMap[merchantId] = {
+							orders: [],
+							susTotals: {},
+						};
+					}
+
+					merchantMap[merchantId].orders.push(orderId);
+
+					const key = `${amount.toFixed(2)}|${itemCount}`;
+					merchantMap[merchantId].susTotals[key] =
+						(merchantMap[merchantId].susTotals[key] || 0) + 1;
+				});
+
+				let hasSuspicious = false;
+				let totalMatchCount = 0;
+
+				Object.entries(merchantMap).forEach(([merchantId, data]) => {
+					Object.entries(data.susTotals).forEach(([key, count]) => {
+						if (count >= 3) {
+							hasSuspicious = true;
+							totalMatchCount += count;
+						}
+					});
+				});
+
+				if (hasSuspicious) {
+					const merchants = summarizeByMerchant(result);
+
+					// Build blocks with NORMAL format appended (last 7d),
+					// and style red+bold if different from the affiliate’s observed format.
+					let rowHasDiff = false;
+					let totalOrderCount = 0;
+
+					const merchantBlocks = (
+						await Promise.all(
+							merchants.map(async (m) => {
+								const entries = Array.from(
+									m.amountCounts.entries(),
+								)
+									.filter(([, count]) => count >= 2)
+									.sort((a, b) => b[1] - a[1]);
+
+								if (entries.length === 0) return null;
+
+								// get normal format
+								let normal = normalFormatCache[m.merchantId];
+								if (!normal) {
+									try {
+										normal =
+											await fetchMerchantNormalFormat({
+												merchantId: m.merchantId,
+												settings,
+												endDate,
+											});
+										normalFormatCache[m.merchantId] =
+											normal;
+									} catch {
+										normal = {
+											format: "unknown",
+											firstDigits: "",
+										};
+									}
+								}
+
+								const isDiff =
+									(normal?.format || "unknown") !==
+									(m?.format || "unknown");
+								if (isDiff) rowHasDiff = true;
+
+								// accumulate total orders (count of all amounts)
+								totalOrderCount += entries.reduce(
+									(sum, [, count]) => sum + count,
+									0,
+								);
+
+								return (
+									<div
+										key={m.merchantId}
+										style={{
+											marginBottom: 8,
+											fontWeight: isDiff
+												? 700
+												: undefined,
+											color: isDiff
+												? "#c62828"
+												: undefined,
+										}}
+									>
+										<span>
+											<strong>{m.merchantId}</strong> —{" "}
+											{m.merchantName} &nbsp;
+											<em>
+												(Observed Format: {m.format}
+												{m.firstDigits
+													? `, first digits: ${m.firstDigits}`
+													: ""}
+												)
+											</em>
+										</span>
+										<ul
+											style={{
+												margin: "4px 0 0 16px",
+											}}
+										>
+											{entries.map(([amount, count]) => (
+												<li key={amount}>
+													${amount}: {count}
+												</li>
+											))}
+										</ul>
+										<div
+											style={{
+												marginLeft: 16,
+												fontStyle: "italic",
+											}}
+										>
+											Normal Format (last 7d):{" "}
+											{normal.format}
+											{normal.firstDigits
+												? `, first digits: ${normal.firstDigits}`
+												: ""}
+										</div>
+									</div>
+								);
+							}),
+						)
+					).filter(Boolean);
+
+					// Push a row to your existing warningReport table
+					setWarningReport((prev) => {
+						const updated = [
+							...prev,
+							{
+								affiliateId: affiliate_Id,
+								affiliateName: affiliate_Name,
+								numMerchants: merchants.length,
+								totalOrderCount,
+								hasDiff: rowHasDiff,
+								jsx: (
+									<div key={affiliate_Id}>
+										{merchantBlocks}
+									</div>
+								),
+							},
+						];
+
+						// sort: red first, then most orders first
+						return updated.sort((a, b) => {
+							if (a.hasDiff !== b.hasDiff)
+								return b.hasDiff - a.hasDiff;
+							return b.totalOrderCount - a.totalOrderCount;
+						});
+					});
+				} else {
+					reviewList[affiliate_Id] = {
+						totalMerchants: Object.keys(merchantMap).length,
+						totalOrders: result.length,
+					};
+				}
+			}
+			setLoading("false");
+
+			console.log(warningReport);
+
+			console.log("Review List:", reviewList);
+		} catch (err) {
+			setError(
+				"Error while processing the file. Check format or console for debug info.",
 			);
 			console.error(err);
 		}
@@ -385,98 +646,191 @@ const MarkKalbachReport = () => {
 	};
 
 	return (
-		<Container className="shadow-sm p-4 bg-white border position-relative card-drop-in  rounded mt-5">
-			{stage === "input" && (
-				<Row>
-					<h3>MARK K REPORT</h3>
-					<h6> Time selection. </h6>
-					The following FORM is selecting what to filter out of the
-					review criteria.
-					<hr></hr>
-					<Form.Group className="mb-3">
-						<DateRangePicker
-							startDate={startDate}
-							endDate={endDate}
-							onStartChange={setStartDate}
-							onEndChange={setEndDate}
-							otherFunction={console.log("x")}
+		<div>
+			<Container className="shadow-sm p-4 bg-white border position-relative card-drop-in  rounded mt-5">
+				{stage === "input" && (
+					<Row>
+						<h3>MARK K REPORT</h3>
+						<h6> Time selection. </h6>
+						The following FORM is selecting what to filter out of
+						the review criteria.
+						<hr></hr>
+						<Form.Group className="mb-3">
+							<DateRangePicker
+								startDate={startDate}
+								endDate={endDate}
+								onStartChange={setStartDate}
+								onEndChange={setEndDate}
+								otherFunction={console.log("x")}
+							/>
+							<Form.Label>
+								Affiliate IDs Under:{" "}
+								<strong>{minimumID}</strong>
+							</Form.Label>
+							<Form.Range
+								min={0}
+								max={500000}
+								step={50000}
+								value={minimumID}
+								onChange={(e) => setMinimumID(e.target.value)}
+							/>
+						</Form.Group>
+						<Form.Group className="mb-3">
+							<Form.Label>
+								Average Orders Under:{" "}
+								<strong>${minimumSaleAvg}.00</strong>
+							</Form.Label>
+							<Form.Range
+								min={0}
+								max={1000}
+								step={5}
+								value={minimumSaleAvg}
+								onChange={(e) =>
+									setMinimumSaleAvg(e.target.value)
+								}
+							/>
+						</Form.Group>
+						<Form.Group
+							className="mb-3"
+							controlId="excludeRecruited"
+						>
+							<Form.Check
+								type="checkbox"
+								label="Exclude Recruited Affiliates"
+								checked={excludeRecruited}
+								onChange={(e) =>
+									setExcludeRecruited(e.target.checked)
+								}
+							/>
+						</Form.Group>
+						<Button
+							variant="success"
+							onClick={runMarkKReport}
+							disabled={loading}
+						>
+							{loading ? "Running..." : "Run Mark K Report"}
+						</Button>
+						{error && <Alert variant="danger">{error}</Alert>}
+						{loading && (
+							<LoadingOverlay
+								modules={filteredData}
+								completedModules={completedModules}
+								loadingStage={loadingStage}
+								merchantReference={11177}
+								tableButton={tableButton}
+							/>
+						)}
+					</Row>
+				)}
+				{stage === "report" && (
+					<Row>
+						<ColumnMapTable
+							title={"WARNING LIST"}
+							tableMap={[
+								{ label: "Affiliate ID", type: "string" },
+								{ label: "Affiliate Name", type: "string" },
+								{ label: "Num Merchants", type: "string" },
+								{
+									label: "Merchant Report Format",
+									type: "string",
+								},
+							]}
+							table={warningReport.map((r) => [
+								r.affiliateId,
+								r.affiliateName,
+								String(r.numMerchants),
+								r.jsx,
+							])}
+							id={123456}
+							hideTools={true}
+							classes={["largeFont"]}
 						/>
-						<Form.Label>
-							Affiliate IDs Under: <strong>{minimumID}</strong>
-						</Form.Label>
-						<Form.Range
-							min={0}
-							max={500000}
-							step={50000}
-							value={minimumID}
-							onChange={(e) => setMinimumID(e.target.value)}
+					</Row>
+				)}
+			</Container>
+			<Container className="shadow-sm p-4 bg-white border position-relative card-drop-in  rounded mt-5">
+				{stage === "input" && (
+					<Row>
+						<h3>Atypical Orders </h3>
+						<h6> Time selection. </h6>
+						The following FORM is selecting what to filter out of
+						the review criteria.
+						<hr></hr>
+						<Form.Group className="mb-3">
+							<DateRangePicker
+								startDate={startDate}
+								endDate={endDate}
+								onStartChange={setStartDate}
+								onEndChange={setEndDate}
+								otherFunction={console.log("x")}
+							/>
+						</Form.Group>
+						<Form.Group className="mb-3">
+							<hr />
+							<h6>
+								report will look for orders over the following
+								benchmark
+							</h6>
+							<Form.Label>
+								Outlier Benchmark:{" "}
+								<strong>${outlierBenchmark}.00</strong>
+							</Form.Label>
+							<Form.Range
+								min={1000}
+								max={10000}
+								step={5}
+								value={outlierBenchmark}
+								onChange={(e) =>
+									setOutlierBenchmark(e.target.value)
+								}
+							/>
+						</Form.Group>
+						<Button
+							variant="success"
+							onClick={runOutlierReport}
+							disabled={loading}
+						>
+							{loading ? "Running..." : "Run Outlier Report"}
+						</Button>
+						{error && <Alert variant="danger">{error}</Alert>}
+						{loading && (
+							<LoadingOverlay
+								modules={filteredData}
+								completedModules={completedModules}
+								loadingStage={loadingStage}
+								merchantReference={11177}
+								tableButton={tableButton}
+							/>
+						)}
+					</Row>
+				)}
+				{stage === "report" && (
+					<Row>
+						<ColumnMapTable
+							title={"WARNING LIST"}
+							tableMap={[
+								{ label: "Affiliate ID", type: "string" },
+								{ label: "Affiliate Name", type: "string" },
+								{ label: "Num Merchants", type: "string" },
+								{
+									label: "Merchant Report Format",
+									type: "string",
+								},
+							]}
+							table={warningReport.map((r) => [
+								r.affiliateId,
+								r.affiliateName,
+								String(r.numMerchants),
+								r.jsx,
+							])}
+							id={123456}
+							hideTools={true}
+							classes={["largeFont"]}
 						/>
-					</Form.Group>
-					<Form.Group className="mb-3">
-						<Form.Label>
-							Average Orders Under:{" "}
-							<strong>${minimumSaleAvg}.00</strong>
-						</Form.Label>
-						<Form.Range
-							min={0}
-							max={1000}
-							step={5}
-							value={minimumSaleAvg}
-							onChange={(e) => setMinimumSaleAvg(e.target.value)}
-						/>
-					</Form.Group>
-					<Form.Group className="mb-3" controlId="excludeRecruited">
-						<Form.Check
-							type="checkbox"
-							label="Exclude Recruited Affiliates"
-							checked={excludeRecruited}
-							onChange={(e) =>
-								setExcludeRecruited(e.target.checked)
-							}
-						/>
-					</Form.Group>
-					<Button
-						variant="success"
-						onClick={runMarkKReport}
-						disabled={loading}
-					>
-						{loading ? "Running..." : "Run Report"}
-					</Button>
-					{error && <Alert variant="danger">{error}</Alert>}
-					{loading && (
-						<LoadingOverlay
-							modules={filteredData}
-							completedModules={completedModules}
-							loadingStage={loadingStage}
-							merchantReference={11177}
-							tableButton={tableButton}
-						/>
-					)}
-				</Row>
-			)}
-			{stage === "report" && (
-				<Row>
-					<ColumnMapTable
-						title={"WARNING LIST"}
-						tableMap={[
-							{ label: "Affiliate ID", type: "string" },
-							{ label: "Affiliate Name", type: "string" },
-							{ label: "Num Merchants", type: "string" },
-							{ label: "Merchant Report Format", type: "string" },
-						]}
-						table={warningReport.map((r) => [
-							r.affiliateId,
-							r.affiliateName,
-							String(r.numMerchants),
-							r.jsx,
-						])}
-						id={123456}
-						hideTools={true}
-						classes={["largeFont"]}
-					/>
-				</Row>
-			)}
-		</Container>
+					</Row>
+				)}
+			</Container>
+		</div>
 	);
 };
 

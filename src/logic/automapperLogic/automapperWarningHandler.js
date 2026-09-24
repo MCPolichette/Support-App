@@ -1,7 +1,7 @@
 // This is where we handle all the warnings for the automapper.
 
 export function autoMapperWarningHandler(array) {
-	const dataArray = [];
+	const dataArray = array.flatMap(field => field.assignmentNote ? [field.assignmentNote] : []);
 	let parents = false;
 	const seen = new Set();
 	const duplicates = new Set();
